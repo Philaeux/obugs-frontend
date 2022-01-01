@@ -14,39 +14,59 @@
       </div>
     </mat-nav-list>
   </mat-sidenav>
+
   <mat-sidenav-content>
     BROKEN NAV BAR TOFIX
-    <!-- Add Content Here -->
+
+    <div id="dashboard-content">
+      <div class="grid-container">
+        <mat-grid-list cols="2" rowHeight="450px">
+
+          <mat-grid-tile [colspan]="1" [rowspan]="2">
+            <mat-card class="dashboard-card">
+              <mat-card-header>
+                <mat-card-title>
+                  Open
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content class="dashboard-card-content">
+                <div>ngFor open bugs that changed recently</div>
+              </mat-card-content>
+            </mat-card>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <mat-card class="dashboard-card">
+              <mat-card-header>
+                <mat-card-title>
+                  New
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content class="dashboard-card-content">
+                <div>ngFor bugs new but not yet accepted by mods</div>
+              </mat-card-content>
+            </mat-card>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="1" [rowspan]="1">
+            <mat-card class="dashboard-card">
+              <mat-card-header>
+                <mat-card-title>
+                  Closed
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content class="dashboard-card-content">
+                <div>ngFor bugs new but not yet accepted by mods</div>
+              </mat-card-content>
+            </mat-card>
+          </mat-grid-tile>
+
+        </mat-grid-list>
+      </div>
+    </div>
+
   </mat-sidenav-content>
 </mat-sidenav-container>
 
 
-<div id="dashboard-content">
 
-  <div id="dashboard-open">
-    List of open bugs here
-  </div>
-
-  <div id="dashboard-new">
-    List of new bugs here
-  </div>
-
-</div>
-
-TURN THIS INTO STATIC GRID, NOT A NGFOR
-<div class="grid-container">
-  <mat-grid-list cols="2" rowHeight="350px">
-    <mat-grid-tile *ngFor="let card of cards" [colspan]="card.cols" [rowspan]="card.rows">
-      <mat-card class="dashboard-card">
-        <mat-card-header>
-          <mat-card-title>
-            {{card.title}}
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
-          <div>Card Content Here</div>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
-  </mat-grid-list>
-</div>
