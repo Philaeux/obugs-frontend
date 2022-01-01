@@ -1,18 +1,25 @@
-<h1>oBugs > NAME </h1>
+<mat-toolbar color="primary">
+  <div>oBugs > NAME</div>
+  <div style="right: 0; position:absolute">Account Name + Rights on this sub</div>
+</mat-toolbar>
 
-<div id="dashboard-login">
-  Login
-  Account Name + Rights onn this sub
-</div>
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav class="sidenav">
+    <mat-toolbar>Menu</mat-toolbar>
+    <mat-nav-list>
+      <a routerLink="/dota-2/dashboard">Dashboard</a>
+      <a routerLink="/dota-2/search">Browse</a>
+      <div>
+        Advertisement
+      </div>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    BROKEN NAV BAR TOFIX
+    <!-- Add Content Here -->
+  </mat-sidenav-content>
+</mat-sidenav-container>
 
-<nav>
-  <div>
-    <a routerLink="/dota-2/dashboard">Dashboard</a>
-  </div>
-  <div>
-    Advertisement
-  </div>
-</nav>
 
 <div id="dashboard-content">
 
@@ -24,4 +31,22 @@
     List of new bugs here
   </div>
 
+</div>
+
+TURN THIS INTO STATIC GRID, NOT A NGFOR
+<div class="grid-container">
+  <mat-grid-list cols="2" rowHeight="350px">
+    <mat-grid-tile *ngFor="let card of cards" [colspan]="card.cols" [rowspan]="card.rows">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            {{card.title}}
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <div>Card Content Here</div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
 </div>
