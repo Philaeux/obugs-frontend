@@ -29,7 +29,7 @@ After some time, the browser should display the main page, with hot reload after
 
 ### Linux
 Using any bash console.  
-* Install `nvm` to manage Node under Windows:
+* Install `nvm` to manage Node under Linux:
 ```
 sudo apt install curl 
 curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash 
