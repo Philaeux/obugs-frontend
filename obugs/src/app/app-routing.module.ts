@@ -1,20 +1,23 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { IndexComponent } from './components/index/index.component';
-import { SoftwareComponent } from './components/software/software.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { BugDetailsComponent } from './components/bug-details/bug-details.component';
-import { LoginComponent } from "./components/login/login.component";
-import { SearchComponent } from "./components/search/search.component";
+import { IndexComponent } from './components/pages/index/index.component';
+import { SoftwareListComponent } from './components/pages/software-list/software-list.component';
+import { DashboardComponent } from './components/pages/dashboard/dashboard.component';
+import { BugDetailsComponent } from './components/pages/bug-details/bug-details.component';
+import { LoginComponent } from "./components/pages/login/login.component";
+import { BugSearchComponent } from "./components/pages/bug-search/bug-search.component";
+import {AccountComponent} from "./components/pages/account/account.component";
+import {AuthGuard, redirectLoggedInTo, redirectUnauthorizedTo} from "@angular/fire/auth-guard";
 
 const routes: Routes = [
   { path: '', redirectTo: '/index', pathMatch: 'full' },
   { path: 'index', component: IndexComponent },
-  { path: 'software', component: SoftwareComponent },
+  { path: 'software', component: SoftwareListComponent },
   { path: 'login', component: LoginComponent },
-  { path: ':software/dashboard', component: DashboardComponent },
-  { path: ':software/bug/:id', component: BugDetailsComponent },
-  { path: ':software/search', component: SearchComponent },
+  { path: 'account', component: AccountComponent },
+  { path: 's/:software-list/dashboard', component: DashboardComponent },
+  { path: 's/:software-list/bug/:id', component: BugDetailsComponent },
+  { path: 's/:software-list/bug/search', component: BugSearchComponent },
 ];
 
 @NgModule({

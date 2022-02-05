@@ -1,14 +1,15 @@
 <mat-toolbar color="primary">
-  <div>oBugs > NAME</div>
-  <div style="right: 0; position:absolute">Account Name + Rights on this sub</div>
+  <div>oBugs > {{software}}</div>
+  <div style="right: 0; position:absolute"><a routerLink="/login">Login</a></div>
 </mat-toolbar>
 
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav class="sidenav">
+    This sidenav doesn't appear for some reason.
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a routerLink="/dota-2/dashboard">Dashboard</a>
-      <a routerLink="/dota-2/search">Browse</a>
+      <a routerLink="/{{software}}/dashboard">Dashboard</a>
+      <a routerLink="/{{software}}/search">Browse</a>
       <div>
         Advertisement
       </div>
@@ -16,8 +17,6 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
-    BROKEN NAV BAR TOFIX
-
     <div id="dashboard-content">
       <div class="grid-container">
         <mat-grid-list cols="2" rowHeight="450px">

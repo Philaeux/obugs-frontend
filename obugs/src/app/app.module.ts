@@ -5,13 +5,13 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { DashboardComponent } from './components/pages/dashboard/dashboard.component';
 import { HttpClientModule } from '@angular/common/http';
-import { IndexComponent } from './components/index/index.component';
-import { SoftwareComponent } from './components/software/software.component';
-import { BugDetailsComponent } from './components/bug-details/bug-details.component';
-import { SearchComponent } from './components/search/search.component';
-import { LoginComponent } from './components/login/login.component';
+import { IndexComponent } from './components/pages/index/index.component';
+import { SoftwareListComponent } from './components/pages/software-list/software-list.component';
+import { BugDetailsComponent } from './components/pages/bug-details/bug-details.component';
+import { BugSearchComponent } from './components/pages/bug-search/bug-search.component';
+import { LoginComponent } from './components/pages/login/login.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -28,6 +28,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { provideAuth,getAuth } from '@angular/fire/auth';
+import { AccountComponent } from './components/pages/account/account.component';
 
 
 @NgModule({
@@ -35,10 +36,11 @@ import { provideAuth,getAuth } from '@angular/fire/auth';
     AppComponent,
     DashboardComponent,
     IndexComponent,
-    SoftwareComponent,
+    SoftwareListComponent,
     BugDetailsComponent,
-    SearchComponent,
+    BugSearchComponent,
     LoginComponent,
+    AccountComponent,
   ],
   imports: [
     BrowserModule,
