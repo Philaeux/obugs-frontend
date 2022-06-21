@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { IndexComponent } from './components/pages/index/index.component';
-import { SoftwareListComponent } from './components/pages/software-list/software-list.component';
 import { DashboardComponent } from './components/pages/dashboard/dashboard.component';
 import { BugDetailsComponent } from './components/pages/bug-details/bug-details.component';
 import { LoginComponent } from "./components/pages/login/login.component";
@@ -12,7 +11,6 @@ import {AuthGuard, redirectLoggedInTo, redirectUnauthorizedTo} from "@angular/fi
 const routes: Routes = [
   { path: '', redirectTo: '/index', pathMatch: 'full' },
   { path: 'index', component: IndexComponent },
-  { path: 'software', component: SoftwareListComponent },
   { path: 'login', component: LoginComponent },
   { path: 'account', component: AccountComponent },
   { path: 's/:software-list/dashboard', component: DashboardComponent },

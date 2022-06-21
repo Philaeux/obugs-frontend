@@ -1,0 +1,19 @@
+.software {
+  max-width: 200px;
+}
+
+.software-header-image {
+  background-size: cover;
+}
+
+.software-image {
+  width: 200px;
+}
+
+.software-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 25px;
+  margin: 25px;
+}

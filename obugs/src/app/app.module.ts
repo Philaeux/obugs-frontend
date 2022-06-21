@@ -20,7 +20,6 @@ import { BugSearchComponent } from './components/pages/bug-search/bug-search.com
 import { DashboardComponent } from './components/pages/dashboard/dashboard.component';
 import { IndexComponent } from './components/pages/index/index.component';
 import { LoginComponent } from './components/pages/login/login.component';
-import { SoftwareListComponent } from './components/pages/software-list/software-list.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +30,6 @@ import { SoftwareListComponent } from './components/pages/software-list/software
     DashboardComponent,
     IndexComponent,
     LoginComponent,
-    SoftwareListComponent,
   ],
   imports: [
     AppRoutingModule,

@@ -4,16 +4,15 @@
 </mat-toolbar>
 
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav class="sidenav">
-    This sidenav doesn't appear for some reason.
-    <mat-toolbar>Menu</mat-toolbar>
+  <mat-sidenav class="sidenav" opened mode="side">
     <mat-nav-list>
-      <a routerLink="/{{software}}/dashboard">Dashboard</a>
-      <a routerLink="/{{software}}/search">Browse</a>
-      <div>
-        Advertisement
-      </div>
+      <a mat-list-item href="/s/{{software}}/dashboard">Dashboard</a>
+      <a mat-list-item href="/s/{{software}}/search">Browse</a>
     </mat-nav-list>
+
+    <div class="mat-body">
+      Ad
+    </div>
   </mat-sidenav>
 
   <mat-sidenav-content>
