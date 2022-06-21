@@ -1,0 +1,10 @@
+obugs:
+  container_name: "obugs"
+  restart: always
+  build: .
+  ports:
+    - "19997:80"
+  environment:
+    - NGINX_HOST=obugs.the-cluster.org
+    - NGINX_PORT=80
+
