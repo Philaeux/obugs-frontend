@@ -1,3 +1,19 @@
-/* Application-wide Styles */
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@use "@angular/material" as mat;
+
+@import '~normalize.css';
+@include mat.core();
+
+// Define theme
+$dark-primary: mat.define-palette(mat.$blue-grey-palette, 500);
+$dark-accent: mat.define-palette(mat.$brown-palette, 400);
+$dark-warn: mat.define-palette(mat.$red-palette);
+$dark-theme: mat.define-dark-theme((
+  color: (
+    primary: $dark-primary,
+    accent: $dark-accent,
+    warn: $dark-warn
+  )
+));
+
+// Apply the theme by default
+@include mat.all-component-themes($dark-theme);
