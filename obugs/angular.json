@@ -108,5 +108,7 @@
       }
     }
   },
-  "defaultProject": "obugs"
+  "cli": {
+    "analytics": "0af711de-6888-4e24-bd50-5c9c96707c4b"
+  }
 }
