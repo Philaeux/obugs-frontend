@@ -1,19 +1,61 @@
-.software {
-  max-width: 200px;
+.index-header {
+  display: flex;
+  justify-content: center;
+  font-size: 24px;
 }
 
-.software-header-image {
-  background-size: cover;
+.index-header-head {
+  display: flex;
+  align-items: center;
 }
 
-.software-image {
-  width: 200px;
+.index-main {
+  width: 75%;
+  max-width: 1000px;
+  margin: auto;
+  padding: 16px;
 }
 
-.software-container {
+.index-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 50px 0;
+}
+
+.index-tile {
+  flex-direction: column;
+  min-width: 200px;
+  max-width: 320px;
+}
+
+.index-tile .mat-h2 {
+  font-size: 25px;
+  font-weight: 400;
+  margin: 0 0 16px;
+  padding: 0;
+}
+
+.index-tile .body-1 {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 28px;
+  margin: 0 0 24px;
+  padding: 0;
+}
+
+.index-softwares {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
   gap: 25px;
   margin: 25px;
+}
+
+.index-software-ico {
+  background-size: cover;
+}
+
+.index-software-subtitle {
+  margin-bottom: 0;
 }
