@@ -8,24 +8,28 @@
 <div class="index-main">
   <div class="index-tiles">
     <div class="mat-typography index-tile">
-      <p class="mat-h2">High quality</p>
-      <p class="body-1">Internationalized and accessible components for everyone. Well tested to ensure performance and
-        reliability.</p>
-      <p class="body-1">Straightforward APIs with consistent cross platform behaviour.</p>
+      <p class="mat-h2">Bug Tracking</p>
+      <p class="body-1">Software developers use internal bug tracking systems daily to maintain their applications.
+        However, their platform is usually private and not scalable for big communities.
+        Finally users are most of the time in the dark, not able to know if they are adding duplicates, if the bug is already reported or if any developers is able to see the issue.
+      </p>
+      <p class="body-1">oBugs aims to generalize bug tracking for a lot of users to contribute. When social networks meet bug tracking.</p>
     </div>
 
     <div class="mat-typography index-tile">
-      <p class="mat-h2">High quality</p>
-      <p class="body-1">Internationalized and accessible components for everyone. Well tested to ensure performance and
-        reliability.</p>
-      <p class="body-1">Straightforward APIs with consistent cross platform behaviour.</p>
+      <p class="mat-h2">Collaboration</p>
+      <p class="body-1">When a software is used by thousands of people, wider issues get discovered over internal testing.
+        However, it is hard to convey the problem back to a developer.
+        The current tools - forums, social networks or custom tools - are inefficient to absorb user feedbacks.</p>
+      <p class="body-1">With oBugs, filter the bug database, create new ones, discuss issues, vote to edit available information; all so that developers can focus on fixing real problems instead of looking around.</p>
     </div>
 
     <div class="mat-typography index-tile">
-      <p class="mat-h2">High quality</p>
-      <p class="body-1">Internationalized and accessible components for everyone. Well tested to ensure performance and
-        reliability.</p>
-      <p class="body-1">Straightforward APIs with consistent cross platform behaviour.</p>
+      <p class="mat-h2">Free</p>
+      <p class="body-1">This project is a non-profit platform.
+        Dedicated users accept to spend some time to report bugs if they improve the piece of software they use daily.
+        Moreover, the developers are free to use the database content their community cures for them.</p>
+      <p class="body-1">No user tracking, no data selling. Simply users helping to improve software.</p>
     </div>
   </div>
 
@@ -33,7 +37,7 @@
 
   <div class="index-softwares">
 
-    <mat-card class="index-software" color="secondary">
+    <mat-card class="index-software" color="secondary" (click)="selectSoftware('dota')">
       <mat-card-header>
         <div mat-card-avatar class="index-software-ico" style="background-image: url('/assets/icons/dota.png')"></div>
         <mat-card-title class="index-software-title">Dota 2</mat-card-title>

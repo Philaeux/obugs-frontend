@@ -21,6 +21,7 @@
   flex-wrap: wrap;
   justify-content: center;
   margin: 50px 0;
+  gap: 20px;
 }
 
 .index-tile {
@@ -50,6 +51,10 @@
   justify-content: space-evenly;
   gap: 25px;
   margin: 25px;
+}
+
+.index-software {
+  cursor: pointer;
 }
 
 .index-software-ico {
