@@ -1,6 +1,6 @@
 
 export interface Software {
-  id: string;
+  code: string;
   name: string;
   editor: string;
   description: string;

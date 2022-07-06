@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
+import {SoftwaresService} from "../../../services/softwares.service";
+import {Software} from "../../../models/software";
 
 @Component({
   selector: 'app-index',
@@ -8,12 +10,22 @@ import {Router} from "@angular/router";
 })
 export class IndexComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  private softwares: Array<Software> = [];
+
+  constructor(private router: Router, private softwaresService: SoftwaresService) { }
 
   ngOnInit(): void {
+    this.refreshListSoftware();
   }
 
   selectSoftware(software: string) {
     this.router.navigate(["/s/" + software + "/dashboard"]);
+  }
+
+  refreshListSoftware() {
+    this.softwaresService.listSoftware().subscribe((data: Array<Software>) =>
+    {
+      this.softwares = data;
+    })
   }
 }

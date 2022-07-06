@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 
 @Component({
   selector: 'app-dashboard',
@@ -8,15 +8,19 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class DashboardComponent implements OnInit {
 
-  public software: String = ""
+  software: string = "";
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
   ) { }
 
   ngOnInit(): void {
-    this.software = this.route.snapshot.paramMap.get('software')!;
+    this.route.paramMap.subscribe((params: ParamMap) =>  {
+      const soft = params.get('software');
+      if (soft != null) {
+        this.software = soft;
+      }
+    });
   }
 
 }

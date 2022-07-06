@@ -1,0 +1,12 @@
+<mat-toolbar color="primary" class="header">
+  <div class="header-head" (click)="goToHome()">
+    <mat-icon>bug_report</mat-icon>
+    <span>oBugs</span>
+  </div>
+  <div *ngIf="subtitle !== undefined">
+    -
+  </div>
+  <div *ngIf="subtitle !== undefined" class="header-software" (click)="goToDashboard()">
+    {{subtitle}}
+  </div>
+</mat-toolbar>

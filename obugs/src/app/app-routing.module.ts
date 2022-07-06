@@ -13,9 +13,9 @@ const routes: Routes = [
   { path: 'index', component: IndexComponent },
   { path: 'login', component: LoginComponent },
   { path: 'account', component: AccountComponent },
-  { path: 's/:software-list/dashboard', component: DashboardComponent },
-  { path: 's/:software-list/bug/:id', component: BugDetailsComponent },
-  { path: 's/:software-list/bug/search', component: BugSearchComponent },
+  { path: 's/:software/dashboard', component: DashboardComponent },
+  { path: 's/:software/bug/:id', component: BugDetailsComponent },
+  { path: 's/:software/bug/search', component: BugSearchComponent },
 ];
 
 @NgModule({
