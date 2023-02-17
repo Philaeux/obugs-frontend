@@ -1,0 +1,11 @@
+.new-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 1000px;
+    padding: 0px 20px 20px 20px;
+}
+
+.centered-form-element {
+    max-width: fit-content;
+    align-self: center;
+}

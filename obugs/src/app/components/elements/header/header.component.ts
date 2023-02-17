@@ -1,8 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
-import {Software} from "../../../models/software";
-import {AuthService} from "../../../services/auth.service";
-import { async } from "rxjs";
+import { Component, Input, OnInit } from '@angular/core';
+import { Router } from "@angular/router";
+import { Software } from "../../../models/software";
+import { AuthService } from "../../../services/auth.service";
 
 @Component({
   selector: 'app-header',
@@ -15,7 +14,7 @@ export class HeaderComponent implements OnInit {
   software: Software | undefined;
 
   constructor(public authService: AuthService,
-              private router: Router) {
+    private router: Router) {
   }
 
   ngOnInit(): void {
@@ -27,20 +26,20 @@ export class HeaderComponent implements OnInit {
   }
 
   goToDashboard() {
-    this.router.navigate(["/s/" + this.software!.code + "/dashboard"]);
+    this.router.navigate(["/s/" + this.software!.id]);
   }
 
   loginWithGoogle() {
     this.authService
       .loginWithGoogle()
-      .then(() => { console.log(this.authService.afAuth.currentUser)})
+      .then(() => { console.log(this.authService.afAuth.currentUser) })
       .catch((e) => console.log(e.message));
   }
 
   loginWithTwitter() {
     this.authService
       .loginWithTwitter()
-      .then(() => { console.log(this.authService.afAuth.currentUser?.getIdToken())})
+      .then(() => { console.log(this.authService.afAuth.currentUser?.getIdToken()) })
       .catch((e) => console.log(e.message));
   }
 }

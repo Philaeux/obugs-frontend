@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Software} from "../models/software";
+import {Software, SoftwareArrayPayload, SoftwarePayload} from "../models/software";
 import {environment} from "../../environments/environment";
 
 @Injectable({
@@ -10,14 +10,14 @@ export class SoftwaresService {
 
   constructor(private http: HttpClient) { }
 
-  pathSoftwareList = '/api/softwares/list'
-  pathSoftwareDetails = '/api/softwares/details/'
+  pathSoftwareList = '/api/software/list'
+  pathSoftwareDetails = '/api/software/details/'
 
   getSoftwareList() {
-    return this.http.get<Software[]>(environment.apiUrl +  this.pathSoftwareList);
+    return this.http.get<SoftwareArrayPayload>(environment.apiUrl +  this.pathSoftwareList);
   }
 
   getSoftwareDetails(code: string) {
-    return this.http.get<Software[]>(environment.apiUrl + this.pathSoftwareDetails + code);
+    return this.http.get<SoftwarePayload>(environment.apiUrl + this.pathSoftwareDetails + code);
   }
 }

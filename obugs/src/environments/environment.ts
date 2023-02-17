@@ -12,7 +12,7 @@ export const environment = {
     messagingSenderId: '955891060575',
   },
   production: false,
-  apiUrl: 'http://127.0.0.1:19999'
+  apiUrl: 'http://127.0.0.1:8000'
 };
 
 /*

@@ -1,0 +1,21 @@
+<app-header [software]=software></app-header>
+
+<app-software-sidenav [softwareId]="softwareId">
+
+    <div class="new-form">
+
+        <h1 class="centered-form-element">Create a new Bug</h1>
+        <mat-form-field appearance="fill">
+            <mat-label>Title</mat-label>
+            <input matInput>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>Description</mat-label>
+            <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+        </mat-form-field>
+        <button class="centered-form-element" mat-raised-button>Create</button>
+
+    </div>
+
+</app-software-sidenav>

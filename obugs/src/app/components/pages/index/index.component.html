@@ -1,42 +1,12 @@
 <app-header></app-header>
 
 <div class="index-main">
-  <div class="index-tiles">
-    <div class="mat-typography index-tile">
-      <p class="mat-h2">Bug Tracking</p>
-      <p class="body-1">Software developers use internal bug tracking systems daily to maintain their applications.
-        However, their platform is usually private and not scalable for big communities.
-        Users are most of the time in the dark, not able to know if they are adding duplicates, if the bug is already reported or if a developer is able to understand the issue.
-      </p>
-      <p class="body-1">oBugs aims to generalize bug tracking for many users to contribute.</p>
-    </div>
-
-    <div class="mat-typography index-tile">
-      <p class="mat-h2">Collaboration</p>
-      <p class="body-1">When a software is used by thousands of people, wider issues get discovered over internal beta testing.
-        However, it is hard to convey the problem back to a developer.
-        The current tools - forums, social networks and simple forms - are inefficient to absorb user feedbacks.</p>
-      <p class="body-1">With oBugs, get the bug database organized, vote to set priorities, all so that developers can focus on fixing real problems.</p>
-    </div>
-
-    <div class="mat-typography index-tile">
-      <p class="mat-h2">Free</p>
-      <p class="body-1">This project is a non-profit platform.
-        Dedicated users willing to spend some time to manage bugs improve software they use daily.
-        Moreover, the developers are free to use the database content from their community.</p>
-      <p class="body-1">No user tracking, no data selling. Simply users helping to improve software.</p>
-    </div>
-  </div>
-
-  <mat-divider></mat-divider>
-
   <div class="index-softwares">
-
-
-    <mat-card *ngFor="let software of softwares; index as i;" class="index-software" color="secondary" (click)="selectSoftware(software.code)">
+    
+    <mat-card *ngFor="let software of softwares; index as i;" class="index-software" color="secondary" (click)="selectSoftware(software.id)">
       <mat-card-header>
-        <div mat-card-avatar class="index-software-ico" style="background-image: url('/assets/icons/{{software.code}}.png')"></div>
-        <mat-card-title class="index-software-title">{{software.name}}</mat-card-title>
+        <div mat-card-avatar class="index-software-ico" style="background-image: url('/assets/icons/{{software.id}}.png')"></div>
+        <mat-card-title class="index-software-title">{{software.fullname}}</mat-card-title>
         <mat-card-subtitle class="index-software-subtitle">{{software.editor}}</mat-card-subtitle>
       </mat-card-header>
     </mat-card>

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {SoftwaresService} from "../../../services/softwares.service";
-import {Software} from "../../../models/software";
-
+import {Software, SoftwareArrayPayload} from "../../../models/software";
+ 
 @Component({
   selector: 'app-index',
   templateUrl: './index.component.html',
@@ -19,13 +19,14 @@ export class IndexComponent implements OnInit {
   }
 
   selectSoftware(software: string) {
-    this.router.navigate(["/s/" + software + "/dashboard"]);
+    this.router.navigate(["/s/" + software]);
   }
 
   refreshListSoftware() {
-    this.softwaresService.getSoftwareList().subscribe((data: Software[]) =>
+    this.softwaresService.getSoftwareList().subscribe((data: SoftwareArrayPayload) =>
     {
-      this.softwares = data;
+      this.softwares = data.payload;
+      console.log(this.softwares);
     })
   }
 }

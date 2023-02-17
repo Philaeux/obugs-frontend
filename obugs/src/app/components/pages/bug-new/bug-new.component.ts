@@ -1,24 +1,21 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, ParamMap, Router} from "@angular/router";
-import {Software} from "../../../models/software";
-import {SoftwaresService} from "../../../services/softwares.service";
+import { Component } from '@angular/core';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Software } from 'src/app/models/software';
+import { SoftwaresService } from 'src/app/services/softwares.service';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  selector: 'app-bug-new',
+  templateUrl: './bug-new.component.html',
+  styleUrls: ['./bug-new.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class BugNewComponent {
 
   softwareId: string | undefined;
   software: Software | undefined;
 
-  constructor(
-    private router: Router,
+  constructor(private router: Router,
     private route: ActivatedRoute,
-    private softwaresService: SoftwaresService
-  ) {
-  }
+    private softwaresService: SoftwaresService) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
