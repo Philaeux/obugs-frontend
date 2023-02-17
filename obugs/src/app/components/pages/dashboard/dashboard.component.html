@@ -1,12 +1,10 @@
-<app-header [subtitle]=software></app-header>
+<app-header [software]=software></app-header>
 
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav class="sidenav" opened mode="side">
     <mat-nav-list>
-      <a mat-list-item href="/s/{{software}}/dashboard">
-        <mat-icon aria-hidden="false">home</mat-icon> Dashboard
-      </a>
-      <a mat-list-item href="/s/{{software}}/search">Browse</a>
+      <a mat-list-item href="/s/{{softwareCode}}/dashboard">Browse</a>
+      <a mat-list-item href="/s/{{softwareCode}}/dashboard">New</a>
     </mat-nav-list>
   </mat-sidenav>
 

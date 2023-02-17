@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Software} from "../models/software";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +10,14 @@ export class SoftwaresService {
 
   constructor(private http: HttpClient) { }
 
-  listUrl = 'http://127.0.0.1:19999/api/software/list'
+  pathSoftwareList = '/api/softwares/list'
+  pathSoftwareDetails = '/api/softwares/details/'
 
-  listSoftware() {
-    return this.http.get<Array<Software>>(this.listUrl);
+  getSoftwareList() {
+    return this.http.get<Software[]>(environment.apiUrl +  this.pathSoftwareList);
+  }
+
+  getSoftwareDetails(code: string) {
+    return this.http.get<Software[]>(environment.apiUrl + this.pathSoftwareDetails + code);
   }
 }

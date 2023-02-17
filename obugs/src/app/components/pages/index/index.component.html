@@ -33,19 +33,11 @@
   <div class="index-softwares">
 
 
-    <mat-card *ngFor="" class="index-software" color="secondary" (click)="selectSoftware('dota')">
+    <mat-card *ngFor="let software of softwares; index as i;" class="index-software" color="secondary" (click)="selectSoftware(software.code)">
       <mat-card-header>
-        <div mat-card-avatar class="index-software-ico" style="background-image: url('/assets/icons/dota.png')"></div>
-        <mat-card-title class="index-software-title">Dota 2</mat-card-title>
-        <mat-card-subtitle class="index-software-subtitle">Valve Corporation</mat-card-subtitle>
-      </mat-card-header>
-    </mat-card>
-
-    <mat-card class="index-software" color="secondary" (click)="selectSoftware('dota')">
-      <mat-card-header>
-        <div mat-card-avatar class="index-software-ico" style="background-image: url('/assets/icons/dota.png')"></div>
-        <mat-card-title class="index-software-title">Dota 2</mat-card-title>
-        <mat-card-subtitle class="index-software-subtitle">Valve Corporation</mat-card-subtitle>
+        <div mat-card-avatar class="index-software-ico" style="background-image: url('/assets/icons/{{software.code}}.png')"></div>
+        <mat-card-title class="index-software-title">{{software.name}}</mat-card-title>
+        <mat-card-subtitle class="index-software-subtitle">{{software.editor}}</mat-card-subtitle>
       </mat-card-header>
     </mat-card>
 

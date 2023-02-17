@@ -11,7 +11,8 @@ export const environment = {
     authDomain: 'obugs-5f889.firebaseapp.com',
     messagingSenderId: '955891060575',
   },
-  production: false
+  production: false,
+  apiUrl: 'http://127.0.0.1:19999'
 };
 
 /*

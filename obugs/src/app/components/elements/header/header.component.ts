@@ -1,5 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
+import {Software} from "../../../models/software";
+import {AuthService} from "../../../services/auth.service";
+import { async } from "rxjs";
 
 @Component({
   selector: 'app-header',
@@ -9,12 +12,14 @@ import {Router} from "@angular/router";
 export class HeaderComponent implements OnInit {
 
   @Input()
-  subtitle?: string;
+  software: Software | undefined;
 
-  constructor(private router: Router) { }
+  constructor(public authService: AuthService,
+              private router: Router) {
+  }
 
   ngOnInit(): void {
-    console.log(this.subtitle);
+
   }
 
   goToHome() {
@@ -22,6 +27,20 @@ export class HeaderComponent implements OnInit {
   }
 
   goToDashboard() {
-    this.router.navigate(["/s/" + this.subtitle + "/dashboard"]);
+    this.router.navigate(["/s/" + this.software!.code + "/dashboard"]);
+  }
+
+  loginWithGoogle() {
+    this.authService
+      .loginWithGoogle()
+      .then(() => { console.log(this.authService.afAuth.currentUser)})
+      .catch((e) => console.log(e.message));
+  }
+
+  loginWithTwitter() {
+    this.authService
+      .loginWithTwitter()
+      .then(() => { console.log(this.authService.afAuth.currentUser?.getIdToken())})
+      .catch((e) => console.log(e.message));
   }
 }

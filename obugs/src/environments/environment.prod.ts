@@ -7,5 +7,6 @@ export const environment = {
     authDomain: 'obugs-5f889.firebaseapp.com',
     messagingSenderId: '955891060575',
   },
-  production: true
+  production: true,
+  apiUrl: 'https://obugsapi.the-cluster.org'
 };

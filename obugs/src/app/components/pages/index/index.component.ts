@@ -10,7 +10,7 @@ import {Software} from "../../../models/software";
 })
 export class IndexComponent implements OnInit {
 
-  private softwares: Array<Software> = [];
+  public softwares: Software[] = [];
 
   constructor(private router: Router, private softwaresService: SoftwaresService) { }
 
@@ -23,7 +23,7 @@ export class IndexComponent implements OnInit {
   }
 
   refreshListSoftware() {
-    this.softwaresService.listSoftware().subscribe((data: Array<Software>) =>
+    this.softwaresService.getSoftwareList().subscribe((data: Software[]) =>
     {
       this.softwares = data;
     })

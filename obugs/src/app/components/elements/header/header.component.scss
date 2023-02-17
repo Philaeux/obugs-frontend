@@ -14,3 +14,16 @@
 .header-software {
   cursor: pointer;
 }
+
+.loginArea {
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.menuButton {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
