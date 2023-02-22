@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
 
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
@@ -23,6 +23,7 @@ import { IndexComponent } from './components/pages/index/index.component';
 import { LoginComponent } from './components/pages/login/login.component';
 import { HeaderComponent } from './components/elements/header/header.component';
 import { SoftwareSidenavComponent } from './components/elements/software-sidenav/software-sidenav.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,8 @@ import { SoftwareSidenavComponent } from './components/elements/software-sidenav
     HttpClientModule,
     LayoutModule,
     MaterialModule,
+    ReactiveFormsModule,
+    HttpClientXsrfModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth())
   ],

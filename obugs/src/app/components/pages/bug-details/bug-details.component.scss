@@ -1,0 +1,40 @@
+.spinnerContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.spinner {
+    margin-top: 5px;
+}
+
+.spinnerText {
+    margin-left: 20px;
+    align-self: center;
+    height: fit-content;
+}
+
+.paddedText {
+    margin-left: 20px;
+}
+
+.capsule {
+    border-radius: 10px;
+    padding: 10px 30px;
+    display: inline-block;
+}
+
+.NEW {
+    background-color: #2196f3;
+    color: white;
+}
+
+.OPENED {
+    background-color: #1aa331;
+    color: white;
+}
+
+.CLOSED,
+.WONT-FIX {
+    background-color: #a31a1a;
+    color: white;
+}

@@ -12,9 +12,9 @@ const routes: Routes = [
   { path: '', component: IndexComponent },
   { path: 'account', component: AccountComponent },
   { path: 'login', component: LoginComponent },
-  { path: 's/:software/bug/new', component: BugNewComponent },
+  { path: 's/:software/bug/add', component: BugNewComponent },
   { path: 's/:software/bug/search', component: BugSearchComponent },
-  { path: 's/:software/bug/:id', component: BugDetailsComponent },
+  { path: 's/:software/bug/:bug', component: BugDetailsComponent },
   { path: 's/:software', component: DashboardComponent },
   { path: '**', component: IndexComponent },
 ];

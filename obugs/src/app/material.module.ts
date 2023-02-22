@@ -15,6 +15,9 @@ import { MatTreeModule } from '@angular/material/tree';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input'
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
+import { MatButtonToggleModule } from '@angular/material/button-toggle'
+import { MatChipsModule } from '@angular/material/chips'
 
 const MaterialComponents = [
   MatButtonModule,
@@ -31,7 +34,10 @@ const MaterialComponents = [
   MatTreeModule,
   MatSlideToggleModule,
   MatFormFieldModule,
-  MatInputModule
+  MatInputModule,
+  MatProgressSpinnerModule,
+  MatButtonToggleModule,
+  MatChipsModule
 ]
 
 @NgModule({

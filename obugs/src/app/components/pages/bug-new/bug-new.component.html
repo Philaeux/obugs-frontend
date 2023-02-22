@@ -2,20 +2,22 @@
 
 <app-software-sidenav [softwareId]="softwareId">
 
-    <div class="new-form">
-
+    <form class="new-form" [formGroup]="form" (ngSubmit)="onSubmit()">
         <h1 class="centered-form-element">Create a new Bug</h1>
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="fill" class="form-title">
             <mat-label>Title</mat-label>
-            <input matInput>
+            <input matInput formControlName="title" placeholder="Simple bug name">
+            <mat-error *ngIf="form.get('title')?.invalid">Title is required</mat-error>
         </mat-form-field>
 
-        <mat-form-field class="example-full-width">
+        <mat-form-field appearance="fill" class="form-description">
             <mat-label>Description</mat-label>
-            <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+            <textarea matInput formControlName="description" rows="10"
+                placeholder="Explain in details the bug you are adding."></textarea>
+            <mat-error *ngIf="form.get('description')?.invalid">Description is required</mat-error>
         </mat-form-field>
-        <button class="centered-form-element" mat-raised-button>Create</button>
 
-    </div>
+        <button class="centered-form-element" type="submit" mat-raised-button color="primary">Create</button>
+    </form>
 
 </app-software-sidenav>
