@@ -7,10 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
-
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { environment } from '../environments/environment';
-import { provideAuth, getAuth } from '@angular/fire/auth';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { MaterialModule } from './material.module';
 
@@ -20,10 +17,8 @@ import { BugSearchComponent } from './components/pages/bug-search/bug-search.com
 import { BugNewComponent } from './components/pages/bug-new/bug-new.component';
 import { DashboardComponent } from './components/pages/dashboard/dashboard.component';
 import { IndexComponent } from './components/pages/index/index.component';
-import { LoginComponent } from './components/pages/login/login.component';
 import { HeaderComponent } from './components/elements/header/header.component';
 import { SoftwareSidenavComponent } from './components/elements/software-sidenav/software-sidenav.component';
-import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -34,7 +29,6 @@ import { ReactiveFormsModule } from '@angular/forms';
     BugSearchComponent,
     DashboardComponent,
     IndexComponent,
-    LoginComponent,
     HeaderComponent,
     SoftwareSidenavComponent
   ],
@@ -48,8 +42,6 @@ import { ReactiveFormsModule } from '@angular/forms';
     MaterialModule,
     ReactiveFormsModule,
     HttpClientXsrfModule,
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAuth(() => getAuth())
   ],
   providers: [],
   bootstrap: [AppComponent]
