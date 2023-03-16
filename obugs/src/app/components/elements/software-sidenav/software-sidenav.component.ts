@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Software } from 'src/app/models/models';
 
 @Component({
   selector: 'app-software-sidenav',
@@ -8,5 +9,6 @@ import { Component, Input } from '@angular/core';
 export class SoftwareSidenavComponent {
 
   @Input()
-  softwareId: string | undefined;
+  software: Software | undefined;
+
 }

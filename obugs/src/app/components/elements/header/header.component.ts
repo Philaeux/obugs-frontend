@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
-import { Software } from "../../../models/software";
+import { Software } from "../../../models/models";
 import { AuthService } from "../../../services/auth.service";
 
 @Component({
@@ -13,9 +13,10 @@ export class HeaderComponent implements OnInit {
   @Input()
   software: Software | undefined;
 
-  constructor(public authService: AuthService,
-    private router: Router) {
-  }
+  constructor(
+    public authService: AuthService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
 
@@ -30,16 +31,8 @@ export class HeaderComponent implements OnInit {
   }
 
   loginWithGoogle() {
-    this.authService
-      .loginWithGoogle()
-      .then(() => { console.log(this.authService.afAuth.currentUser) })
-      .catch((e) => console.log(e.message));
   }
 
   loginWithTwitter() {
-    this.authService
-      .loginWithTwitter()
-      .then(() => { console.log(this.authService.afAuth.currentUser?.getIdToken()) })
-      .catch((e) => console.log(e.message));
   }
 }

@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, ParamMap, Router} from "@angular/router";
-import {Software} from "../../../models/software";
-import {SoftwaresService} from "../../../services/softwares.service";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap, Router } from "@angular/router";
+import { Software, Bug } from "../../../models/models";
+import { SoftwareService } from "../../../services/software.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -10,30 +10,72 @@ import {SoftwaresService} from "../../../services/softwares.service";
 })
 export class DashboardComponent implements OnInit {
 
-  softwareId: string | undefined;
   software: Software | undefined;
+  bugsAll: Bug[] = [];
+  bugsNew: Bug[] = [];
+  bugsConfirmed: Bug[] = [];
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private softwaresService: SoftwaresService
-  ) {
-  }
+    private softwareService: SoftwareService
+  ) { }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params: ParamMap) => {
-      let softwareId = params.get('software');
-      if (softwareId != null) {
-        this.softwareId = softwareId;
-        this.softwaresService.getSoftwareDetails(this.softwareId).subscribe(data => {
-          if (data.payload == null) {
-            this.router.navigate(["/"]);
-          } else {
-            this.software = data.payload;
-          }
-        });
+    var softwareCode: string | null = this.route.snapshot.paramMap.get("software");
+
+    if (softwareCode == null) {
+      this.router.navigate(["/"]);
+    }
+
+    this.getSoftwareDetails(softwareCode as string);
+    this.getBugsAll(softwareCode as string);
+    this.getBugsNew(softwareCode as string);
+    this.getBugsConfirmed(softwareCode as string);
+  }
+
+  getSoftwareDetails(softwareCode: string) {
+    this.softwareService.getSoftwareDetails(softwareCode).subscribe(data => {
+      if (data.payload == null) {
+        console.log(data.error)
+        this.router.navigate(["/"]);
+      } else {
+        this.software = data.payload;
       }
     });
   }
 
+  getBugsAll(softwareCode: string) {
+    this.softwareService.getBugs(softwareCode).subscribe(data => {
+      if (data.error != null) {
+        console.log(data.error);
+      } else {
+        this.bugsAll = data.payload;
+      }
+    })
+  }
+
+  getBugsNew(softwareCode: string) {
+    this.softwareService.getBugs(softwareCode, "NEW").subscribe(data => {
+      if (data.error != null) {
+        console.log(data.error);
+      } else {
+        this.bugsNew = data.payload;
+      }
+    });
+  }
+
+  getBugsConfirmed(softwareCode: string) {
+    this.softwareService.getBugs(softwareCode, "CONFIRMED").subscribe(data => {
+      if (data.error != null) {
+        console.log(data.error)
+      } else {
+        this.bugsConfirmed = data.payload;
+      }
+    });
+  }
+
+  openBugDetails(bug: Bug) {
+    this.router.navigate([`s/${bug.software_id}/bug/${bug.id}`]);
+  }
 }

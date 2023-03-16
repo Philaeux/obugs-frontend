@@ -11,7 +11,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { MaterialModule } from './material.module';
 
-import { AccountComponent } from './components/pages/account/account.component';
 import { BugDetailsComponent } from './components/pages/bug-details/bug-details.component';
 import { BugSearchComponent } from './components/pages/bug-search/bug-search.component';
 import { BugNewComponent } from './components/pages/bug-new/bug-new.component';
@@ -19,10 +18,10 @@ import { DashboardComponent } from './components/pages/dashboard/dashboard.compo
 import { IndexComponent } from './components/pages/index/index.component';
 import { HeaderComponent } from './components/elements/header/header.component';
 import { SoftwareSidenavComponent } from './components/elements/software-sidenav/software-sidenav.component';
+import { BugRowComponent } from './components/elements/bug-row/bug-row.component';
 
 @NgModule({
   declarations: [
-    AccountComponent,
     AppComponent,
     BugDetailsComponent,
     BugNewComponent,
@@ -30,7 +29,8 @@ import { SoftwareSidenavComponent } from './components/elements/software-sidenav
     DashboardComponent,
     IndexComponent,
     HeaderComponent,
-    SoftwareSidenavComponent
+    SoftwareSidenavComponent,
+    BugRowComponent
   ],
   imports: [
     AppRoutingModule,

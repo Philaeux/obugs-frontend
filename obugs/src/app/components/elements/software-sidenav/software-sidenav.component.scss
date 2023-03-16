@@ -1,5 +1,5 @@
 .sidenav-container {
-    min-height: 100vh;
+    min-height: calc(100vh - 64px);
 }
 
 .sidenav {
@@ -12,4 +12,13 @@
 
 .sidenav-content {
     margin: 20px 20px 20px 20px;
+}
+
+.sidenav-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.sidenav-row-text {
+    padding-left: 4px;
 }

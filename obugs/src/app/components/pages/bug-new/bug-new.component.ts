@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Software } from 'src/app/models/software';
+import { Software } from 'src/app/models/models';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { SoftwaresService } from 'src/app/services/softwares.service';
+import { SoftwareService } from 'src/app/services/software.service';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { BugNewPayload } from 'src/app/models/bug';
+import { BugNewPayload } from 'src/app/models/models';
 
 @Component({
   selector: 'app-bug-new',
@@ -22,7 +22,7 @@ export class BugNewComponent {
   software: Software | undefined;
 
   constructor(private fb: FormBuilder, private router: Router, private route: ActivatedRoute,
-    private softwaresService: SoftwaresService, private http: HttpClient) {
+    private softwareService: SoftwareService, private http: HttpClient) {
     this.form = this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required]
@@ -34,7 +34,7 @@ export class BugNewComponent {
       let softwareId = params.get('software');
       if (softwareId != null) {
         this.softwareId = softwareId;
-        this.softwaresService.getSoftwareDetails(this.softwareId).subscribe(data => {
+        this.softwareService.getSoftwareDetails(this.softwareId).subscribe(data => {
           if (data.payload == null) {
             this.router.navigate(["/"]);
           } else {

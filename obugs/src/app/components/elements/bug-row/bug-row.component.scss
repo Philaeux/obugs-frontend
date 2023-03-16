@@ -1,0 +1,27 @@
+.chip {
+    padding: 6px 8px;
+    border-radius: 5px;
+    font-weight: lighter;
+    color: white;
+}
+
+.chip-FIXED {
+    background-color: #34a853;
+}
+
+.chip-CONFIRMED {
+    background-color: #ea4335;
+}
+
+.chip-NEW {
+    background-color: #4285f4;
+}
+
+.chip-PROPOSAL {
+    background-color: #fbbc05;
+}
+
+.chip-DROPPED,
+.chip-EXPECTED {
+    background-color: #949494;
+}

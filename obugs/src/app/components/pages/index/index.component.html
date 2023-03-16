@@ -2,10 +2,10 @@
 
 <div class="index-main">
   <div class="index-softwares">
-    
-    <mat-card *ngFor="let software of softwares; index as i;" class="index-software" color="secondary" (click)="selectSoftware(software.id)">
-      <mat-card-header>
-        <div mat-card-avatar class="index-software-ico" style="background-image: url('/assets/icons/{{software.id}}.png')"></div>
+
+    <mat-card *ngFor="let software of softwares; index as i;" class="index-software" color="secondary"
+      (click)="selectSoftware(software.id)">
+      <mat-card-header class="software-card">
         <mat-card-title class="index-software-title">{{software.fullname}}</mat-card-title>
         <mat-card-subtitle class="index-software-subtitle">{{software.editor}}</mat-card-subtitle>
       </mat-card-header>

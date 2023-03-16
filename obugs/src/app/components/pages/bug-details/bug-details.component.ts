@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Bug, BugDetailsPayload, BugVotePayload } from 'src/app/models/bug';
-import { Software } from 'src/app/models/software';
-import { SoftwaresService } from 'src/app/services/softwares.service';
+import { Bug, BugDetailsPayload, BugVotePayload } from 'src/app/models/models';
+import { Software } from 'src/app/models/models';
+import { SoftwareService } from 'src/app/services/software.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -19,7 +19,7 @@ export class BugDetailsComponent implements OnInit {
   myVote?: string;
 
   constructor(private router: Router, private route: ActivatedRoute,
-    private softwaresService: SoftwaresService, private http: HttpClient) {
+    private softwareService: SoftwareService, private http: HttpClient) {
   }
 
   ngOnInit(): void {
@@ -27,7 +27,7 @@ export class BugDetailsComponent implements OnInit {
       let softwareId = params.get('software');
       if (softwareId != null) {
         this.softwareId = softwareId;
-        this.softwaresService.getSoftwareDetails(this.softwareId).subscribe(data => {
+        this.softwareService.getSoftwareDetails(this.softwareId).subscribe(data => {
           if (data.payload == null) {
             this.router.navigate(["/"]);
           } else {

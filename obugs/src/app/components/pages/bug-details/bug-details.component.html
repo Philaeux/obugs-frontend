@@ -1,11 +1,11 @@
 <app-header [software]=software></app-header>
 
-<app-software-sidenav [softwareId]="softwareId">
+<app-software-sidenav [software]="software">
 
 
     <div *ngIf="bug != null">
         <p class="mat-headline-5">#{{bug.id}} {{bug.title}}</p>
-        <p class="mat-subtitle-2 paddedText">Created by {{bug.user.username}} on {{bug.created_at | date: 'MMMM d, y,
+        <p class="mat-subtitle-2 paddedText">Created by {{bug.user_id}} on {{bug.created_at | date: 'MMMM d, y,
             H:mm:ss'}}
         </p>
         <p class="mat-subtitle-2 paddedText">Updated on {{bug.updated_at | date: 'MMMM d, y, H:mm:ss'}}</p>

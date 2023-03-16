@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {Router} from "@angular/router";
-import {SoftwaresService} from "../../../services/softwares.service";
-import {Software, SoftwareArrayPayload} from "../../../models/software";
- 
+import { Router } from "@angular/router";
+import { SoftwareService } from "../../../services/software.service";
+import { Software, SoftwareArrayPayload } from "../../../models/models";
+
 @Component({
   selector: 'app-index',
   templateUrl: './index.component.html',
@@ -12,7 +12,10 @@ export class IndexComponent implements OnInit {
 
   public softwares: Software[] = [];
 
-  constructor(private router: Router, private softwaresService: SoftwaresService) { }
+  constructor(
+    private router: Router,
+    private softwareService: SoftwareService
+  ) { }
 
   ngOnInit(): void {
     this.refreshListSoftware();
@@ -23,10 +26,12 @@ export class IndexComponent implements OnInit {
   }
 
   refreshListSoftware() {
-    this.softwaresService.getSoftwareList().subscribe((data: SoftwareArrayPayload) =>
-    {
-      this.softwares = data.payload;
-      console.log(this.softwares);
+    this.softwareService.getSoftwareList().subscribe((data: SoftwareArrayPayload) => {
+      if (data.error != null) {
+        console.log(data.error);
+      } else {
+        this.softwares = data.payload;
+      }
     })
   }
 }

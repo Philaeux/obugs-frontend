@@ -5,7 +5,11 @@ import { Injectable } from '@angular/core';
 })
 export class AuthService {
 
+  isLoggedIn: Boolean = false;
+  username: String | undefined;
+
   constructor() {
+
   }
 
   loginWithGoogle() {
