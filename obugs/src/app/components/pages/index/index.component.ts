@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { SoftwareService } from "../../../services/software.service";
 import { Software, SoftwareArrayPayload } from "../../../models/models";
+import { SocialAuthService } from '@abacritt/angularx-social-login';
 
 @Component({
   selector: 'app-index',
@@ -14,7 +15,8 @@ export class IndexComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private softwareService: SoftwareService
+    private softwareService: SoftwareService,
+    public socialAuthService: SocialAuthService
   ) { }
 
   ngOnInit(): void {

@@ -1,7 +1,7 @@
+import { GoogleLoginProvider, SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { Software } from "../../../models/models";
-import { AuthService } from "../../../services/auth.service";
 
 @Component({
   selector: 'app-header',
@@ -12,14 +12,17 @@ export class HeaderComponent implements OnInit {
 
   @Input()
   software: Software | undefined;
+  user: SocialUser | undefined;
 
   constructor(
-    public authService: AuthService,
-    private router: Router
+    private router: Router,
+    private authService: SocialAuthService
   ) { }
 
   ngOnInit(): void {
-
+    this.authService.authState.subscribe((user) => {
+      this.user = user;
+    });
   }
 
   goToHome() {
@@ -30,9 +33,7 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(["/s/" + this.software!.id]);
   }
 
-  loginWithGoogle() {
-  }
-
-  loginWithTwitter() {
+  signOut() {
+    this.authService.signOut();
   }
 }
