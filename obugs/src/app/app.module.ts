@@ -9,11 +9,7 @@ import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { SocialLoginModule, SocialAuthServiceConfig, GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
-import {
-  GoogleLoginProvider,
-  FacebookLoginProvider
-} from '@abacritt/angularx-social-login';
+
 import { MaterialModule } from './material.module';
 
 import { BugDetailsComponent } from './components/pages/bug-details/bug-details.component';
@@ -47,28 +43,8 @@ import { BugRowComponent } from './components/elements/bug-row/bug-row.component
     LayoutModule,
     MaterialModule,
     ReactiveFormsModule,
-    SocialLoginModule,
-    GoogleSigninButtonModule
   ],
-  providers: [
-    {
-      provide: 'SocialAuthServiceConfig',
-      useValue: {
-        autoLogin: true,
-        providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(
-              '955891060575-the5kh56bfjefs7icqssn7h9bddfk41r.apps.googleusercontent.com'
-            )
-          }
-        ],
-        onError: (err) => {
-          console.error(err);
-        }
-      } as SocialAuthServiceConfig,
-    }
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {

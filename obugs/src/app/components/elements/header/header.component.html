@@ -10,17 +10,13 @@
 
   <div class="loginArea">
 
-    <ng-template [ngIf]="user">
-      {{ user.name }}
+    <ng-template [ngIf]="false">
       <button mat-icon-button aria-label="Logout" (click)="signOut()">
         <mat-icon>logout</mat-icon>
       </button>
     </ng-template>
 
-    <ng-template [ngIf]="!user">
-
-
-      <asl-google-signin-button class="mx-5"></asl-google-signin-button>
+    <ng-template [ngIf]="true">
     </ng-template>
   </div>
 
