@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Software } from 'src/app/models/models';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormControl } from '@angular/forms';
 import { SoftwareService } from 'src/app/services/software.service';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -14,14 +14,14 @@ import { BugNewPayload } from 'src/app/models/models';
 })
 export class BugNewComponent {
 
-  form: FormGroup = new FormGroup({
-    title: new FormControl(''),
-    description: new FormControl(''),
+  form: UntypedFormGroup = new UntypedFormGroup({
+    title: new UntypedFormControl(''),
+    description: new UntypedFormControl(''),
   });
   softwareId: string | undefined;
   software: Software | undefined;
 
-  constructor(private fb: FormBuilder, private router: Router, private route: ActivatedRoute,
+  constructor(private fb: UntypedFormBuilder, private router: Router, private route: ActivatedRoute,
     private softwareService: SoftwareService, private http: HttpClient) {
     this.form = this.fb.group({
       title: ['', Validators.required],
