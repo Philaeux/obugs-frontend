@@ -3,23 +3,32 @@
 @import '~normalize.css';
 
 // Define theme
-@include mat.core();
+// TODO(v15): As of v15 mat.legacy-core no longer includes default typography styles.
+//  The following line adds:
+//    1. Default typography styles for all components
+//    2. Styles for typography hierarchy classes (e.g. .mat-headline-1)
+//  If you specify typography styles for the components you use elsewhere, you should delete this line.
+//  If you don't need the default component typographies but still want the hierarchy styles,
+//  you can delete this line and instead use:
+//    `@include mat.legacy-typography-hierarchy(mat.define-legacy-typography-config());`
+@include mat.all-legacy-component-typographies();
+@include mat.legacy-core();
 
 $my-primary: mat.define-palette(mat.$blue-palette, 500);
 $my-accent: mat.define-palette(mat.$grey-palette, 700);
 $my-warn: mat.define-palette(mat.$red-palette);
-$my-typography: mat.define-typography-config($font-family: "Roboto"
+$my-typography: mat.define-legacy-typography-config($font-family: "Roboto"
   );
 
 $my-theme: mat.define-light-theme((color: (primary: $my-primary,
         accent: $my-accent,
         warn: $my-warn ),
-      typography: mat.define-typography-config(),
+      typography: mat.define-legacy-typography-config(),
       density: 0,
     ));
 
-@include mat.all-component-themes($my-theme);
+@include mat.all-legacy-component-themes($my-theme);
 // If you want to emit components one by one
 // @include mat.core-theme($my-theme);
 // @include mat.button-theme($my-theme);
-@include mat.typography-hierarchy($my-typography);
+@include mat.legacy-typography-hierarchy($my-typography);
