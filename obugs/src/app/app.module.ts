@@ -20,6 +20,9 @@ import { IndexComponent } from './components/pages/index/index.component';
 import { HeaderComponent } from './components/elements/header/header.component';
 import { SoftwareSidenavComponent } from './components/elements/software-sidenav/software-sidenav.component';
 import { BugRowComponent } from './components/elements/bug-row/bug-row.component';
+import { GraphQLModule } from './graphql.module';
+import { LoginComponent } from './components/pages/login/login.component';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [
@@ -31,7 +34,8 @@ import { BugRowComponent } from './components/elements/bug-row/bug-row.component
     IndexComponent,
     HeaderComponent,
     SoftwareSidenavComponent,
-    BugRowComponent
+    BugRowComponent,
+    LoginComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -43,8 +47,11 @@ import { BugRowComponent } from './components/elements/bug-row/bug-row.component
     LayoutModule,
     MaterialModule,
     ReactiveFormsModule,
+    GraphQLModule
   ],
-  providers: [],
+  providers: [
+    AuthService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

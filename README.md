@@ -10,9 +10,9 @@ Using Powershell as console. You may require to start as administrator for some 
 * Check that nvm is ready to be used:  
 `nvm version`
 * Install a running version of node:  
-`nvm install latest`
+`nvm install lts`
 * Set the installed version as the one to use:   
-`nvm use latest`
+`nvm use lts`
 * Check that node is ready to be used:  
 `node --version`  
 `npm --version`
@@ -21,9 +21,9 @@ Using Powershell as console. You may require to start as administrator for some 
 * Install angular global library:  
 `npm install -g @angular/cli`
 * Install project libraries:  
-`cd /obugs-frontend/obugs; npm install`
+`cd ./obugs; npm install`
 * Start the project:  
-`cd /obugs-frontend/obugs; ng serve --open`
+`cd ./obugs; ng serve --open`
 
 After some time, the browser should display the main page, with hot reload after every change.
 
@@ -38,9 +38,9 @@ source ~/.profile
 * Check that nvm is ready to be used:  
 `nvm --version`
 * Install a running version of node:  
-`nvm install node`
+`nvm install lts`
 * Set the installed version as the one to use:   
-`nvm use latest`
+`nvm use lts`
 * Check that node is ready to be used:  
 `node --version`  
 `npm --version`
@@ -49,9 +49,9 @@ source ~/.profile
 * Install angular global library:  
 `npm install -g @angular/cli`
 * Install project libraries:  
-`cd /obugs-frontend/obugs; npm install`
+`cd ./obugs; npm install`
 * Start the project:  
-`cd /obugs-frontend/obugs; ng serve --open`
+`cd ./obugs; ng serve --open`
 
 ### Production
 
@@ -60,3 +60,8 @@ To turn the angular project into a production ready website, the command `ng bui
 
 ## Deploy
 Website will be deployed into a Nginx on a production server.
+````
+docker compose build
+docker compose down
+docker compose up -d
+``

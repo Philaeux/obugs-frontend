@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Software } from 'src/app/models/models';
 import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormControl } from '@angular/forms';
-import { SoftwareService } from 'src/app/services/software.service';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { BugNewPayload } from 'src/app/models/models';
@@ -21,8 +20,7 @@ export class BugNewComponent {
   softwareId: string | undefined;
   software: Software | undefined;
 
-  constructor(private fb: UntypedFormBuilder, private router: Router, private route: ActivatedRoute,
-    private softwareService: SoftwareService, private http: HttpClient) {
+  constructor(private fb: UntypedFormBuilder, private router: Router, private route: ActivatedRoute, private http: HttpClient) {
     this.form = this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required]
@@ -33,14 +31,14 @@ export class BugNewComponent {
     this.route.paramMap.subscribe((params: ParamMap) => {
       let softwareId = params.get('software');
       if (softwareId != null) {
-        this.softwareId = softwareId;
+        this.softwareId = softwareId;/*
         this.softwareService.getSoftwareDetails(this.softwareId).subscribe(data => {
           if (data.payload == null) {
             this.router.navigate(["/"]);
           } else {
             this.software = data.payload;
           }
-        });
+        });*/
       }
     });
   }
@@ -53,7 +51,7 @@ export class BugNewComponent {
         title: title,
         description: description
       }
-      this.http.post<BugNewPayload>(environment.apiUrl + '/api/bug', payload).subscribe(
+      this.http.post<BugNewPayload>(environment.obugsBackend + '/api/bug', payload).subscribe(
         response => {
           if (response.error == null) {
             this.router.navigate(["/s/" + this.softwareId + "/bug/" + response.payload.id]);

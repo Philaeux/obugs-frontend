@@ -1,0 +1,77 @@
+<app-header></app-header>
+
+<div class="container">
+    <mat-card class="combined-card">
+        <div class="form-column">
+            <h2>Login</h2>
+            <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
+                <mat-form-field class="full-width">
+                    <input matInput placeholder="Username" formControlName="loginUsername">
+                    <mat-error *ngIf="loginForm.get('loginUsername')?.hasError('required')">Username is
+                        required.</mat-error>
+                    <mat-error *ngIf="loginForm.get('loginUsername')?.hasError('minlength')">Username is
+                        at least 3 characters long.</mat-error>
+                </mat-form-field>
+                <mat-form-field class="full-width">
+                    <input matInput type="password" placeholder="Password" formControlName="loginPassword">
+                    <mat-error *ngIf="loginForm.get('loginPassword')?.hasError('required')">Password is
+                        required.</mat-error>
+                    <mat-error *ngIf="loginForm.get('loginPassword')?.hasError('minlength')">Password is
+                        at least 6 characters long.</mat-error>
+                </mat-form-field>
+                <div class="error">{{errorLogin}}</div>
+                <div class="message">{{messageLogin}}</div>
+                <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">Login</button>
+            </form>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="form-column">
+            <h2>Register</h2>
+            <form [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()">
+                <mat-form-field class="full-width">
+                    <input matInput placeholder="Username" formControlName="registerUsername">
+                    <mat-error *ngIf="registerForm.get('registerUsername')?.hasError('required')">Username is
+                        required.</mat-error>
+                    <mat-error *ngIf="registerForm.get('registerUsername')?.hasError('minlength')">Username is
+                        at least 3 characters long.</mat-error>
+                </mat-form-field>
+                <mat-form-field class="full-width">
+                    <input matInput type="password" placeholder="Password" formControlName="registerPassword">
+                    <mat-error *ngIf="registerForm.get('registerPassword')?.hasError('required')">Password is
+                        required.</mat-error>
+                    <mat-error *ngIf="registerForm.get('registerPassword')?.hasError('minlength')">Password is
+                        at least 6 characters long.</mat-error>
+                </mat-form-field>
+                <mat-form-field class="full-width">
+                    <input matInput type="password" placeholder="Repeat Password" formControlName="repeatPassword">
+                    <mat-error *ngIf="registerForm.get('repeatPassword')?.hasError('required')">Repeat Password is
+                        required.</mat-error>
+                    <mat-error
+                        *ngIf="registerForm.get('repeatPassword')?.hasError('passwordMismatch') && registerForm.get('repeatPassword')?.touched">Passwords
+                        must match.</mat-error>
+                </mat-form-field>
+                <mat-form-field class="full-width">
+                    <input matInput type="email" placeholder="Email" formControlName="registerEmail">
+                    <mat-error *ngIf="registerForm.get('registerEmail')?.hasError('required')">Email is
+                        required.</mat-error>
+                    <mat-error *ngIf="registerForm.get('registerEmail')?.hasError('email')">Email is not
+                        valid.</mat-error>
+                </mat-form-field>
+                <mat-form-field class="full-width">
+                    <input matInput type="email" placeholder="Repeat Email" formControlName="repeatEmail">
+                    <mat-error *ngIf="registerForm.get('repeatEmail')?.hasError('required')">Repeat Email is
+                        required.</mat-error>
+                    <mat-error
+                        *ngIf="registerForm.get('repeatEmail')?.hasError('emailMismatch') && registerForm.get('repeatEmail')?.touched">Emails
+                        must match.</mat-error>
+                </mat-form-field>
+                <div class="error">{{errorRegister}}</div>
+                <div class="message">{{messageRegister}}</div>
+                <button mat-raised-button color="primary" type="submit" [disabled]="!registerForm.valid">Create
+                    Account</button>
+            </form>
+        </div>
+    </mat-card>
+</div>

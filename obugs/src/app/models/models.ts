@@ -1,8 +1,20 @@
+export interface AuthPayload {
+    error: string;
+    message: string;
+}
+
 export interface Software {
     id: string;
-    fullname: string;
+    fullName: string;
     editor: string;
 }
+
+export interface User {
+    id: number;
+    username: string;
+}
+
+///////////////////
 
 export interface SoftwareArrayPayload {
     error: string | null;
@@ -32,12 +44,8 @@ export interface BugArrayPayload {
     payload: Bug[];
 }
 
-///////////////////
 
-export interface User {
-    id: BigInteger;
-    username: string;
-}
+
 
 export interface BugNewPayload {
     error: string | null;

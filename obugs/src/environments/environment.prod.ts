@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://obugsapi.the-cluster.org/api/'
+  obugsFrontend: 'https://obugs.the-cluster.org/',
+  obugsBackend: 'https://obugsapi.the-cluster.org/'
 };

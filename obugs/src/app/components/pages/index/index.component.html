@@ -1,15 +1,22 @@
 <app-header></app-header>
 
-<div class="index-main">
-  <div class="index-softwares">
+<div class="software-list-card">
+  <table mat-table [dataSource]="softwares" class="mat-elevation-z8">
+    <!-- ID Column -->
 
-    <mat-card *ngFor="let software of softwares; index as i;" class="index-software" color="secondary"
-      (click)="selectSoftware(software.id)">
-      <mat-card-header class="software-card">
-        <mat-card-title class="index-software-title">{{software.fullname}}</mat-card-title>
-        <mat-card-subtitle class="index-software-subtitle">{{software.editor}}</mat-card-subtitle>
-      </mat-card-header>
-    </mat-card>
+    <!-- Full Name Column -->
+    <ng-container matColumnDef="fullName">
+      <th mat-header-cell *matHeaderCellDef>Software</th>
+      <td mat-cell *matCellDef="let software">{{ software.fullName }}</td>
+    </ng-container>
 
-  </div>
-</div>
+    <!-- Editor Column -->
+    <ng-container matColumnDef="editor">
+      <th mat-header-cell *matHeaderCellDef>Company</th>
+      <td mat-cell *matCellDef="let software">{{ software.editor }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectSoftware(row.id)"></tr>
+  </table>
+  <div>

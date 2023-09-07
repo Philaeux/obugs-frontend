@@ -18,6 +18,7 @@ import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy
 import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from '@angular/material/legacy-progress-spinner'
 import { MatButtonToggleModule } from '@angular/material/button-toggle'
 import { MatLegacyChipsModule as MatChipsModule } from '@angular/material/legacy-chips'
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const MaterialComponents = [
   MatButtonModule,
@@ -32,6 +33,7 @@ const MaterialComponents = [
   MatTableModule,
   MatToolbarModule,
   MatTreeModule,
+  MatTooltipModule,
   MatSlideToggleModule,
   MatFormFieldModule,
   MatInputModule,
@@ -42,7 +44,7 @@ const MaterialComponents = [
 
 @NgModule({
   imports: [
-    MaterialComponents
+    MaterialComponents,
   ],
   exports: [
     MaterialComponents

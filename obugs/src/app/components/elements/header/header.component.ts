@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { Software } from "../../../models/models";
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -13,7 +14,8 @@ export class HeaderComponent implements OnInit {
   software: Software | undefined;
 
   constructor(
-    private router: Router
+    private router: Router,
+    public authService: AuthService
   ) { }
 
   ngOnInit(): void { }
@@ -26,7 +28,11 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(["/s/" + this.software!.id]);
   }
 
-  signOut() {
+  goToAccount() {
 
+  }
+
+  goToLogin() {
+    this.router.navigate(["/login"]);
   }
 }

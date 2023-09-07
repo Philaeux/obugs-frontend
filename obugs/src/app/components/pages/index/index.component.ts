@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
-import { SoftwareService } from "../../../services/software.service";
 import { Software, SoftwareArrayPayload } from "../../../models/models";
+import { Apollo } from 'apollo-angular';
+import { QUERY_LIST_SOFTWARE } from 'src/app/models/graphql';
+import { QueryResponseListSoftware } from 'src/app/models/graphql';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-index',
@@ -11,10 +14,12 @@ import { Software, SoftwareArrayPayload } from "../../../models/models";
 export class IndexComponent implements OnInit {
 
   public softwares: Software[] = [];
+  displayedColumns: string[] = ['fullName', 'editor'];
 
   constructor(
     private router: Router,
-    private softwareService: SoftwareService
+    private apollo: Apollo,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -26,12 +31,15 @@ export class IndexComponent implements OnInit {
   }
 
   refreshListSoftware() {
-    this.softwareService.getSoftwareList().subscribe((data: SoftwareArrayPayload) => {
-      if (data.error != null) {
-        console.log(data.error);
-      } else {
-        this.softwares = data.payload;
-      }
-    })
+    this.apollo
+      .query<QueryResponseListSoftware>({
+        query: QUERY_LIST_SOFTWARE
+      })
+      .subscribe((response) => {
+        this.softwares = response.data.softwares;
+      },
+        (error) => {
+          console.log(error);
+        });
   }
 }
