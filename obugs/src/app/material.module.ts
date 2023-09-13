@@ -17,8 +17,9 @@ import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/materia
 import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input'
 import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from '@angular/material/legacy-progress-spinner'
 import { MatButtonToggleModule } from '@angular/material/button-toggle'
-import { MatLegacyChipsModule as MatChipsModule } from '@angular/material/legacy-chips'
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatChipsModule } from '@angular/material/chips'
 
 const MaterialComponents = [
   MatButtonModule,
@@ -39,7 +40,8 @@ const MaterialComponents = [
   MatInputModule,
   MatProgressSpinnerModule,
   MatButtonToggleModule,
-  MatChipsModule
+  MatChipsModule,
+  MatAutocompleteModule
 ]
 
 @NgModule({

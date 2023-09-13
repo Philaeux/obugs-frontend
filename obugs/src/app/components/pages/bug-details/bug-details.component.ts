@@ -1,8 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Bug, BugDetailsPayload, BugVotePayload } from 'src/app/models/models';
+import { Apollo } from 'apollo-angular';
+import { QUERY_ENTRY_DETAILS, QueryResponseEntryDetails } from 'src/app/models/graphql';
+import { Bug, BugDetailsPayload, BugVotePayload, Entry } from 'src/app/models/models';
 import { Software } from 'src/app/models/models';
+import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -11,51 +14,44 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./bug-details.component.scss']
 })
 export class BugDetailsComponent implements OnInit {
-  softwareId?: string;
+
+  softwareId: String | null = null;
+  entryId: number | null = null;
+  entry: Entry | null = null;
+
   software?: Software;
-  bugId?: string;
   bug?: Bug;
   myVote?: string;
 
-  constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {
-  }
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private apollo: Apollo,
+    public auth: AuthService
+  ) { }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params: ParamMap) => {
-      let softwareId = params.get('software');
-      if (softwareId != null) {
-        this.softwareId = softwareId;/*
-        this.softwareService.getSoftwareDetails(this.softwareId).subscribe(data => {
-          if (data.payload == null) {
-            this.router.navigate(["/"]);
-          } else {
-            this.software = data.payload;
-          }
-        });*/
-      }
+    this.softwareId = this.route.snapshot.paramMap.get("software");
+    let id = this.route.snapshot.paramMap.get("entry");
+    if (id != null) {
+      this.entryId = parseInt(id)
+    }
 
-      let bugId = params.get('bug');
-      if (bugId != null) {
-        this.bugId = bugId;
-        this.http.get<BugDetailsPayload>(environment.obugsBackend + "/api/bug/" + this.bugId + "/").subscribe(data => {
-          if (data.payload == null) {
-            this.router.navigate(["/s/" + this.softwareId]);
-          } else {
-            this.bug = data.payload;
-            this.http.get<BugVotePayload>(environment.obugsBackend + "/api/bug_vote/" + this.bugId + "/").subscribe(data => {
-              if (data.error == null && data.payload != 0) {
-                console.log(data);
-                this.myVote = data.payload?.toString();
-              }
-            })
-          }
-        });
-      }
-    });
+    this.apollo
+      .query<QueryResponseEntryDetails>({
+        query: QUERY_ENTRY_DETAILS,
+        variables: {
+          entryId: this.entryId,
+        }
+      })
+      .subscribe((response) => {
+        this.entry = response.data.entry;
+      });
   }
 
   onVoteChange(): void {
-    this.http.post<BugDetailsPayload>(environment.obugsBackend + "/api/bug_vote/" + this.bugId + "/", { "vote": this.myVote }).subscribe(data => {
+    this.http.post<BugDetailsPayload>(environment.obugsBackend + "/api/bug_vote/" + this.entryId + "/", { "vote": this.myVote }).subscribe(data => {
       if (data.payload != null) {
         this.bug = data.payload;
       }

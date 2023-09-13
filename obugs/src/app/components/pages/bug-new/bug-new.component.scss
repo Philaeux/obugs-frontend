@@ -1,20 +1,26 @@
-.new-form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+/* form.component.scss */
+
+.form-card {
+    width: 400px;
+    margin: 0 auto;
+    padding: 16px;
+
+    .full-width {
+        width: 100%;
+    }
+
+
+
+
 }
 
-.centered-form-element {
-    max-width: fit-content;
-    align-self: center;
+mat-chip-row {
+    padding: 4px;
 }
 
-.form-title {
-    width: 600px;
-    align-self: center;
-}
-
-.form-description {
-    width: 600px;
-    align-self: center;
+.tagOption {
+    z-index: 1000;
+    /* You can adjust this value as needed */
+    background-color: white !important;
+    /* Set the background color to white */
 }

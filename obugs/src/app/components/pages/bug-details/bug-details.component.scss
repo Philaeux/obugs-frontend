@@ -38,3 +38,18 @@
     background-color: #a31a1a;
     color: white;
 }
+
+.entry-votes {
+    display: flex;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    gap: 16px;
+    align-items: center;
+}
+
+.entry-impact {
+    text-align: center;
+    font-size: xx-large;
+    margin: 8px;
+
+}

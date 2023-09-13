@@ -10,9 +10,9 @@ import { LoginComponent } from './components/pages/login/login.component';
 const routes: Routes = [
   { path: '', component: IndexComponent },
   { path: 'login', component: LoginComponent },
-  { path: 's/:software/bug/add', component: BugNewComponent },
+  { path: 's/:software/new', component: BugNewComponent },
   { path: 's/:software/bug/search', component: BugSearchComponent },
-  { path: 's/:software/bug/:bug', component: BugDetailsComponent },
+  { path: 's/:software/:entry', component: BugDetailsComponent },
   { path: 's/:software', component: DashboardComponent },
   { path: '**', component: IndexComponent },
 ];

@@ -14,6 +14,25 @@ export interface User {
     username: string;
 }
 
+export interface Tag {
+    id: number;
+    name: string;
+    softwareId: string;
+}
+
+export interface Entry {
+    id: number;
+    softwareId: string;
+    title: string;
+    description: string;
+    illustration: string;
+    createdAt: string;
+    updatedAt: string;
+    status: string;
+    ratingTotal: number;
+    ratingCount: number;
+}
+
 ///////////////////
 
 export interface SoftwareArrayPayload {

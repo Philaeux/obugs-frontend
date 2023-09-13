@@ -11,24 +11,26 @@
 //  If you don't need the default component typographies but still want the hierarchy styles,
 //  you can delete this line and instead use:
 //    `@include mat.legacy-typography-hierarchy(mat.define-legacy-typography-config());`
-@include mat.all-legacy-component-typographies();
-@include mat.legacy-core();
+
+//@include mat.all-legacy-component-typographies();
+//@include mat.legacy-core();
+
+@include mat.core();
 
 $my-primary: mat.define-palette(mat.$blue-palette, 500);
 $my-accent: mat.define-palette(mat.$grey-palette, 700);
 $my-warn: mat.define-palette(mat.$red-palette);
-$my-typography: mat.define-legacy-typography-config($font-family: "Roboto"
-  );
+$my-typography: mat.define-typography-config($font-family: "Roboto");
 
 $my-theme: mat.define-light-theme((color: (primary: $my-primary,
         accent: $my-accent,
-        warn: $my-warn ),
-      typography: mat.define-legacy-typography-config(),
+        warn: $my-warn,
+      ),
+      typography: $my-typography,
       density: 0,
     ));
 
-@include mat.all-legacy-component-themes($my-theme);
-// If you want to emit components one by one
-// @include mat.core-theme($my-theme);
-// @include mat.button-theme($my-theme);
-@include mat.legacy-typography-hierarchy($my-typography);
+//@include mat.all-legacy-component-themes($my-theme);
+//@include mat.legacy-typography-hierarchy($my-typography);
+
+@include mat.all-component-themes($my-theme);

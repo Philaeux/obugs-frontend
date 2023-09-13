@@ -21,8 +21,6 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router,
-    private apollo: Apollo,
     private route: ActivatedRoute,
     private authService: AuthService
   ) {
@@ -64,7 +62,6 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Use username and token as needed
     const username = this.route.snapshot.queryParamMap.get('username');
     const token = this.route.snapshot.queryParamMap.get('token');
 
@@ -90,7 +87,6 @@ export class LoginComponent implements OnInit {
             this.errorLogin = data.error;
           }
         )
-      console.log('Login form submitted:', this.loginForm.value);
     }
   }
 

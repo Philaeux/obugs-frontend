@@ -37,9 +37,6 @@ export class IndexComponent implements OnInit {
       })
       .subscribe((response) => {
         this.softwares = response.data.softwares;
-      },
-        (error) => {
-          console.log(error);
-        });
+      });
   }
 }

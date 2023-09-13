@@ -1,10 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Software } from 'src/app/models/models';
-import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormControl } from '@angular/forms';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
-import { BugNewPayload } from 'src/app/models/models';
+import { Software, Tag } from 'src/app/models/models';
+import { Validators, FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { Apollo } from 'apollo-angular';
+import { MUTATION_CREATE_ENTRY, MutationResponseCreatEntry, QUERY_LIST_TAGS, QueryResponseListTags } from 'src/app/models/graphql';
+import { MatChipEditedEvent, MatChipGrid, MatChipInput, MatChipInputEvent } from '@angular/material/chips';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatInput } from '@angular/material/input';
+
 
 @Component({
   selector: 'app-bug-new',
@@ -13,51 +17,98 @@ import { BugNewPayload } from 'src/app/models/models';
 })
 export class BugNewComponent {
 
-  form: UntypedFormGroup = new UntypedFormGroup({
-    title: new UntypedFormControl(''),
-    description: new UntypedFormControl(''),
-  });
-  softwareId: string | undefined;
-  software: Software | undefined;
 
-  constructor(private fb: UntypedFormBuilder, private router: Router, private route: ActivatedRoute, private http: HttpClient) {
+  softwareId: string | null = null;
+  softwareTags: string[] = [];
+
+  @ViewChild("autoComple") autoComple: MatAutocomplete | undefined;
+  @ViewChild("chipInput") chipInput: MatInput | undefined;
+
+  form: FormGroup;
+  selectedTags: string[] = [];
+  suggestedTags: string[] = [];
+  readonly separatorKeysCodes = [ENTER, COMMA] as const;
+
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private apollo: Apollo,
+    private router: Router
+  ) {
     this.form = this.fb.group({
-      title: ['', Validators.required],
-      description: ['', Validators.required]
+      title: ['', [Validators.required]],
+      description: ['', [Validators.required]],
+      illustration: ['']
     });
   }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params: ParamMap) => {
-      let softwareId = params.get('software');
-      if (softwareId != null) {
-        this.softwareId = softwareId;/*
-        this.softwareService.getSoftwareDetails(this.softwareId).subscribe(data => {
-          if (data.payload == null) {
-            this.router.navigate(["/"]);
-          } else {
-            this.software = data.payload;
-          }
-        });*/
-      }
-    });
+    this.softwareId = this.route.snapshot.paramMap.get("software");
+    this.apollo
+      .query<QueryResponseListTags>({
+        query: QUERY_LIST_TAGS,
+        variables: {
+          softwareId: this.softwareId
+        }
+      })
+      .subscribe((response) => {
+        this.softwareTags = []
+        for (var tag of response.data.tags) {
+          this.softwareTags.push(tag.name);
+        };
+      });
+  }
+
+  onSeparatorKey(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+
+    this.addTag(value);
+  }
+
+  addTag(tag: string): void {
+    const index = this.softwareTags.indexOf(tag);
+    if (index != -1) {
+      this.selectedTags.push(tag);
+      this.softwareTags.splice(index, 1);
+    }
+  }
+
+  removeTag(tag: string): void {
+    const index = this.selectedTags.indexOf(tag);
+
+    if (index >= 0) {
+      this.selectedTags.splice(index, 1);
+      this.softwareTags.push(tag);
+      this.softwareTags.sort();
+    }
+  }
+
+  filterTagSuggestions(event: any): void {
+    const value = event.target.value.toLowerCase();
+    this.suggestedTags = this.softwareTags.filter(
+      (tag) => tag.toLowerCase().includes(value)
+    );
+  }
+
+  onTagOptionSelected(event: MatAutocompleteSelectedEvent) {
+    this.addTag(event.option.value);
   }
 
   onSubmit() {
     if (this.form.valid) {
-      const { title, description } = this.form.value;
-      const payload = {
-        software: this.softwareId,
-        title: title,
-        description: description
-      }
-      this.http.post<BugNewPayload>(environment.obugsBackend + '/api/bug', payload).subscribe(
-        response => {
-          if (response.error == null) {
-            this.router.navigate(["/s/" + this.softwareId + "/bug/" + response.payload.id]);
-          } else {
-            console.log(response);
+      this.apollo
+        .mutate<MutationResponseCreatEntry>({
+          mutation: MUTATION_CREATE_ENTRY,
+          variables: {
+            softwareId: this.softwareId,
+            title: this.form.value.title,
+            description: this.form.value.description,
+            illustration: this.form.value.illustration,
+            tags: this.selectedTags
           }
+        })
+        .subscribe((response) => {
+          this.router.navigate(["/s/" + response.data?.createEntry.softwareId + "/" + response.data?.createEntry.id]);
         });
     }
   }

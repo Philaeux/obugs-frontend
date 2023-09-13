@@ -20,16 +20,11 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    var softwareCode: string | null = this.route.snapshot.paramMap.get("software");
+    var softwareId: string | null = this.route.snapshot.paramMap.get("software");
 
-    if (softwareCode == null) {
+    if (softwareId == null) {
       this.router.navigate(["/"]);
     }
-
-    this.getSoftwareDetails(softwareCode as string);
-    this.getBugsAll(softwareCode as string);
-    this.getBugsNew(softwareCode as string);
-    this.getBugsConfirmed(softwareCode as string);
   }
 
   getSoftwareDetails(softwareCode: string) {/*
