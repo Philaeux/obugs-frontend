@@ -1,22 +1,13 @@
-<app-header></app-header>
+<app-layout>
 
-<div class="software-list-card">
-  <table mat-table [dataSource]="softwares" class="mat-elevation-z8">
-    <!-- ID Column -->
+  <mat-card class="title-card">
+    <mat-card-content class="title-card-content">
+      <div class="mat-headline-1">oBugs</div>
+      <div class="title-card-subtitle mat-headline-5">oBugs is a community-driven bug tracking system where users curate
+        a live database of
+        known issues for their favorite software.</div>
+      <button mat-raised-button color="primary" class="title-card-button" routerLink="/apps">Start Contributing</button>
+    </mat-card-content>
+  </mat-card>
 
-    <!-- Full Name Column -->
-    <ng-container matColumnDef="fullName">
-      <th mat-header-cell *matHeaderCellDef>Software</th>
-      <td mat-cell *matCellDef="let software">{{ software.fullName }}</td>
-    </ng-container>
-
-    <!-- Editor Column -->
-    <ng-container matColumnDef="editor">
-      <th mat-header-cell *matHeaderCellDef>Company</th>
-      <td mat-cell *matCellDef="let software">{{ software.editor }}</td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectSoftware(row.id)"></tr>
-  </table>
-  <div>
+</app-layout>

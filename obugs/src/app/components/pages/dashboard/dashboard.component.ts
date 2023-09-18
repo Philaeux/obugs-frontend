@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from "@angular/router";
-import { Software, Bug } from "../../../models/models";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Entry } from "../../../models/models";
+import { Apollo } from 'apollo-angular';
+import { QUERY_LIST_ENTRIES, QueryResponseListEntries } from 'src/app/models/graphql';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,22 +11,34 @@ import { Software, Bug } from "../../../models/models";
 })
 export class DashboardComponent implements OnInit {
 
-  software: Software | undefined;
-  bugsAll: Bug[] = [];
-  bugsNew: Bug[] = [];
-  bugsConfirmed: Bug[] = [];
+  softwareId: string | null = null;
+
+  entryMixed: Entry[] = [];
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private apollo: Apollo
   ) { }
 
   ngOnInit(): void {
-    var softwareId: string | null = this.route.snapshot.paramMap.get("software");
-
-    if (softwareId == null) {
+    this.softwareId = this.route.snapshot.paramMap.get("software");
+    if (this.softwareId == null) {
       this.router.navigate(["/"]);
     }
+
+    this.apollo
+      .subscribe<QueryResponseListEntries>({
+        query: QUERY_LIST_ENTRIES,
+        variables: {
+          softwareId: this.softwareId
+        }
+      })
+      .subscribe((response) => {
+        if (response.data) {
+          this.entryMixed = response.data.entries;
+        }
+      });
   }
 
   getSoftwareDetails(softwareCode: string) {/*
@@ -68,7 +82,7 @@ export class DashboardComponent implements OnInit {
     });*/
   }
 
-  openBugDetails(bug: Bug) {
-    this.router.navigate([`s/${bug.software_id}/bug/${bug.id}`]);
+  openBugDetails(entry: Entry) {
+    this.router.navigate([`s/${entry.softwareId}/${entry.id}`]);
   }
 }

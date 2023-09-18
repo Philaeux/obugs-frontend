@@ -6,15 +6,17 @@ import { BugSearchComponent } from "./components/pages/bug-search/bug-search.com
 import { DashboardComponent } from './components/pages/dashboard/dashboard.component';
 import { IndexComponent } from './components/pages/index/index.component';
 import { LoginComponent } from './components/pages/login/login.component';
+import { AppsComponent } from './components/pages/apps/apps.component';
 
 const routes: Routes = [
-  { path: '', component: IndexComponent },
-  { path: 'login', component: LoginComponent },
+  { path: '', title: 'oBugs - Community-driven bug tracker', component: IndexComponent },
+  { path: 'apps', title: 'oBugs - Applications', component: AppsComponent },
+  { path: 'login', title: 'oBugs - Login', component: LoginComponent },
   { path: 's/:software/new', component: BugNewComponent },
   { path: 's/:software/bug/search', component: BugSearchComponent },
   { path: 's/:software/:entry', component: BugDetailsComponent },
   { path: 's/:software', component: DashboardComponent },
-  { path: '**', component: IndexComponent },
+  { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 
 @NgModule({

@@ -1,5 +1,5 @@
 import { gql } from "apollo-angular"
-import { Entry, Software, Tag, User } from "./models"
+import { Entry, EntryMessage, EntryVote, Software, Tag, User } from "./models"
 
 
 export const QUERY_LIST_SOFTWARE = gql`
@@ -7,7 +7,8 @@ export const QUERY_LIST_SOFTWARE = gql`
         softwares{
             id,
             fullName,
-            editor
+            editor,
+            description
         }
     }
 `
@@ -67,6 +68,8 @@ export const QUERY_ENTRY_DETAILS = gql`
             tags{
                 id
                 name
+                fontColor
+                backgroundColor
             }
             createdAt
             updatedAt
@@ -79,4 +82,102 @@ export const QUERY_ENTRY_DETAILS = gql`
 
 export interface QueryResponseEntryDetails {
     entry: Entry
+}
+
+export const QUERY_LIST_ENTRIES = gql`
+    query EntryList($softwareId: String!) {
+        entries(softwareId: $softwareId) {
+            id
+            title
+            softwareId
+            description
+            illustration
+            tags{
+                id
+                name
+                fontColor
+                backgroundColor
+            }
+            createdAt
+            updatedAt
+            status
+            ratingTotal
+            ratingCount
+        }
+    }
+`
+
+export interface QueryResponseListEntries {
+    entries: Entry[]
+}
+
+export const QUERY_MY_VOTE = gql`
+    query MyVote($entryId: Int!) {
+        myVote(entryId: $entryId) {
+            entryId
+            userId
+            rating
+        }
+    }
+`
+
+export interface QueryResponseMyVote {
+    myVote: EntryVote;
+}
+
+export const MUTATION_VOTE_ON_ENTRY = gql`
+    mutation VoteOnEntry($entryId: Int!, $rating: Int!) {
+        voteOnEntry(entryId: $entryId, rating: $rating) {
+            entry {
+                id
+                title
+                softwareId
+                description
+                illustration
+                tags{
+                    id
+                    name
+                    fontColor
+                    backgroundColor
+                }
+                createdAt
+                updatedAt
+                status
+                ratingTotal
+                ratingCount
+            }
+            vote {
+                entryId
+                userId
+                rating
+            }
+        }
+    }
+`
+
+export interface MutationResponseVoteOnEntry {
+    voteOnEntry: {
+        entry: Entry,
+        vote: EntryVote
+    }
+}
+
+export const QUERY_ENTRY_MESSAGES = gql`
+    query EntryMessages($entryId: Int!) {
+        entryMessages(entryId: $entryId) {
+            id
+            entryId
+            userId
+            createdAt
+            type
+            stateBefore
+            stateAfter
+            rating
+            ratingCount
+        }
+    }
+`
+
+export interface QueryResponseEntryMessages {
+    entryMessages: EntryMessage[]
 }

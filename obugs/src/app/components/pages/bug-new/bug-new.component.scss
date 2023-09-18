@@ -1,17 +1,18 @@
 /* form.component.scss */
 
 .form-card {
-    width: 400px;
+    width: 500px;
     margin: 0 auto;
     padding: 16px;
 
     .full-width {
         width: 100%;
     }
+}
 
-
-
-
+.mat-headline-5,
+.form-button {
+    text-align: center;
 }
 
 mat-chip-row {
@@ -20,7 +21,5 @@ mat-chip-row {
 
 .tagOption {
     z-index: 1000;
-    /* You can adjust this value as needed */
     background-color: white !important;
-    /* Set the background color to white */
 }

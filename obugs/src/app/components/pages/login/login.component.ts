@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
+    private router: Router,
     private authService: AuthService
   ) {
     this.loginForm = this.fb.group({
@@ -85,6 +86,9 @@ export class LoginComponent implements OnInit {
         this.loginForm.value.loginPassword).subscribe(
           data => {
             this.errorLogin = data.error;
+            if (this.errorLogin == "") {
+              this.router.navigate(["/"]);
+            }
           }
         )
     }

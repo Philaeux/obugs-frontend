@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Bug } from 'src/app/models/models';
+import { Entry, Tag } from 'src/app/models/models';
 
 @Component({
   selector: 'app-bug-row',
@@ -9,6 +9,13 @@ import { Bug } from 'src/app/models/models';
 export class BugRowComponent {
 
   @Input()
-  bug: Bug | undefined;
+  entry: Entry | undefined;
 
+  chipStyle(tag: Tag) {
+    const styles = {
+      'color': tag.fontColor,
+      'background-color': tag.backgroundColor
+    }
+    return styles
+  }
 }

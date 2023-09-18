@@ -1,0 +1,37 @@
+.bug-chip {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    margin-left: 4px;
+    margin-right: 4px;
+    border-radius: 5px;
+    color: white;
+    text-align: center;
+}
+
+.bug-chip-NEW {
+    background-color: #4285f4;
+}
+
+.bug-chip-CONFIRMED {
+    background-color: #ea4335;
+}
+
+.bug-chip-WIP {
+    background-color: #ea9c35;
+}
+
+.bug-chip-CHECK {
+    background-color: #8c51cf;
+}
+
+.bug-chip-FIXED {
+    background-color: #34a853;
+}
+
+.bug-chip-EXPECTED,
+.bug-chip-DUPLICATE,
+.bug-chip-CLOSED {
+    background-color: #949494;
+}

@@ -1,27 +1,58 @@
-.chip {
-    padding: 6px 8px;
-    border-radius: 5px;
-    font-weight: lighter;
-    color: white;
+.bug {
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    border: solid;
+    border-color: var(--mat-divider-color);
+    border-width: 1px;
 }
 
-.chip-FIXED {
-    background-color: #34a853;
+.bug:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.04);
 }
 
-.chip-CONFIRMED {
-    background-color: #ea4335;
+.bug-impact {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 54px;
+
+    font-size: 26px;
+    font-weight: 400;
+    font-family: Roboto;
+
+    border-right: solid;
+    border-color: var(--mat-divider-color);
+    border-width: 1px;
 }
 
-.chip-NEW {
-    background-color: #4285f4;
+.bug-rows {
+    display: flex;
+    flex-direction: column;
+    line-height: 24px;
+    font-size: 16px;
 }
 
-.chip-PROPOSAL {
-    background-color: #fbbc05;
+.bug-row-1,
+.bug-row-2 {
+    display: flex;
+    align-items: center;
+    //margin-top: 4px;
 }
 
-.chip-DROPPED,
-.chip-EXPECTED {
-    background-color: #949494;
+
+
+.bug-updated-at {
+    margin-left: 4px;
+    margin-right: 4px;
+    font-weight: 400;
+    font-size: 14px;
+    font-style: italic;
+}
+
+.bug-title {
+    font-weight: 500;
+    font-size: 16px;
 }

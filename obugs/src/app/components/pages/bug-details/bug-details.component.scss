@@ -1,50 +1,42 @@
-.spinnerContainer {
+.entry-details {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.spinner {
-    margin-top: 5px;
-}
-
-.spinnerText {
-    margin-left: 20px;
-    align-self: center;
-    height: fit-content;
-}
-
-.paddedText {
+.left-pad {
     margin-left: 20px;
 }
 
-.capsule {
-    border-radius: 10px;
-    padding: 10px 30px;
-    display: inline-block;
+.italic {
+    font-style: italic;
 }
 
-.NEW {
-    background-color: #2196f3;
-    color: white;
-}
-
-.OPENED {
-    background-color: #1aa331;
-    color: white;
-}
-
-.CLOSED,
-.WONT-FIX {
-    background-color: #a31a1a;
-    color: white;
-}
-
-.entry-votes {
+.entry-summary {
     display: flex;
     margin-top: 8px;
     margin-bottom: 8px;
     gap: 16px;
     align-items: center;
+    justify-content: center;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+}
+
+.entry-votes {
+    border: solid;
+    border-color: var(--mat-divider-color);
+    border-width: 1px;
+    border-radius: 10px;
+    padding: 8px;
 }
 
 .entry-impact {
@@ -52,4 +44,16 @@
     font-size: xx-large;
     margin: 8px;
 
+}
+
+.tag-link-list {
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+}
+
+.link-icon {
+    width: 16px;
+    height: 16px;
+    padding-top: 4px;
 }

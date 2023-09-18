@@ -1,3 +1,5 @@
+import { E } from "@angular/cdk/keycodes";
+
 export interface AuthPayload {
     error: string;
     message: string;
@@ -7,6 +9,7 @@ export interface Software {
     id: string;
     fullName: string;
     editor: string;
+    description: string;
 }
 
 export interface User {
@@ -18,6 +21,8 @@ export interface Tag {
     id: number;
     name: string;
     softwareId: string;
+    fontColor: string;
+    backgroundColor: string;
 }
 
 export interface Entry {
@@ -31,56 +36,23 @@ export interface Entry {
     status: string;
     ratingTotal: number;
     ratingCount: number;
+    tags: Tag[]
 }
 
-///////////////////
-
-export interface SoftwareArrayPayload {
-    error: string | null;
-    payload: Software[];
+export interface EntryVote {
+    entryId: number;
+    userId: number;
+    rating: number;
 }
 
-export interface SoftwarePayload {
-    error: string | null;
-    payload: Software | null;
-}
-
-export interface Bug {
+export interface EntryMessage {
     id: number;
-    software_id: string;
-    user_id: number;
-    title: string;
-    description: string;
-    status: string;
-    rating_count: number;
-    rating_total: number;
-    created_at: string;
-    updated_at: string;
-}
-
-export interface BugArrayPayload {
-    error: string | null;
-    payload: Bug[];
-}
-
-
-
-
-export interface BugNewPayload {
-    error: string | null;
-    payload: {
-        id: number
-    }
-}
-
-
-
-export interface BugDetailsPayload {
-    error: string | null;
-    payload: Bug | null;
-}
-
-export interface BugVotePayload {
-    error: string | null;
-    payload: number | null;
+    entryId: number;
+    userId: number;
+    createdAt: string;
+    type: string;
+    stateBefore: string | null;
+    stateAfter: string | null;
+    rating: number | null;
+    ratingCount: number | null;
 }

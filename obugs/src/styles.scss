@@ -1,36 +1,35 @@
+@use 'sass:map';
 @use "@angular/material" as mat;
-
+@use 'app/components/pages/index/_index.component.scss' as index;
 @import '~normalize.css';
 
-// Define theme
-// TODO(v15): As of v15 mat.legacy-core no longer includes default typography styles.
-//  The following line adds:
-//    1. Default typography styles for all components
-//    2. Styles for typography hierarchy classes (e.g. .mat-headline-1)
-//  If you specify typography styles for the components you use elsewhere, you should delete this line.
-//  If you don't need the default component typographies but still want the hierarchy styles,
-//  you can delete this line and instead use:
-//    `@include mat.legacy-typography-hierarchy(mat.define-legacy-typography-config());`
-
-//@include mat.all-legacy-component-typographies();
-//@include mat.legacy-core();
 
 @include mat.core();
 
-$my-primary: mat.define-palette(mat.$blue-palette, 500);
-$my-accent: mat.define-palette(mat.$grey-palette, 700);
-$my-warn: mat.define-palette(mat.$red-palette);
-$my-typography: mat.define-typography-config($font-family: "Roboto");
+$palette-primary: mat.define-palette(mat.$blue-palette);
+$palette-accent: mat.define-palette(mat.$grey-palette);
+$palette-warn: mat.define-palette(mat.$red-palette);
+$typography: mat.define-typography-config($font-family: "Roboto");
+@include mat.typography-hierarchy($typography);
 
-$my-theme: mat.define-light-theme((color: (primary: $my-primary,
-        accent: $my-accent,
-        warn: $my-warn,
-      ),
-      typography: $my-typography,
-      density: 0,
-    ));
+$light-theme: mat.define-light-theme((color: (primary: $palette-primary, accent: $palette-accent, warn: $palette-warn),
+                  typography: $typography,
+                  density: 0));
+$dark-theme: mat.define-dark-theme((color: (primary: $palette-primary, accent: $palette-accent, warn: $palette-warn),
+                  typography: $typography,
+                  density: 0));
 
-//@include mat.all-legacy-component-themes($my-theme);
-//@include mat.legacy-typography-hierarchy($my-typography);
+@include mat.core-theme($light-theme);
+@include mat.all-component-themes($light-theme);
+@include index.theme($light-theme);
 
-@include mat.all-component-themes($my-theme);
+.darkMode {
+      @include mat.core-color($dark-theme);
+      @include mat.all-component-colors($dark-theme);
+      @include index.color($dark-theme);
+}
+
+$color-config: mat.get-color-config($light-theme);
+$primary-palette: map.get($color-config, 'primary');
+$accent-palette: map.get($color-config, 'accent');
+$warn-palette: map.get($color-config, 'warn');

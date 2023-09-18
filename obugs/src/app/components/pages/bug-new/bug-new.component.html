@@ -1,9 +1,8 @@
-<app-header></app-header>
-
-<app-software-sidenav>
-
+<app-layout>
     <mat-card class="form-card">
-        <mat-card-title>New Bug</mat-card-title>
+        <mat-card-title>
+            <div class="mat-headline-5">Add a new Entry</div>
+        </mat-card-title>
         <mat-card-content>
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
                 <!-- Title -->
@@ -47,9 +46,10 @@
                     <textarea matInput placeholder="Links (Youtube, Twitch, Imgur... 1 per line)"
                         formControlName="illustration" rows="3"></textarea>
                 </mat-form-field>
-                <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Create</button>
+                <div class="form-button">
+                    <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Create</button>
+                </div>
             </form>
         </mat-card-content>
     </mat-card>
-
-</app-software-sidenav>
+</app-layout>

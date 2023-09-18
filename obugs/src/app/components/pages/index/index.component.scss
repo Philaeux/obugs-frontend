@@ -1,52 +1,20 @@
-/* software-list.component.scss */
+@use '@angular/material' as mat;
 
-/* Style the card container */
-.software-list-card {
-  width: 40%;
-  margin: 0 auto;
-  padding: 16px;
+@import '../../../../styles.scss';
 
-  /* Center the card horizontally */
+
+.title-card-content {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  text-align: center;
 }
 
-/* Style the table */
-table.mat-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: Arial, sans-serif;
-  border: 1px solid #ddd;
-  margin-top: 16px;
+.title-card-subtitle {
+  max-width: 700px;
+  align-self: center;
+}
 
-  th.mat-header-cell,
-  td.mat-cell {
-    border-right: 1px solid #ddd;
-    /* Add vertical dividers */
-    padding: 8px;
-    text-align: center;
-  }
-
-  th.mat-header-cell {
-    background-color: #f2f2f2;
-    font-weight: bold;
-    border-bottom: 2px solid #ddd;
-  }
-
-  td.mat-cell {
-    border-bottom: 1px solid #ddd;
-  }
-
-  tr.mat-row {
-    cursor: pointer;
-
-    &:nth-child(even) {
-      background-color: #f2f2f2;
-    }
-
-    &:hover {
-      background-color: #e0e0e0;
-    }
-  }
+.title-card-button {
+  max-width: 200px;
+  align-self: center;
 }

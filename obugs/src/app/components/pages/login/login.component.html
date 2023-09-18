@@ -1,7 +1,5 @@
-<app-header></app-header>
-
-<div class="container">
-    <mat-card class="combined-card">
+<app-layout>
+    <div class="container">
         <div class="form-column">
             <h2>Login</h2>
             <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
@@ -73,5 +71,5 @@
                     Account</button>
             </form>
         </div>
-    </mat-card>
-</div>
+    </div>
+</app-layout>

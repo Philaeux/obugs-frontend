@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { MarkdownModule } from 'ngx-markdown'
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -8,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 
 import { MaterialModule } from './material.module';
@@ -17,25 +19,29 @@ import { BugSearchComponent } from './components/pages/bug-search/bug-search.com
 import { BugNewComponent } from './components/pages/bug-new/bug-new.component';
 import { DashboardComponent } from './components/pages/dashboard/dashboard.component';
 import { IndexComponent } from './components/pages/index/index.component';
-import { HeaderComponent } from './components/elements/header/header.component';
-import { SoftwareSidenavComponent } from './components/elements/software-sidenav/software-sidenav.component';
 import { BugRowComponent } from './components/elements/bug-row/bug-row.component';
 import { GraphQLModule } from './graphql.module';
 import { LoginComponent } from './components/pages/login/login.component';
 import { AuthService } from './services/auth.service';
+import { LayoutComponent } from './components/elements/layout/layout.component';
+import { AppsComponent } from './components/pages/apps/apps.component';
+import { TagChipComponent } from './components/elements/tag-chip/tag-chip.component';
+import { StatusChipComponent } from './components/elements/status-chip/status-chip.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    AppsComponent,
     BugDetailsComponent,
     BugNewComponent,
     BugSearchComponent,
     DashboardComponent,
     IndexComponent,
-    HeaderComponent,
-    SoftwareSidenavComponent,
     BugRowComponent,
     LoginComponent,
+    LayoutComponent,
+    TagChipComponent,
+    StatusChipComponent
   ],
   imports: [
     AppRoutingModule,
@@ -47,7 +53,9 @@ import { AuthService } from './services/auth.service';
     LayoutModule,
     MaterialModule,
     ReactiveFormsModule,
-    GraphQLModule
+    GraphQLModule,
+    MarkdownModule.forRoot(),
+    CommonModule
   ],
   providers: [
     AuthService

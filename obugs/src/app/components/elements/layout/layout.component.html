@@ -1,0 +1,71 @@
+<div class="body mat-app-background" [class.darkMode]="darkMode">
+    <div class="sidebar">
+        <mat-nav-list>
+            <mat-list-item routerLink="/" class="sidebar-item sidebar-item-first">
+                <div class="sidebar-item-content">
+                    <div class="sidebar-item-icon"><mat-icon>bug_report</mat-icon></div>
+                    <div class="sidebar-item-text">oBugs</div>
+                </div>
+            </mat-list-item>
+
+            <mat-list-item routerLink="/apps" class="sidebar-item">
+                <div class="sidebar-item-content">
+                    <div class="sidebar-item-icon"><mat-icon>apps</mat-icon></div>
+                    <div class="sidebar-item-text">Apps</div>
+                </div>
+            </mat-list-item>
+
+            <mat-divider></mat-divider>
+
+            <mat-list-item *ngIf="softwareId != null" routerLink="/s/{{softwareId}}" class="sidebar-item">
+                <div class="sidebar-item-content">
+                    <div class="sidebar-item-icon">
+                        <img class="software-icon" src="assets/icons/{{softwareId}}.ico" alt="{{softwareId}}">
+                    </div>
+                    <div class="sidebar-item-text">{{softwareId}}</div>
+                </div>
+            </mat-list-item>
+
+            <mat-list-item *ngIf="softwareId != null && auth.current_user" routerLink="/s/{{softwareId}}/new"
+                class="sidebar-item">
+                <div class="sidebar-item-content">
+                    <div class="sidebar-item-icon"><mat-icon>add</mat-icon></div>
+                    <div class="sidebar-item-text">New</div>
+                </div>
+            </mat-list-item>
+
+        </mat-nav-list>
+
+        <button class="dark-light-switch" (click)="toggleDarkMode()">
+            <div class="switch-icon">
+                <mat-icon *ngIf="darkMode">wb_sunny</mat-icon>
+                <mat-icon *ngIf="!darkMode">nights_stay</mat-icon>
+            </div>
+        </button>
+
+    </div>
+
+    <div class="right-panel">
+
+        <div class="top-bar">
+            <button *ngIf="!auth.current_user" routerLink="/login" mat-mini-fab aria-label="login" color="primary"
+                matTooltip="Login">
+                <mat-icon>login</mat-icon>
+            </button>
+
+            <mat-icon *ngIf="auth.current_user">person</mat-icon>
+            <div *ngIf="auth.current_user" class="top-bar-username">
+                {{auth.current_user.username}}
+            </div>
+            <button *ngIf="auth.current_user" (click)="auth.logout()" mat-mini-fab aria-label="Logout" color="primary"
+                matTooltip="Logout">
+                <mat-icon>logout</mat-icon>
+            </button>
+        </div>
+
+        <div class="content">
+            <ng-content></ng-content>
+        </div>
+
+    </div>
+</div>

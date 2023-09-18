@@ -1,0 +1,25 @@
+.software-list-card {
+    width: 40%;
+    margin: 0 auto;
+    padding: 16px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.software-cards {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.software-card {
+    max-width: 325px;
+}
+
+.software-card:hover {
+    cursor: pointer;
+}

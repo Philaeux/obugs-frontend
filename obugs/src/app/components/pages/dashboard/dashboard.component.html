@@ -1,33 +1,11 @@
-<app-header [software]=software></app-header>
-
-<app-software-sidenav>
-
+<app-layout>
   <div class="dashboard-main">
 
     <div class="bug-all">
-      <div *ngFor="let bug of bugsAll" (click)="openBugDetails(bug)" class="bug-row">
-        <app-bug-row [bug]="bug"></app-bug-row>
-      </div>
-    </div>
-
-    <mat-divider [vertical]="true" class="bug-divider"></mat-divider>
-
-    <div class="bug-families">
-      <div class="bug-new">
-        <div *ngFor="let bug of bugsNew" (click)="openBugDetails(bug)" class="bug-row">
-          <app-bug-row [bug]="bug"></app-bug-row>
-        </div>
-      </div>
-
-      <mat-divider></mat-divider>
-
-      <div class="bug-confirmed">
-        <div *ngFor="let bug of bugsConfirmed" (click)="openBugDetails(bug)" class="bug-row">
-          <app-bug-row [bug]="bug"></app-bug-row>
-        </div>
+      <div *ngFor="let entry of entryMixed" (click)="openBugDetails(entry)" class="bug-row">
+        <app-bug-row [entry]="entry"></app-bug-row>
       </div>
     </div>
 
   </div>
-
-</app-software-sidenav>
+</app-layout>
