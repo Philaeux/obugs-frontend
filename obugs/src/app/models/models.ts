@@ -51,6 +51,7 @@ export interface EntryMessage {
     userId: number;
     createdAt: string;
     type: string;
+    comment: string;
     stateBefore: string | null;
     stateAfter: string | null;
     rating: number | null;

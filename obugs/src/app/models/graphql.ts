@@ -170,6 +170,7 @@ export const QUERY_ENTRY_MESSAGES = gql`
             userId
             createdAt
             type
+            comment
             stateBefore
             stateAfter
             rating

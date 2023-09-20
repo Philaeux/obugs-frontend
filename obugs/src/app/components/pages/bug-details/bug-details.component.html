@@ -48,5 +48,19 @@
 
     <mat-divider></mat-divider>
 
-    <div *ngFor="let message of this.entryMessages">{{message.createdAt}}</div>
+    <mat-card *ngFor="let message of this.entryMessages">
+        <mat-card-content>
+            <div>{{message.createdAt}}</div>
+            <div>{{message.userId}}</div>
+
+            <div *ngIf="message.type == 'creation'">
+                <div>Entry creation:</div>
+                <div>{{message.stateAfter}}</div>
+            </div>
+
+            <div *ngIf="message.type == 'comment'">
+                <div>{{message.comment}}</div>
+            </div>
+        </mat-card-content>
+    </mat-card>
 </app-layout>
