@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
-import { QUERY_LIST_SOFTWARE, QueryResponseListSoftware } from 'src/app/models/graphql';
+import { QUERY_LIST_SOFTWARE, QueryResponseListSoftware } from "src/app/models/graphql/queries";
 import { Software } from 'src/app/models/models';
 
 @Component({

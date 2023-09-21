@@ -8,8 +8,8 @@ import { Entry, Tag } from 'src/app/models/models';
 })
 export class BugRowComponent {
 
-  @Input()
-  entry: Entry | undefined;
+  @Input({ required: true })
+  entry!: Entry;
 
   chipStyle(tag: Tag) {
     const styles = {

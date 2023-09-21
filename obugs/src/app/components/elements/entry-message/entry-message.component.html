@@ -1,0 +1,18 @@
+<div class="message">
+    <div class="message-header">{{userNickname}}
+        <span *ngIf="message.type == 'creation'"> created this entry </span>
+        <span *ngIf="message.type == 'comment'"> commented </span>
+        <span matTooltip="{{(message.createdAt+'+00:00') | date: 'MMMM d, y, H:mm:ss'}}">
+            {{message.createdAt | dateAgo }}.
+        </span>
+    </div>
+
+    <div *ngIf="message.type == 'creation'" class="message-content">
+        <div *ngIf="stateAfter.title">{{stateAfter.title}}</div>
+        {{message.stateAfter}}
+    </div>
+
+    <div *ngIf="message.type == 'comment'" class="message-content">
+        {{message.comment}}
+    </div>
+</div>

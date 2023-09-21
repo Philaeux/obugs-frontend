@@ -4,8 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from "../../environments/environment";
 import { Observable, tap } from 'rxjs';
 import { Apollo } from 'apollo-angular';
-import { QUERY_CURRENT_USER } from '../models/graphql';
-import { QueryResponseCurrentUser } from 'src/app/models/graphql';
+import { QUERY_CURRENT_USER } from "../models/graphql/queries";
+import { QueryResponseCurrentUser } from "../models/graphql/queries";
 
 @Injectable({
   providedIn: 'root'

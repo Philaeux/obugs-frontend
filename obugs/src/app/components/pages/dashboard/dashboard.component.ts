@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { Entry } from "../../../models/models";
 import { Apollo } from 'apollo-angular';
-import { QUERY_LIST_ENTRIES, QueryResponseListEntries } from 'src/app/models/graphql';
+import { QUERY_LIST_ENTRIES, QueryResponseListEntries } from "src/app/models/graphql/queries";
 
 @Component({
   selector: 'app-dashboard',

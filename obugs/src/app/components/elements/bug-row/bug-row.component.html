@@ -1,20 +1,20 @@
 <div class="bug">
-    <div class="bug-impact" *ngIf="entry">
+    <div class="bug-impact">
         {{entry.ratingTotal / entry.ratingCount | number: '1.0-1'}}
     </div>
     <div class="bug-rows">
         <div class="bug-row-1">
-            <app-status-chip [status]="entry?.status"></app-status-chip>
+            <app-status-chip [status]="entry.status"></app-status-chip>
             <div class="bug-title">
-                {{entry?.title}}
+                {{entry.title}}
             </div>
         </div>
         <div class="bug-row-2">
             <div class="bug-updated-at">
-                {{entry?.updatedAt | date: 'dd/MM/YY HH:mm'}}
+                {{entry.updatedAt | date: 'dd/MM/YY HH:mm'}}
             </div>
             <div class="tag-chip-list">
-                <app-tag-chip *ngFor="let tag of entry?.tags" [tag]="tag"></app-tag-chip>
+                <app-tag-chip *ngFor="let tag of entry.tags" [tag]="tag"></app-tag-chip>
             </div>
         </div>
     </div>

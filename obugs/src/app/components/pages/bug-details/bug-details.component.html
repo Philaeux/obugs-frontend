@@ -1,18 +1,26 @@
 <app-layout>
     <div class="entry-details" *ngIf="entry != null">
-        <div class="mat-headline-5">#{{entry.id}} - {{entry.title}}</div>
-        <div class="mat-subtitle-2 left-pad italic">Created on {{entry.createdAt | date: 'MMMM d, y, H:mm:ss'}}</div>
-        <div class="mat-subtitle-2 left-pad italic">Updated on {{entry.updatedAt | date: 'MMMM d, y, H:mm:ss'}}</div>
+        <div class="mat-headline-5 left-pad">#{{entry.id}} - {{entry.title}}</div>
+        <mat-divider></mat-divider>
 
         <div class="entry-summary">
             <div class="column">
+                <div class="mat-subtitle-2 italic">Created <span
+                        matTooltip="{{entry.createdAt+'+00:00' | date: 'MMMM d, y, H:mm:ss'}}">
+                        {{entry.createdAt | dateAgo}}.
+                    </span></div>
+                <div class="mat-subtitle-2 italic">Last update <span
+                        matTooltip="{{entry.updatedAt+'+00:00' | date: 'MMMM d, y, H:mm:ss'}}">
+                        {{entry.updatedAt | dateAgo}}.
+                    </span></div>
+            </div>
+            <div class="column-center">
                 <app-status-chip [status]="entry.status"></app-status-chip>
                 <div *ngIf="entry.illustration === ''">No link.</div>
                 <div *ngIf="entry.illustration != ''">
                     <div *ngFor="let link of entry.illustration.split('\n')" class="entry-illustration">
                         <a [href]="link" target="_blank" matTooltip="{{link}}">
-                            <i *ngIf="!linkIcon(link).endsWith('.png')" class="{{linkIcon(link)}}"
-                                style="color: #000000;"></i>
+                            <i *ngIf="!linkIcon(link).endsWith('.png')" class="link-icon {{linkIcon(link)}}"></i>
                             <img *ngIf="linkIcon(link).endsWith('.png')" class="{{linkIcon(link)}}"
                                 src="/assets/icons/{{linkIcon(link)}}" alt="" class="link-icon">
                         </a>
@@ -20,13 +28,18 @@
                 </div>
             </div>
 
-            <div class="entry-votes">
+            <div class="tag-list">
+                <div *ngIf="entry.tags.length == 0">No Tag.</div>
+                <app-tag-chip *ngFor="let tag of entry.tags" [tag]="tag"></app-tag-chip>
+            </div>
+
+            <div class="entry-votes" matTooltip="Bug impact according to the community.">
                 <div class="entry-impact">{{entry.ratingTotal / entry.ratingCount | number: '1.0-1'}}</div>
                 <div class="entry-vote-total">({{entry.ratingCount}} Vote<span *ngIf="entry.ratingCount>1">s</span>)
                 </div>
             </div>
 
-            <div class="entry-my-vote" *ngIf="auth.isLogged()">
+            <div *ngIf="auth.isLogged()" class="entry-my-vote" matTooltip="Rate how important this entry is.">
                 <mat-button-toggle-group name="myVote" aria-label="My Vote" [(ngModel)]="myVote"
                     (ngModelChange)="onVoteChange()">
                     <mat-button-toggle value="1">1</mat-button-toggle>
@@ -38,29 +51,14 @@
             </div>
         </div>
 
-        <div class="tag-link-list">
-            <div *ngIf="entry.tags.length == 0" class="mat-body-1">No Tag.</div>
-            <app-tag-chip *ngFor="let tag of entry.tags" [tag]="tag"></app-tag-chip>
+        <mat-divider></mat-divider>
+
+        <div class="entry-description">
+            <markdown katex mermaid>{{entry.description}}</markdown>
         </div>
 
-        <markdown katex mermaid>{{entry.description}}</markdown>
+
     </div>
 
-    <mat-divider></mat-divider>
-
-    <mat-card *ngFor="let message of this.entryMessages">
-        <mat-card-content>
-            <div>{{message.createdAt}}</div>
-            <div>{{message.userId}}</div>
-
-            <div *ngIf="message.type == 'creation'">
-                <div>Entry creation:</div>
-                <div>{{message.stateAfter}}</div>
-            </div>
-
-            <div *ngIf="message.type == 'comment'">
-                <div>{{message.comment}}</div>
-            </div>
-        </mat-card-content>
-    </mat-card>
+    <app-entry-message *ngFor="let message of this.entryMessages" [message]="message"></app-entry-message>
 </app-layout>

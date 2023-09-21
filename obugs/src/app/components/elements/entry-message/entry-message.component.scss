@@ -1,0 +1,29 @@
+.message {
+    max-width: 860px;
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+
+    border: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: var(--mat-standard-button-toggle-divider-color);
+}
+
+.message-header {
+    border-bottom: solid;
+    padding-bottom: 4px;
+    padding-top: 6px;
+    padding-left: 12px;
+    padding-right: 12px;
+    border-width: 1px;
+    border-color: var(--mat-standard-button-toggle-divider-color);
+}
+
+.message-content {
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}

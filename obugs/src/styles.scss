@@ -1,6 +1,8 @@
 @use 'sass:map';
 @use "@angular/material" as mat;
 @use 'app/components/pages/index/_index.component.scss' as index;
+@use 'app/components/elements/entry-message/_entry-message.component.scss' as message;
+
 @import '~normalize.css';
 
 
@@ -22,11 +24,13 @@ $dark-theme: mat.define-dark-theme((color: (primary: $palette-primary, accent: $
 @include mat.core-theme($light-theme);
 @include mat.all-component-themes($light-theme);
 @include index.theme($light-theme);
+@include message.theme($light-theme);
 
 .darkMode {
       @include mat.core-color($dark-theme);
       @include mat.all-component-colors($dark-theme);
       @include index.color($dark-theme);
+      @include message.color($dark-theme);
 }
 
 $color-config: mat.get-color-config($light-theme);

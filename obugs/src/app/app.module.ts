@@ -27,6 +27,8 @@ import { LayoutComponent } from './components/elements/layout/layout.component';
 import { AppsComponent } from './components/pages/apps/apps.component';
 import { TagChipComponent } from './components/elements/tag-chip/tag-chip.component';
 import { StatusChipComponent } from './components/elements/status-chip/status-chip.component';
+import { EntryMessageComponent } from './components/elements/entry-message/entry-message.component';
+import { DateAgoPipe } from './pipes/date-ago.pipe';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,9 @@ import { StatusChipComponent } from './components/elements/status-chip/status-ch
     LoginComponent,
     LayoutComponent,
     TagChipComponent,
-    StatusChipComponent
+    StatusChipComponent,
+    EntryMessageComponent,
+    DateAgoPipe
   ],
   imports: [
     AppRoutingModule,

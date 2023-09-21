@@ -8,19 +8,13 @@ import { Tag } from 'src/app/models/models';
 })
 export class TagChipComponent {
 
-  @Input()
-  tag: Tag | undefined;
+  @Input({ required: true })
+  tag!: Tag;
 
   chipStyle() {
-    if (this.tag) {
-      return {
-        'color': this.tag.fontColor,
-        'background-color': this.tag.backgroundColor
-      }
+    return {
+      'color': this.tag.fontColor,
+      'background-color': this.tag.backgroundColor
     }
-    else {
-      return {}
-    }
-
   }
 }

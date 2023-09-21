@@ -2,7 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
-import { MUTATION_VOTE_ON_ENTRY, MutationResponseVoteOnEntry, QUERY_ENTRY_DETAILS, QUERY_ENTRY_MESSAGES, QUERY_MY_VOTE, QueryResponseEntryDetails, QueryResponseEntryMessages, QueryResponseMyVote } from 'src/app/models/graphql';
+import { QUERY_ENTRY_DETAILS, QueryResponseEntryDetails } from "src/app/models/graphql/queries";
+import { QUERY_MY_VOTE, QueryResponseMyVote } from "src/app/models/graphql/queries";
+import { MUTATION_VOTE_ON_ENTRY, MutationResponseVoteOnEntry } from "src/app/models/graphql/mutations";
+import { QUERY_ENTRY_MESSAGES, QueryResponseEntryMessages } from "src/app/models/graphql/queries";
 import { Entry, EntryMessage } from 'src/app/models/models';
 import { Software } from 'src/app/models/models';
 import { AuthService } from 'src/app/services/auth.service';
@@ -86,7 +89,7 @@ export class BugDetailsComponent implements OnInit {
       }
     }).subscribe((response) => {
       if (response.data && response.data.voteOnEntry) {
-        this.entry = response.data?.voteOnEntry.entry
+        this.entry = response.data?.voteOnEntry
       }
     })
   };

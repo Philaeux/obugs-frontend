@@ -7,6 +7,6 @@ import { Component, Input } from '@angular/core';
 })
 export class StatusChipComponent {
 
-  @Input()
-  status: string | undefined;
+  @Input({ required: true })
+  status!: string;
 }

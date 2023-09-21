@@ -1,7 +1,6 @@
 version: '3'
 services:
-  obugs:
-    container_name: "obugs"
+  angular:
     restart: always
     build: .
     ports:
