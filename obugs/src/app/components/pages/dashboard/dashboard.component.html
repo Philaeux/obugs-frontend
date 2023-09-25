@@ -3,7 +3,7 @@
 
     <div class="bug-all">
       <div *ngFor="let entry of entryMixed" (click)="openBugDetails(entry)" class="bug-row">
-        <app-bug-row [entry]="entry"></app-bug-row>
+        <app-bug-row [entry]="entry" [softwareTags]="softwareTags"></app-bug-row>
       </div>
     </div>
 

@@ -30,15 +30,19 @@
     width: 100%;
 }
 
-/* auth.component.scss */
 .error {
     color: red;
     font-weight: bold;
     padding-bottom: 10px;
+    padding-top: 10px;
 }
 
 .message {
     color: green;
     font-weight: bold;
-    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.register-button {
+    margin-top: 15px;
 }

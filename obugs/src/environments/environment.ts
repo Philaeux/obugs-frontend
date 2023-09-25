@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   obugsFrontend: 'http://127.0.0.1:4200',
-  obugsBackend: 'http://127.0.0.1:5000'
+  obugsBackend: 'http://127.0.0.1:5000',
+  recaptchaSiteKey: '6Ld1ilIoAAAAADH6EMOt8dIchXePEXYaEmtRylvK'
 };
 
 /*

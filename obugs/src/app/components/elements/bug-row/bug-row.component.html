@@ -11,10 +11,10 @@
         </div>
         <div class="bug-row-2">
             <div class="bug-updated-at">
-                {{entry.updatedAt | date: 'dd/MM/YY HH:mm'}}
+                {{entry.updatedAt | dateAgo}}
             </div>
             <div class="tag-chip-list">
-                <app-tag-chip *ngFor="let tag of entry.tags" [tag]="tag"></app-tag-chip>
+                <app-tag-chip *ngFor="let tag of entry.tags" [tag]="tag" [softwareTags]="softwareTags"></app-tag-chip>
             </div>
         </div>
     </div>

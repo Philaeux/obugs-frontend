@@ -13,12 +13,14 @@ export interface Software {
 }
 
 export interface User {
-    id: number;
+    id: string;
     username: string;
+    isAdmin: boolean;
+    isBanned: boolean;
 }
 
 export interface Tag {
-    id: number;
+    id: string;
     name: string;
     softwareId: string;
     fontColor: string;
@@ -26,7 +28,7 @@ export interface Tag {
 }
 
 export interface Entry {
-    id: number;
+    id: string;
     softwareId: string;
     title: string;
     description: string;
@@ -39,21 +41,31 @@ export interface Entry {
     tags: Tag[]
 }
 
-export interface EntryVote {
-    entryId: number;
-    userId: number;
+export interface Vote {
+    id: string;
+    subjectId: string;
+    userId: string;
     rating: number;
 }
 
+export interface VoteUpdate {
+    ratingCount: number;
+    ratingTotal: number;
+}
+
 export interface EntryMessage {
-    id: number;
-    entryId: number;
-    userId: number;
+    id: string;
+    entryId: string;
+    userId: string;
     createdAt: string;
     type: string;
     comment: string;
     stateBefore: string | null;
     stateAfter: string | null;
-    rating: number | null;
+    ratingTotal: number | null;
     ratingCount: number | null;
+    isClosed: boolean | null;
+    accepted: boolean | null;
+    closedById: string | null;
+    closedAt: string;
 }

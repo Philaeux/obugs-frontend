@@ -6,14 +6,33 @@
     $color-config: mat.get-color-config($theme);
     $is-dark-theme: map.get($color-config, 'is-dark');
 
+    ins {
+        background-color: #71a753;
+    }
+
+    del {
+        background-color: #c2020e;
+    }
+
+    .message-header {
+        background-color: var(--mat-standard-button-toggle-selected-state-background-color);
+    }
+
     @if $is-dark-theme {
         .message {
             background-color: #303030;
-            border-color: #ffffff;
         }
 
         .message-header {
             background-color: #424242;
+        }
+
+        ins {
+            background-color: #407523;
+        }
+
+        del {
+            background-color: #920107;
         }
     }
 }

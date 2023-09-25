@@ -8,7 +8,7 @@
 
 @include mat.core();
 
-$palette-primary: mat.define-palette(mat.$blue-palette);
+$palette-primary: mat.define-palette(mat.$blue-palette, 300);
 $palette-accent: mat.define-palette(mat.$grey-palette);
 $palette-warn: mat.define-palette(mat.$red-palette);
 $typography: mat.define-typography-config($font-family: "Roboto");

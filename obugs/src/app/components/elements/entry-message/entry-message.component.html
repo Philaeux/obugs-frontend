@@ -1,18 +1,130 @@
 <div class="message">
-    <div class="message-header">{{userNickname}}
-        <span *ngIf="message.type == 'creation'"> created this entry </span>
-        <span *ngIf="message.type == 'comment'"> commented </span>
-        <span matTooltip="{{(message.createdAt+'+00:00') | date: 'MMMM d, y, H:mm:ss'}}">
-            {{message.createdAt | dateAgo }}.
-        </span>
+    <div class="message-header">
+        <div>
+            {{userNickname}}
+            <span *ngIf="message.type == 'creation'"> created this entry </span>
+            <span *ngIf="message.type == 'comment'"> commented </span>
+            <span *ngIf="message.type == 'patch'"> suggested a patch </span>
+            <span matTooltip="{{(message.createdAt+'+00:00') | date: 'MMMM d, y, H:mm:ss'}}">
+                {{message.createdAt | dateAgo }}.
+            </span>
+        </div>
+
+        <div *ngIf="message.type == 'patch'" class="patch-vote">
+
+            <mat-icon *ngIf="auth.current_user != null && !message.isClosed" class="vote-arrow" (click)="vote(1)"
+                matTooltip="Approve this patch."
+                [ngClass]="{'green-icon': petitionVote === 1, 'transparent-icon': petitionVote === -1 }">arrow_upward</mat-icon>
+            <mat-icon *ngIf="auth.current_user != null && !message.isClosed" class="vote-arrow" (click)="vote(-1)"
+                matTooltip="Disapprove this patch."
+                [ngClass]="{'red-icon': petitionVote === -1, 'transparent-icon': petitionVote === 1 }">arrow_downward</mat-icon>
+            <div class="vote-percent" *ngIf="ratingTotal != null && ratingCount != null"
+                matTooltip="Approbation with {{ratingCount}} votes.">
+                {{(ratingCount+ratingTotal)*50.0/ratingCount | number: '1.0-1'}}&nbsp;%
+            </div>
+            <mat-icon *ngIf="message.isClosed && message.accepted"
+                matTooltip="Accepted by {{closedByNickname}} {{this.message.closedAt | dateAgo}}."
+                class="green-icon">done</mat-icon>
+            <mat-icon *ngIf="message.isClosed && !message.accepted"
+                matTooltip="Rejected by {{closedByNickname}} {{this.message.closedAt | dateAgo}}."
+                class="red-icon">close</mat-icon>
+            <mat-icon *ngIf="!message.isClosed && !auth.current_user" matTooltip="Vote is open.">lock_open</mat-icon>
+            <button *ngIf="auth.current_user && auth.current_user.isAdmin && !message.isClosed" mat-icon-button
+                [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="acceptPatch.emit(message)">
+                    <mat-icon>done</mat-icon>
+                    <span>Apply patch</span>
+                </button>
+                <button mat-menu-item (click)="declinePatch.emit(message)">
+                    <mat-icon>close</mat-icon>
+                    <span>Decline patch</span>
+                </button>
+            </mat-menu>
+            <button mat-button color="primary" (click)="showDetails = !showDetails" class="message-header-button">
+                <span *ngIf="showDetails">Hide</span>
+                <span *ngIf="!showDetails">Show</span>
+            </button>
+        </div>
+
+        <button *ngIf="message.type == 'creation'" mat-button color="primary" (click)="showDetails = !showDetails"
+            class="message-header-button">
+            <span *ngIf="showDetails">Hide</span>
+            <span *ngIf="!showDetails">Show</span>
+        </button>
     </div>
 
-    <div *ngIf="message.type == 'creation'" class="message-content">
-        <div *ngIf="stateAfter.title">{{stateAfter.title}}</div>
-        {{message.stateAfter}}
+    <div *ngIf="message.type == 'creation' && showDetails" class="message-content patch">
+        <div class="change-item">
+            <div class="change-title">Title</div>
+            <div>{{stateAfter.title}}</div>
+        </div>
+        <div class="change-item">
+            <div class="change-title">Status</div>
+            <app-status-chip [status]="stateAfter.status"></app-status-chip>
+        </div>
+        <div *ngIf="stateAfter.tags" class="change-item">
+            <div class="change-title">Tags</div>
+            <div *ngIf="stateAfter.tags.length == 0">- EMPTY -</div>
+            <app-tag-chip *ngFor="let tag of stateAfter.tags" [tagName]="tag"
+                [softwareTags]="softwareTags"></app-tag-chip>
+        </div>
+        <div>
+            <div class="change-title">Links</div>
+            <div *ngIf="!stateAfter.illustration">- EMPTY -</div>
+            <div>{{stateAfter.illustration}}</div>
+        </div>
+
+        <mat-divider></mat-divider>
+        <div>
+            <div class="change-title">Description</div>
+            <markdown katex mermaid>{{stateAfter.description}}</markdown>
+        </div>
     </div>
 
     <div *ngIf="message.type == 'comment'" class="message-content">
-        {{message.comment}}
+        <markdown katex mermaid>{{message.comment}}</markdown>
+    </div>
+
+    <div *ngIf="message.type == 'patch' && showDetails" class="message-content patch">
+        <div *ngIf="stateAfter.title" class="change-item">
+            <div class="change-title">Title</div>
+            <div [innerHTML]="generateUnifiedText(stateBefore.title, stateAfter.title)"></div>
+        </div>
+        <div *ngIf="stateAfter.status" class="change-item">
+            <div class="change-title">Status</div>
+            <div>From</div>
+            <app-status-chip [status]="stateBefore.status"></app-status-chip>
+            <div>to</div>
+            <app-status-chip [status]="stateAfter.status"></app-status-chip>
+        </div>
+        <div *ngIf="stateAfter.tags" class="change-item">
+            <div class="change-title">Tags</div>
+            <div>From</div>
+            <div *ngIf="stateBefore.tags.length == 0">- EMPTY -</div>
+            <app-tag-chip *ngFor="let tag of stateBefore.tags" [tagName]="tag"
+                [softwareTags]="softwareTags"></app-tag-chip>
+            <div>to</div>
+            <div *ngIf="stateAfter.tags.length == 0">- EMPTY -</div>
+            <app-tag-chip *ngFor="let tag of stateAfter.tags" [tagName]="tag"
+                [softwareTags]="softwareTags"></app-tag-chip>
+        </div>
+        <div *ngIf="stateAfter.illustration">
+            <div class="change-title">Links</div>
+            <div [innerHTML]="generateUnifiedText(stateBefore.illustration, stateAfter.illustration)"></div>
+        </div>
+        <mat-divider *ngIf="stateAfter.description"></mat-divider>
+        <div *ngIf="stateAfter.description">
+            <div class="change-title">Description</div>
+            <div [innerHTML]="generateUnifiedText(stateBefore.description, stateAfter.description)"></div>
+        </div>
+        <mat-divider *ngIf="stateAfter.description"></mat-divider>
+        <div *ngIf="stateAfter.description">
+            <div class="change-title">Preview</div>
+            <markdown katex mermaid>{{stateAfter.description}}</markdown>
+        </div>
+        <div *ngIf="!stateAfter.description" class="no-preview-pad"></div>
     </div>
 </div>

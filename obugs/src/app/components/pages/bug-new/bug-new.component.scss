@@ -1,7 +1,7 @@
 /* form.component.scss */
 
 .form-card {
-    width: 500px;
+    width: 700px;
     margin: 0 auto;
     padding: 16px;
 
@@ -22,4 +22,19 @@ mat-chip-row {
 .tagOption {
     z-index: 1000;
     background-color: white !important;
+}
+
+.captcha-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    text-align: center;
 }

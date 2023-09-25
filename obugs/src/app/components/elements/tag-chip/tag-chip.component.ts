@@ -1,4 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Apollo } from 'apollo-angular';
+import { QUERY_LIST_TAGS, QueryResponseListTags } from 'src/app/models/graphql/queries';
 import { Tag } from 'src/app/models/models';
 
 @Component({
@@ -8,13 +10,40 @@ import { Tag } from 'src/app/models/models';
 })
 export class TagChipComponent {
 
-  @Input({ required: true })
+  @Input()
   tag!: Tag;
 
+  @Input()
+  tagName!: string;
+
+  @Input({ required: true })
+  softwareTags!: Tag[];
+
   chipStyle() {
-    return {
-      'color': this.tag.fontColor,
-      'background-color': this.tag.backgroundColor
+    if (this.tagName) {
+      let targetTag = null;
+      for (let tag of this.softwareTags) {
+        if (tag.name == this.tagName) {
+          targetTag = tag;
+        }
+      }
+      if (targetTag) {
+        return {
+          'color': targetTag.fontColor,
+          'background-color': targetTag.backgroundColor
+        }
+      } else {
+        return {}
+      }
+    } else {
+      if (this.tag) {
+        return {
+          'color': this.tag.fontColor,
+          'background-color': this.tag.backgroundColor
+        }
+      } else {
+        return {}
+      }
     }
   }
 }

@@ -1,14 +1,11 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Software, Tag } from 'src/app/models/models';
-import { Validators, FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { Apollo } from 'apollo-angular';
 import { QUERY_LIST_TAGS, QueryResponseListTags } from "src/app/models/graphql/queries";
 import { MUTATION_CREATE_ENTRY, MutationResponseCreatEntry } from "src/app/models/graphql/mutations";
-import { MatChipEditedEvent, MatChipGrid, MatChipInput, MatChipInputEvent } from '@angular/material/chips';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatInput } from '@angular/material/input';
+import { environment } from 'src/environments/environment';
+import { ReCaptcha2Component } from 'ngx-captcha';
 
 
 @Component({
@@ -21,14 +18,12 @@ export class BugNewComponent {
 
   softwareId: string | null = null;
   softwareTags: string[] = [];
-
-  @ViewChild("autoComple") autoComple: MatAutocomplete | undefined;
-  @ViewChild("chipInput") chipInput: MatInput | undefined;
+  errorMessage: string = "";
 
   form: FormGroup;
   selectedTags: string[] = [];
-  suggestedTags: string[] = [];
-  readonly separatorKeysCodes = [ENTER, COMMA] as const;
+  siteKey: string = environment.recaptchaSiteKey;
+  @ViewChild('captchaRef', { static: false }) captchaRef!: ReCaptcha2Component;
 
   constructor(
     private fb: FormBuilder,
@@ -39,7 +34,8 @@ export class BugNewComponent {
     this.form = this.fb.group({
       title: ['', [Validators.required]],
       description: ['', [Validators.required]],
-      illustration: ['']
+      illustration: [''],
+      recaptcha: ['', Validators.required]
     });
   }
 
@@ -60,47 +56,14 @@ export class BugNewComponent {
       });
   }
 
-  onSeparatorKey(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
-
-    this.addTag(value);
-  }
-
-  addTag(tag: string): void {
-    const index = this.softwareTags.indexOf(tag);
-    if (index != -1) {
-      this.selectedTags.push(tag);
-      this.softwareTags.splice(index, 1);
-    }
-  }
-
-  removeTag(tag: string): void {
-    const index = this.selectedTags.indexOf(tag);
-
-    if (index >= 0) {
-      this.selectedTags.splice(index, 1);
-      this.softwareTags.push(tag);
-      this.softwareTags.sort();
-    }
-  }
-
-  filterTagSuggestions(event: any): void {
-    const value = event.target.value.toLowerCase();
-    this.suggestedTags = this.softwareTags.filter(
-      (tag) => tag.toLowerCase().includes(value)
-    );
-  }
-
-  onTagOptionSelected(event: MatAutocompleteSelectedEvent) {
-    this.addTag(event.option.value);
-  }
-
   onSubmit() {
+    this.errorMessage = '';
     if (this.form.valid) {
       this.apollo
         .mutate<MutationResponseCreatEntry>({
           mutation: MUTATION_CREATE_ENTRY,
           variables: {
+            recaptcha: this.form.value.recaptcha,
             softwareId: this.softwareId,
             title: this.form.value.title,
             description: this.form.value.description,
@@ -109,7 +72,12 @@ export class BugNewComponent {
           }
         })
         .subscribe((response) => {
-          this.router.navigate(["/s/" + response.data?.createEntry.softwareId + "/" + response.data?.createEntry.id]);
+          this.captchaRef.resetCaptcha();
+          if (response.data?.createEntry == null) {
+            this.errorMessage = 'Invalid recaptcha.';
+          } else {
+            this.router.navigate(["/s/" + response.data?.createEntry.softwareId + "/" + response.data?.createEntry.id]);
+          }
         });
     }
   }

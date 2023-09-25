@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, ValidationErrors, AbstractControlOptions } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
 import { AuthService } from 'src/app/services/auth.service';
+import { environment } from 'src/environments/environment';
+import { ReCaptcha2Component } from 'ngx-captcha';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +15,8 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
   registerForm: FormGroup;
+  siteKey: string = environment.recaptchaSiteKey;
+  @ViewChild('captchaRef', { static: false }) captchaRef!: ReCaptcha2Component;
 
   messageLogin: string = "";
   errorLogin: string = "";
@@ -36,6 +40,7 @@ export class LoginComponent implements OnInit {
       repeatPassword: ['', Validators.required],
       registerEmail: ['', [Validators.required, Validators.email]],
       repeatEmail: ['', [Validators.required, Validators.email]],
+      recaptcha: ['', Validators.required]
     }, { validator: this.customRegisterValidator } as AbstractControlOptions);
   }
 
@@ -87,7 +92,9 @@ export class LoginComponent implements OnInit {
           data => {
             this.errorLogin = data.error;
             if (this.errorLogin == "") {
-              this.router.navigate(["/"]);
+              this.authService.refreshCurrentUserInfo().subscribe((data) => {
+                this.router.navigate(["/"]);
+              });
             }
           }
         )
@@ -102,12 +109,14 @@ export class LoginComponent implements OnInit {
       this.authService.register(
         this.registerForm.value.registerUsername,
         this.registerForm.value.registerPassword,
-        this.registerForm.value.registerEmail).subscribe(
+        this.registerForm.value.registerEmail,
+        this.registerForm.value.recaptcha).subscribe(
           data => {
             this.errorRegister = data.error;
             this.messageRegister = data.message;
           }
         )
+      this.captchaRef.resetCaptcha()
     }
   }
 

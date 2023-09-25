@@ -1,9 +1,9 @@
 import { gql } from "apollo-angular";
-import { Entry, EntryMessage, EntryVote, Software, Tag, User } from "../models";
+import { Entry, EntryMessage, Vote, Software, Tag, User } from "../models";
 
 
 export const QUERY_ENTRY_MESSAGES = gql`
-    query EntryMessages($entryId: Int!) {
+    query EntryMessages($entryId: UUID!) {
         entryMessages(entryId: $entryId) {
             id
             entryId
@@ -13,8 +13,12 @@ export const QUERY_ENTRY_MESSAGES = gql`
             comment
             stateBefore
             stateAfter
-            rating
+            ratingTotal
             ratingCount
+            isClosed
+            accepted
+            closedById
+            closedAt
         }
     }
 `
@@ -26,8 +30,8 @@ export const QUERY_LIST_SOFTWARE = gql`
     {
         softwares{
             id,
-            fullName,
-            editor,
+            fullName
+            editor
             description
         }
     }
@@ -41,6 +45,8 @@ export const QUERY_CURRENT_USER = gql`
         currentUser {
             id
             username
+            isAdmin
+            isBanned
         }
     }
 `
@@ -49,10 +55,12 @@ export interface QueryResponseCurrentUser {
 }
 
 export const QUERY_USER_DETAILS = gql`
-    query User($userId: Int!) {
+    query User($userId: UUID!) {
         user(userId: $userId) {
             id
             username
+            isAdmin
+            isBanned
         }
     }
 `
@@ -63,9 +71,11 @@ export interface QueryResponseUserDetails {
 export const QUERY_LIST_TAGS = gql`
     query GetTags($softwareId: String!) {
         tags(softwareId: $softwareId) {
-            id,
-            name,
+            id
+            name
             softwareId
+            fontColor
+            backgroundColor
         }
     }
 `
@@ -74,20 +84,20 @@ export interface QueryResponseListTags {
 }
 
 export const QUERY_MY_VOTE = gql`
-    query MyVote($entryId: Int!) {
-        myVote(entryId: $entryId) {
-            entryId
+    query MyVote($subjectId: UUID!) {
+        myVote(subjectId: $subjectId) {
+            subjectId
             userId
             rating
         }
     }
 `;
 export interface QueryResponseMyVote {
-    myVote: EntryVote;
+    myVote: Vote;
 }
 
 export const QUERY_ENTRY_DETAILS = gql`
-    query Entry($entryId: Int!){
+    query Entry($entryId: UUID!){
         entry(entryId: $entryId) {
             id
             title

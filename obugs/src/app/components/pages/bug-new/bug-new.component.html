@@ -12,42 +12,29 @@
                 </mat-form-field>
 
                 <!-- Tags -->
-                <mat-form-field class="full-width">
-                    <mat-label>Tags</mat-label>
-                    <mat-chip-grid #chipGrid aria-label="Add tags related to your issue.">
-                        <mat-chip-row *ngFor="let tag of selectedTags" (removed)="removeTag(tag)" [editable]="false">
-                            {{tag}}
-                            <button matChipRemove [attr.aria-label]="'remove ' + tag">
-                                <mat-icon>cancel</mat-icon>
-                            </button>
-                        </mat-chip-row>
-                        <input #chipInput placeholder="Add tags..." [matChipInputFor]="chipGrid"
-                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
-                            (matChipInputTokenEnd)="onSeparatorKey($event)" [matAutocomplete]="auto"
-                            (input)="filterTagSuggestions($event)" />
-                    </mat-chip-grid>
-                    <mat-autocomplete #auto="matAutocomplete" #autoComple
-                        (optionSelected)="onTagOptionSelected($event)">
-                        <mat-option *ngFor="let tag of suggestedTags" [value]="tag" class="tagOption">
-                            {{ tag }}
-                        </mat-option>
-                    </mat-autocomplete>
-                </mat-form-field>
-
-                <!-- Description -->
-                <mat-form-field class="full-width">
-                    <textarea matInput placeholder="Description" formControlName="description" required
-                        rows="10"></textarea>
-                    <mat-error *ngIf="form.get('description')?.hasError('required')">Description is required</mat-error>
-                </mat-form-field>
+                <app-tag-input [selectedTags]="selectedTags" [softwareTags]="softwareTags"></app-tag-input>
 
                 <!-- Illustration -->
                 <mat-form-field class="full-width">
                     <textarea matInput placeholder="Links (Youtube, Twitch, Imgur... 1 per line)"
                         formControlName="illustration" rows="3"></textarea>
                 </mat-form-field>
+
+                <!-- Description -->
+                <mat-form-field class="full-width">
+                    <textarea matInput placeholder="Description (Markdown with Katex and Mermaid)"
+                        formControlName="description" required rows="10"></textarea>
+                    <mat-error *ngIf="form.get('description')?.hasError('required')">Description is required</mat-error>
+                </mat-form-field>
+
+                <div *ngIf="errorMessage != ''" class="error">{{errorMessage}}</div>
+                <div class="captcha-container">
+                    <ngx-recaptcha2 [siteKey]="siteKey" [useGlobalDomain]="false" formControlName="recaptcha"
+                        #captchaRef></ngx-recaptcha2><button mat-raised-button color="primary" type="submit"
+                        [disabled]="!form.valid">Create</button>
+                </div>
+
                 <div class="form-button">
-                    <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Create</button>
                 </div>
             </form>
         </mat-card-content>

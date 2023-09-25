@@ -1,0 +1,21 @@
+<mat-form-field class="full-width">
+    <mat-label>Tags</mat-label>
+
+    <mat-chip-grid #chipGrid aria-label="Add tags related to your issue.">
+        <mat-chip-row *ngFor="let tag of selectedTags" (removed)="removeTag(tag)" [editable]="false">
+            {{tag}}
+            <button matChipRemove [attr.aria-label]="'remove ' + tag">
+                <mat-icon>cancel</mat-icon>
+            </button>
+        </mat-chip-row>
+        <input #chipInput placeholder="Add tags..." [matChipInputFor]="chipGrid"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+            (matChipInputTokenEnd)="onSeparatorKey($event)" [matAutocomplete]="auto"
+            (input)="filterTagSuggestions($event)" />
+    </mat-chip-grid>
+    <mat-autocomplete #auto="matAutocomplete" #autoComple (optionSelected)="onTagOptionSelected($event)">
+        <mat-option *ngFor="let tag of suggestedTags" [value]="tag" class="tagOption">
+            {{ tag }}
+        </mat-option>
+    </mat-autocomplete>
+</mat-form-field>

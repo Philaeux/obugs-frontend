@@ -20,6 +20,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle'
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips'
+import { MatTabsModule } from '@angular/material/tabs'
 
 const MaterialComponents = [
   MatButtonModule,
@@ -41,7 +42,8 @@ const MaterialComponents = [
   MatProgressSpinnerModule,
   MatButtonToggleModule,
   MatChipsModule,
-  MatAutocompleteModule
+  MatAutocompleteModule,
+  MatTabsModule
 ]
 
 @NgModule({

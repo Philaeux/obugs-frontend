@@ -11,11 +11,6 @@ export class BugRowComponent {
   @Input({ required: true })
   entry!: Entry;
 
-  chipStyle(tag: Tag) {
-    const styles = {
-      'color': tag.fontColor,
-      'background-color': tag.backgroundColor
-    }
-    return styles
-  }
+  @Input({ required: true })
+  softwareTags!: Tag[];
 }

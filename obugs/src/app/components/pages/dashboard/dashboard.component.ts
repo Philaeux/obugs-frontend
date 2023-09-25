@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
-import { Entry } from "../../../models/models";
+import { Entry, Tag } from "../../../models/models";
 import { Apollo } from 'apollo-angular';
-import { QUERY_LIST_ENTRIES, QueryResponseListEntries } from "src/app/models/graphql/queries";
+import { QUERY_LIST_ENTRIES, QUERY_LIST_TAGS, QueryResponseListEntries, QueryResponseListTags } from "src/app/models/graphql/queries";
 
 @Component({
   selector: 'app-dashboard',
@@ -12,7 +12,7 @@ import { QUERY_LIST_ENTRIES, QueryResponseListEntries } from "src/app/models/gra
 export class DashboardComponent implements OnInit {
 
   softwareId: string | null = null;
-
+  softwareTags: Tag[] = [];
   entryMixed: Entry[] = [];
 
   constructor(
@@ -27,6 +27,7 @@ export class DashboardComponent implements OnInit {
       this.router.navigate(["/"]);
     }
 
+    // Software entries
     this.apollo
       .subscribe<QueryResponseListEntries>({
         query: QUERY_LIST_ENTRIES,
@@ -39,47 +40,18 @@ export class DashboardComponent implements OnInit {
           this.entryMixed = response.data.entries;
         }
       });
-  }
 
-  getSoftwareDetails(softwareCode: string) {/*
-    this.softwareService.getSoftwareDetails(softwareCode).subscribe(data => {
-      if (data.payload == null) {
-        console.log(data.error)
-        this.router.navigate(["/"]);
-      } else {
-        this.software = data.payload;
-      }
-    });*/
-  }
-
-  getBugsAll(softwareCode: string) {/*
-    this.softwareService.getBugs(softwareCode).subscribe(data => {
-      if (data.error != null) {
-        console.log(data.error);
-      } else {
-        this.bugsAll = data.payload;
-      }
-    })*/
-  }
-
-  getBugsNew(softwareCode: string) {/*
-    this.softwareService.getBugs(softwareCode, "NEW").subscribe(data => {
-      if (data.error != null) {
-        console.log(data.error);
-      } else {
-        this.bugsNew = data.payload;
-      }
-    });*/
-  }
-
-  getBugsConfirmed(softwareCode: string) {/*
-    this.softwareService.getBugs(softwareCode, "CONFIRMED").subscribe(data => {
-      if (data.error != null) {
-        console.log(data.error)
-      } else {
-        this.bugsConfirmed = data.payload;
-      }
-    });*/
+    // Software tags
+    this.apollo
+      .query<QueryResponseListTags>({
+        query: QUERY_LIST_TAGS,
+        variables: {
+          softwareId: this.softwareId
+        }
+      })
+      .subscribe((response) => {
+        this.softwareTags = response.data.tags;
+      });
   }
 
   openBugDetails(entry: Entry) {

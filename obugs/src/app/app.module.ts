@@ -29,6 +29,8 @@ import { TagChipComponent } from './components/elements/tag-chip/tag-chip.compon
 import { StatusChipComponent } from './components/elements/status-chip/status-chip.component';
 import { EntryMessageComponent } from './components/elements/entry-message/entry-message.component';
 import { DateAgoPipe } from './pipes/date-ago.pipe';
+import { TagInputComponent } from './components/elements/tag-input/tag-input.component';
+import { NgxCaptchaModule } from 'ngx-captcha';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,8 @@ import { DateAgoPipe } from './pipes/date-ago.pipe';
     TagChipComponent,
     StatusChipComponent,
     EntryMessageComponent,
-    DateAgoPipe
+    DateAgoPipe,
+    TagInputComponent
   ],
   imports: [
     AppRoutingModule,
@@ -59,7 +62,8 @@ import { DateAgoPipe } from './pipes/date-ago.pipe';
     ReactiveFormsModule,
     GraphQLModule,
     MarkdownModule.forRoot(),
-    CommonModule
+    CommonModule,
+    NgxCaptchaModule
   ],
   providers: [
     AuthService

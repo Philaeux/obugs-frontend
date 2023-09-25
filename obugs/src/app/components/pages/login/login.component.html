@@ -17,8 +17,8 @@
                     <mat-error *ngIf="loginForm.get('loginPassword')?.hasError('minlength')">Password is
                         at least 6 characters long.</mat-error>
                 </mat-form-field>
-                <div class="error">{{errorLogin}}</div>
-                <div class="message">{{messageLogin}}</div>
+                <div *ngIf="errorLogin != ''" class="error">{{errorLogin}}</div>
+                <div *ngIf="messageLogin != ''" class="message">{{messageLogin}}</div>
                 <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">Login</button>
             </form>
         </div>
@@ -65,9 +65,12 @@
                         *ngIf="registerForm.get('repeatEmail')?.hasError('emailMismatch') && registerForm.get('repeatEmail')?.touched">Emails
                         must match.</mat-error>
                 </mat-form-field>
-                <div class="error">{{errorRegister}}</div>
-                <div class="message">{{messageRegister}}</div>
-                <button mat-raised-button color="primary" type="submit" [disabled]="!registerForm.valid">Create
+                <ngx-recaptcha2 [siteKey]="siteKey" [useGlobalDomain]="false" formControlName="recaptcha"
+                    #captchaRef></ngx-recaptcha2>
+                <div *ngIf="errorRegister != ''" class="error">{{errorRegister}}</div>
+                <div *ngIf="messageRegister != ''" class="message">{{messageRegister}}</div>
+                <button class="register-button" mat-raised-button color="primary" type="submit"
+                    [disabled]="!registerForm.valid">Create
                     Account</button>
             </form>
         </div>
