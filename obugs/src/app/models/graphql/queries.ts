@@ -1,5 +1,5 @@
 import { gql } from "apollo-angular";
-import { Entry, EntryMessage, Vote, Software, Tag, User } from "../models";
+import { Entry, EntryMessage, Vote, Software, Tag, User, Error } from "../models";
 
 
 export const QUERY_ENTRY_MESSAGES = gql`
@@ -43,15 +43,21 @@ export interface QueryResponseListSoftware {
 export const QUERY_CURRENT_USER = gql`
     {
         currentUser {
-            id
-            username
-            isAdmin
-            isBanned
+            __typename
+            ... on Error {
+                message
+            }
+            ... on User {
+                id
+                username
+                isAdmin
+                isBanned
+            }
         }
     }
 `
 export interface QueryResponseCurrentUser {
-    currentUser: User
+    currentUser: Error | User
 }
 
 export const QUERY_USER_DETAILS = gql`
@@ -123,8 +129,8 @@ export interface QueryResponseEntryDetails {
 }
 
 export const QUERY_LIST_ENTRIES = gql`
-    query EntryList($softwareId: String!) {
-        entries(softwareId: $softwareId) {
+    query EntryList($softwareId: String!, $statusFilter: [String!]!, $limit: Int!, $offset: Int!) {
+        entries(softwareId: $softwareId, statusFilter: $statusFilter, limit: $limit, offset: $offset) {
             id
             title
             softwareId

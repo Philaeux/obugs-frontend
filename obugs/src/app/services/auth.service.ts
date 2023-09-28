@@ -1,5 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
-import { AuthPayload, User } from '../models/models';
+import { AuthPayload, User, Error } from '../models/models';
 import { HttpClient } from '@angular/common/http';
 import { environment } from "../../environments/environment";
 import { Observable, tap } from 'rxjs';
@@ -15,10 +15,7 @@ export class AuthService {
   public current_user: User | null = null;
 
   constructor(private http: HttpClient, private apollo: Apollo) {
-    const access_token = localStorage.getItem('access_token');
-    if (access_token != null) {
-      this.refreshCurrentUserInfo().subscribe(() => { })
-    }
+    this.initUserIfNecessary()
   }
 
   register(username: string, password: string, email: string, recaptcha: string = ""): Observable<AuthPayload> {
@@ -37,13 +34,24 @@ export class AuthService {
     }));
   }
 
-  refreshCurrentUserInfo(): Observable<any> {
-    return this.apollo
-      .query<QueryResponseCurrentUser>({
-        query: QUERY_CURRENT_USER
-      }).pipe(tap((response) => {
-        this.current_user = response.data.currentUser;
-      }));
+  initUserIfNecessary() {
+    const access_token = localStorage.getItem('access_token');
+    if (access_token != null) {
+      this.apollo
+        .query<QueryResponseCurrentUser>({
+          query: QUERY_CURRENT_USER
+        }).subscribe((response) => {
+          const data = response.data.currentUser
+          if (data.__typename === 'Error') {
+            const error = data as Error
+            console.log(error.message)
+            this.logout()
+          } else {
+            const user = data as User
+            this.current_user = user
+          }
+        });
+    }
   }
 
   logout() {

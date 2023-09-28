@@ -6,6 +6,7 @@ import { QUERY_LIST_TAGS, QueryResponseListTags } from "src/app/models/graphql/q
 import { MUTATION_CREATE_ENTRY, MutationResponseCreatEntry } from "src/app/models/graphql/mutations";
 import { environment } from 'src/environments/environment';
 import { ReCaptcha2Component } from 'ngx-captcha';
+import { Error, Entry } from 'src/app/models/models';
 
 
 @Component({
@@ -73,12 +74,17 @@ export class BugNewComponent {
         })
         .subscribe((response) => {
           this.captchaRef.resetCaptcha();
-          if (response.data?.createEntry == null) {
-            this.errorMessage = 'Invalid recaptcha.';
-          } else {
-            this.router.navigate(["/s/" + response.data?.createEntry.softwareId + "/" + response.data?.createEntry.id]);
+          if (response.data && response.data.createEntry) {
+            const result = response.data.createEntry
+            if (result.__typename === 'Error') {
+              const error = result as Error;
+              this.errorMessage = error.message;
+            } else {
+              const entry = result as Entry
+              this.router.navigate(["/s/" + entry.softwareId + "/" + entry.id]);
+            }
           }
-        });
+        })
     }
   }
 }

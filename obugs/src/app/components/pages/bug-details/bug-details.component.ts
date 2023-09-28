@@ -1,13 +1,13 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Apollo } from 'apollo-angular';
 import { QUERY_ENTRY_DETAILS, QUERY_LIST_TAGS, QUERY_MY_VOTE, QueryResponseEntryDetails, QueryResponseListTags, QueryResponseMyVote } from "src/app/models/graphql/queries";
-import { MUTATION_COMMENT_ENTRY, MUTATION_PROCESS_PATCH, MUTATION_SUBMIT_PROPOSITION, MUTATION_VOTE, MutationResponseCommentEntry, MutationResponseProcessPatch, MutationResponseSubmitProposition, MutationResponseVote } from "src/app/models/graphql/mutations";
+import { MUTATION_COMMENT_ENTRY, MUTATION_PROCESS_PATCH, MUTATION_SUBMIT_PATCH, MUTATION_VOTE, MutationResponseCommentEntry, MutationResponseProcessPatch, MutationResponseSubmitPatch, MutationResponseVote } from "src/app/models/graphql/mutations";
 import { QUERY_ENTRY_MESSAGES, QueryResponseEntryMessages } from "src/app/models/graphql/queries";
-import { Entry, EntryMessage, Tag } from 'src/app/models/models';
-import { Software } from 'src/app/models/models';
+import { Entry, EntryMessage, Error, ProcessPatchSuccess, Tag, VoteUpdate } from 'src/app/models/models';
 import { AuthService } from 'src/app/services/auth.service';
+import { environment } from 'src/environments/environment';
+import { ReCaptcha2Component } from 'ngx-captcha';
 
 @Component({
   selector: 'app-bug-details',
@@ -23,11 +23,17 @@ export class BugDetailsComponent implements OnInit {
   entry: Entry | null = null;
   entryMessages: EntryMessage[] = [];
 
-  software?: Software;
+  siteKey: string = environment.recaptchaSiteKey;
+  @ViewChild('recaptchaRef', { static: false }) recaptchaRef!: ReCaptcha2Component;
+  recaptcha: string = "";
+  errorMessage: string = "";
+
   myVote: string | null = null;
   ratingTotal: number = 2;
   ratingCount: number = 1;
+
   editPanelIndex: number = 0;
+
   editComment: string = "";
   editTitle: string = "";
   editStatus: string = "NEW";
@@ -36,9 +42,7 @@ export class BugDetailsComponent implements OnInit {
   editDescription: string = "";
 
   constructor(
-    private router: Router,
     private route: ActivatedRoute,
-    private http: HttpClient,
     private apollo: Apollo,
     public auth: AuthService
   ) { }
@@ -87,7 +91,9 @@ export class BugDetailsComponent implements OnInit {
       }
     }).subscribe((response) => {
       if (response.data && response.data.entryMessages) {
-        this.entryMessages = response.data.entryMessages;
+        for (let message of response.data.entryMessages) {
+          this.entryMessages.push(message)
+        }
       }
     })
 
@@ -139,9 +145,16 @@ export class BugDetailsComponent implements OnInit {
         rating: parseInt(this.myVote!)
       }
     }).subscribe((response) => {
-      if (response.data && response.data.vote && this.entry) {
-        this.ratingCount = response.data?.vote.ratingCount
-        this.ratingTotal = response.data?.vote.ratingTotal
+      if (response.data && response.data.vote) {
+        const result = response.data.vote
+        if (result.__typename === 'Error') {
+          const error = result as Error;
+          console.log(error)
+        } else {
+          const vote = result as VoteUpdate
+          this.ratingCount = vote.ratingCount
+          this.ratingTotal = vote.ratingTotal
+        }
       }
     })
   };
@@ -166,48 +179,71 @@ export class BugDetailsComponent implements OnInit {
     return 'fa-solid fa-link'
   }
 
-  onSendComment(): void {
-    if (this.editComment == '') return;
+  onSubmit(): void {
+    if (this.recaptcha == '') return;
 
-    this.apollo.mutate<MutationResponseCommentEntry>({
-      mutation: MUTATION_COMMENT_ENTRY,
-      variables: {
-        entryId: this.entryId,
-        comment: this.editComment
-      }
-    }).subscribe((response) => {
-      if (response.data && response.data.commentEntry) {
-        this.entryMessages = response.data.commentEntry;
-        this.editComment = ""
-      }
-    })
-  }
+    if (this.editPanelIndex == 0) {
+      // COMMENT
+      if (this.editComment == '') return;
+      this.errorMessage = '';
+      this.apollo.mutate<MutationResponseCommentEntry>({
+        mutation: MUTATION_COMMENT_ENTRY,
+        variables: {
+          recaptcha: this.recaptcha,
+          entryId: this.entryId,
+          comment: this.editComment
+        }
+      }).subscribe((response) => {
+        this.recaptchaRef.resetCaptcha()
+        if (response.data && response.data.commentEntry) {
+          const result = response.data.commentEntry
+          if (result.__typename === 'Error') {
+            const error = result as Error;
+            this.errorMessage = error.message;
+          } else {
+            const message = result as EntryMessage
+            this.entryMessages.push(message);
+            this.editComment = "";
+          }
+        }
+      })
 
-  onProposeModification(): void {
-    if (this.editTitle == this.entry?.title &&
-      this.editIllustration == this.entry.illustration &&
-      this.editDescription == this.entry.description &&
-      this.equalTags(this.entry.tags, this.editTags) &&
-      this.editStatus == this.entry.status)
-      return;
+    } else if (this.editPanelIndex == 1) {
+      // PATCH
+      if (this.editTitle == this.entry?.title &&
+        this.editIllustration == this.entry.illustration &&
+        this.editDescription == this.entry.description &&
+        this.equalTags(this.entry.tags, this.editTags) &&
+        this.editStatus == this.entry.status)
+        return;
 
-    this.apollo.mutate<MutationResponseSubmitProposition>({
-      mutation: MUTATION_SUBMIT_PROPOSITION,
-      variables: {
-        entryId: this.entryId,
-        title: this.editTitle,
-        status: this.editStatus,
-        tags: this.editTags,
-        description: this.editDescription,
-        illustration: this.editIllustration
-      }
-    }).subscribe((response) => {
-      if (response.data && response.data.submitProposition) {
-        this.entryMessages = response.data.submitProposition;
-        this.editPanelIndex = 0;
-        this.resetEditsWithEntry()
-      }
-    })
+      this.apollo.mutate<MutationResponseSubmitPatch>({
+        mutation: MUTATION_SUBMIT_PATCH,
+        variables: {
+          recaptcha: this.recaptcha,
+          entryId: this.entryId,
+          title: this.editTitle,
+          status: this.editStatus,
+          tags: this.editTags,
+          description: this.editDescription,
+          illustration: this.editIllustration
+        }
+      }).subscribe((response) => {
+        this.recaptchaRef.resetCaptcha()
+        if (response.data && response.data.submitPatch) {
+          const result = response.data.submitPatch
+          if (result.__typename === 'Error') {
+            const error = result as Error;
+            this.errorMessage = error.message;
+          } else {
+            const message = result as EntryMessage
+            this.editPanelIndex = 0;
+            this.resetEditsWithEntry()
+            this.entryMessages.push(message);
+          }
+        }
+      })
+    }
   }
 
   equalTags(entryTags: Tag[], editTags: string[]): boolean {
@@ -236,16 +272,29 @@ export class BugDetailsComponent implements OnInit {
       }
     }).subscribe((response) => {
       if (response.data && response.data.processPatch) {
-        this.entry = response.data.processPatch.entry
-        this.entryMessages = this.entryMessages.map((message) => {
-          if (message.id === response.data!.processPatch.message.id) {
-            return response.data!.processPatch.message;
-          } else {
-            return message;
-          }
-        })
-        this.resetEditsWithEntry()
+        const result = response.data.processPatch
+        if (result.__typename === 'Error') {
+          const error = result as Error;
+          console.log(error.message);
+        } else {
+          const pps = result as ProcessPatchSuccess
+          this.entry = pps.entry
+          this.entryMessages = this.entryMessages.map((message) => {
+            if (message.id === pps.entryMessage.id) {
+              return pps.entryMessage;
+            } else {
+              return message;
+            }
+          })
+          this.resetEditsWithEntry()
+        }
       }
     })
+  }
+
+  removeMessage(deletedMessage: EntryMessage) {
+    this.entryMessages = this.entryMessages.filter(
+      (message) => message.id !== deletedMessage.id
+    );
   }
 }

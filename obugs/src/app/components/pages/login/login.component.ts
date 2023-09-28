@@ -92,9 +92,7 @@ export class LoginComponent implements OnInit {
           data => {
             this.errorLogin = data.error;
             if (this.errorLogin == "") {
-              this.authService.refreshCurrentUserInfo().subscribe((data) => {
-                this.router.navigate(["/"]);
-              });
+              this.router.navigate(["/"]);
             }
           }
         )

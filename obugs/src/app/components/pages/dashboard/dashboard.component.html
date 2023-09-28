@@ -1,11 +1,35 @@
 <app-layout>
-  <div class="dashboard-main">
+  <div class="dashboard">
+    <div class="panel">
+      <div class="filters">
+        <mat-button-toggle-group name="status" aria-label="Status" multiple [(ngModel)]="statusFilter"
+          (change)="onStatusFilterChange()">
+          <mat-button-toggle value="NEW">New</mat-button-toggle>
+          <mat-button-toggle value="CONFIRMED" checked>Confirmed</mat-button-toggle>
+          <mat-button-toggle value="WIP" checked>WIP</mat-button-toggle>
+          <mat-button-toggle value="CHECK" checked>Check</mat-button-toggle>
+          <mat-button-toggle value="FIXED">Fixed</mat-button-toggle>
+          <mat-button-toggle value="EXPECTED">Expected</mat-button-toggle>
+          <mat-button-toggle value="DUPLICATE">Duplicate</mat-button-toggle>
+          <mat-button-toggle value="CLOSED">Closed</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
 
-    <div class="bug-all">
-      <div *ngFor="let entry of entryMixed" (click)="openBugDetails(entry)" class="bug-row">
-        <app-bug-row [entry]="entry" [softwareTags]="softwareTags"></app-bug-row>
+      <div class="bug-list">
+        <app-bug-row *ngFor="let entry of filteredEntries" (click)="openBugDetails(entry)" [entry]="entry"
+          [softwareTags]="softwareTags"></app-bug-row>
+      </div>
+
+      <div *ngIf="filterHasMore" class="more-button">
+        <button mat-raised-button (click)="getMoreFiltered()" color="primary">Get More</button>
       </div>
     </div>
-
+    <mat-divider [vertical]="true"></mat-divider>
+    <div class="panel">
+      <div class="bug-list">
+        <app-bug-row *ngFor="let entry of newEntries" (click)="openBugDetails(entry)" [entry]="entry"
+          [softwareTags]="softwareTags"></app-bug-row>
+      </div>
+    </div>
   </div>
 </app-layout>

@@ -1,11 +1,30 @@
-.dashboard-main {
+.dashboard {
+    min-height: 100%;
     display: flex;
-    flex-direction: row;
+    gap: 4px;
+    align-items: stretch;
 }
 
-.bug-all {
+.panel {
     flex-grow: 1;
+    flex-basis: calc(50% - 4px);
+
     display: flex;
     flex-direction: column;
     gap: 4px;
+}
+
+.filters {
+    display: flex;
+    justify-content: center;
+}
+
+.bug-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.more-button {
+    text-align: center;
 }

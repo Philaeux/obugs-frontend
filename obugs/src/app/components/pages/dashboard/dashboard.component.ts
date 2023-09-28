@@ -13,7 +13,11 @@ export class DashboardComponent implements OnInit {
 
   softwareId: string | null = null;
   softwareTags: Tag[] = [];
-  entryMixed: Entry[] = [];
+  filteredEntries: Entry[] = [];
+  newEntries: Entry[] = [];
+  filterLimit = 20;
+  filterHasMore: boolean = false;
+  statusFilter: string[] = ['CONFIRMED', 'WIP', 'CHECK'];
 
   constructor(
     private router: Router,
@@ -27,19 +31,8 @@ export class DashboardComponent implements OnInit {
       this.router.navigate(["/"]);
     }
 
-    // Software entries
-    this.apollo
-      .subscribe<QueryResponseListEntries>({
-        query: QUERY_LIST_ENTRIES,
-        variables: {
-          softwareId: this.softwareId
-        }
-      })
-      .subscribe((response) => {
-        if (response.data) {
-          this.entryMixed = response.data.entries;
-        }
-      });
+    this.fetchFilteredEntries()
+    this.fetchNewEntries()
 
     // Software tags
     this.apollo
@@ -54,7 +47,62 @@ export class DashboardComponent implements OnInit {
       });
   }
 
+  fetchFilteredEntries() {
+    // Entries
+    this.apollo
+      .subscribe<QueryResponseListEntries>({
+        query: QUERY_LIST_ENTRIES,
+        variables: {
+          softwareId: this.softwareId,
+          statusFilter: this.statusFilter,
+          limit: this.filterLimit,
+          offset: this.filteredEntries.length
+        }
+      })
+      .subscribe((response) => {
+        if (response.data) {
+          if (response.data.entries.length == this.filterLimit) {
+            this.filterHasMore = true;
+          } else {
+            this.filterHasMore = false;
+          }
+          for (let entry of response.data.entries) {
+            this.filteredEntries.push(entry)
+          }
+        }
+      });
+  }
+
+  fetchNewEntries() {
+    this.apollo
+      .subscribe<QueryResponseListEntries>({
+        query: QUERY_LIST_ENTRIES,
+        variables: {
+          softwareId: this.softwareId,
+          statusFilter: ['NEW'],
+          limit: 20,
+          offset: 0
+        }
+      })
+      .subscribe((response) => {
+        if (response.data) {
+          for (let entry of response.data.entries) {
+            this.newEntries.push(entry)
+          }
+        }
+      });
+  }
+
   openBugDetails(entry: Entry) {
     this.router.navigate([`s/${entry.softwareId}/${entry.id}`]);
+  }
+
+  onStatusFilterChange() {
+    this.filteredEntries = []
+    this.fetchFilteredEntries()
+  }
+
+  getMoreFiltered() {
+    this.fetchFilteredEntries()
   }
 }

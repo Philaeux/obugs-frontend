@@ -6,6 +6,7 @@ export interface AuthPayload {
 }
 
 export interface Software {
+    __typename: 'Software'
     id: string;
     fullName: string;
     editor: string;
@@ -13,6 +14,7 @@ export interface Software {
 }
 
 export interface User {
+    __typename: 'User'
     id: string;
     username: string;
     isAdmin: boolean;
@@ -20,6 +22,7 @@ export interface User {
 }
 
 export interface Tag {
+    __typename: 'Tag'
     id: string;
     name: string;
     softwareId: string;
@@ -28,6 +31,7 @@ export interface Tag {
 }
 
 export interface Entry {
+    __typename: 'Entry'
     id: string;
     softwareId: string;
     title: string;
@@ -42,6 +46,7 @@ export interface Entry {
 }
 
 export interface Vote {
+    __typename: 'Vote'
     id: string;
     subjectId: string;
     userId: string;
@@ -49,11 +54,13 @@ export interface Vote {
 }
 
 export interface VoteUpdate {
+    __typename: 'VoteUpdate'
     ratingCount: number;
     ratingTotal: number;
 }
 
 export interface EntryMessage {
+    __typename: 'EntryMessage'
     id: string;
     entryId: string;
     userId: string;
@@ -68,4 +75,15 @@ export interface EntryMessage {
     accepted: boolean | null;
     closedById: string | null;
     closedAt: string;
+}
+
+export interface Error {
+    __typename: 'Error';
+    message: string;
+}
+
+export interface ProcessPatchSuccess {
+    __typename: 'ProcessPatchSuccess'
+    entry: Entry,
+    entryMessage: EntryMessage,
 }

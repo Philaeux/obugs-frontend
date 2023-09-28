@@ -17,7 +17,7 @@
             <div class="column-center">
                 <app-status-chip [status]="entry.status"></app-status-chip>
                 <div *ngIf="entry.illustration === ''">No link.</div>
-                <div *ngIf="entry.illustration != ''">
+                <div *ngIf="entry.illustration != ''" class="link-list">
                     <div *ngFor="let link of entry.illustration.split('\n')" class="entry-illustration">
                         <a [href]="link" target="_blank" matTooltip="{{link}}">
                             <i *ngIf="!linkIcon(link).endsWith('.png')" class="link-icon {{linkIcon(link)}}"></i>
@@ -60,7 +60,8 @@
 
     <div class="entry-comments">
         <app-entry-message *ngFor="let message of this.entryMessages" [message]="message" [softwareTags]="softwareTags"
-            (acceptPatch)="processPatch($event, true)" (declinePatch)="processPatch($event, false)"></app-entry-message>
+            (acceptPatch)="processPatch($event, true)" (declinePatch)="processPatch($event, false)"
+            (messageDeleted)="removeMessage($event)"></app-entry-message>
 
         <div class="comment-write">
             <mat-tab-group *ngIf="auth.current_user" animationDuration="0ms" [(selectedIndex)]="editPanelIndex">
@@ -74,9 +75,7 @@
                         <div *ngIf="editComment != ''" class="comment-preview">
                             <markdown katex mermaid data="{{editComment}}"></markdown>
                         </div>
-                        <div class="comment-send">
-                            <button mat-raised-button color="primary" (click)="onSendComment()">Send</button>
-                        </div>
+
                     </div>
                 </mat-tab>
                 <mat-tab label="Propose a patch">
@@ -113,17 +112,21 @@
                         <div class="comment-preview">
                             <markdown katex mermaid data="{{editDescription}}"></markdown>
                         </div>
-                        <div class="comment-send">
-                            <button mat-raised-button color="primary" (click)="onProposeModification()">Submit</button>
-                        </div>
                     </div>
                 </mat-tab>
             </mat-tab-group>
 
+            <div *ngIf="errorMessage != ''" class="error">
+                {{errorMessage}}
+            </div>
+            <div class="comment-send">
+                <ngx-recaptcha2 [siteKey]="siteKey" [useGlobalDomain]="false" #recaptchaRef
+                    [(ngModel)]="recaptcha"></ngx-recaptcha2>
+                <button mat-raised-button color="primary" (click)="onSubmit()"
+                    [disabled]="recaptcha == ''">Submit</button>
+            </div>
             <div *ngIf="!auth.current_user" class="login-message">Login to comment or submit a patch.</div>
         </div>
     </div>
-
-
 
 </app-layout>

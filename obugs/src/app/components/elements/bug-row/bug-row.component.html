@@ -13,9 +13,7 @@
             <div class="bug-updated-at">
                 {{entry.updatedAt | dateAgo}}
             </div>
-            <div class="tag-chip-list">
-                <app-tag-chip *ngFor="let tag of entry.tags" [tag]="tag" [softwareTags]="softwareTags"></app-tag-chip>
-            </div>
+            <app-tag-chip *ngFor="let tag of entry.tags" [tag]="tag" [softwareTags]="softwareTags"></app-tag-chip>
         </div>
     </div>
 </div>

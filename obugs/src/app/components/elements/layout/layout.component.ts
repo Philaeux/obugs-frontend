@@ -26,6 +26,10 @@ export class LayoutComponent {
     this.route.paramMap.subscribe(params => {
       this.softwareId = params.get('software');
     });
+
+    if (this.auth.current_user == null) {
+      this.auth.initUserIfNecessary()
+    }
   }
 
   toggleDarkMode() {

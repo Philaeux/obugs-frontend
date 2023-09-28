@@ -91,4 +91,5 @@
 .content {
     padding: 8px;
     transition: margin-left 0.3s ease-in-out;
+    min-height: calc(100% - 60px);
 }

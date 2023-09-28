@@ -1,10 +1,12 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewEncapsulation } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { QUERY_USER_DETAILS, QUERY_MY_VOTE, QueryResponseUserDetails, QueryResponseMyVote } from 'src/app/models/graphql/queries';
-import { EntryMessage, Tag } from 'src/app/models/models';
+import { EntryMessage, Tag, Error, VoteUpdate, User } from 'src/app/models/models';
 import { diff_match_patch as DiffMatchPatch } from 'diff-match-patch';
 import { AuthService } from 'src/app/services/auth.service';
 import { MUTATION_VOTE, MutationResponseVote } from 'src/app/models/graphql/mutations';
+import { MUTATION_BAN_USER, MutationresponseBanUser } from 'src/app/models/graphql/mutations/users';
+import { MUTATION_DELETE_MESSAGE, MessageDeleteSuccess, MutationResponseDeleteMessage } from 'src/app/models/graphql/mutations/entry_messages';
 
 @Component({
   selector: 'app-entry-message',
@@ -21,8 +23,9 @@ export class EntryMessageComponent implements OnInit {
 
   @Output() acceptPatch = new EventEmitter<EntryMessage>();
   @Output() declinePatch = new EventEmitter<EntryMessage>();
+  @Output() messageDeleted = new EventEmitter<EntryMessage>();
 
-  userNickname: string | null = null;
+  messageUser: User | null = null;
   petitionVote: number = 0;
   ratingTotal: number = 0;
   ratingCount: number = 1;
@@ -55,14 +58,14 @@ export class EntryMessageComponent implements OnInit {
     }
 
     this.apollo
-      .query<QueryResponseUserDetails>({
+      .watchQuery<QueryResponseUserDetails>({
         query: QUERY_USER_DETAILS,
         variables: {
           userId: this.message.userId,
         }
       })
-      .subscribe((response) => {
-        this.userNickname = response.data.user.username;
+      .valueChanges.subscribe(({ data, loading }) => {
+        this.messageUser = data.user;
       });
 
     if (this.auth.current_user != null && this.message.type == 'patch') {
@@ -130,12 +133,58 @@ export class EntryMessageComponent implements OnInit {
           rating: this.petitionVote
         }
       }).subscribe((response) => {
-        console.log(response)
         if (response.data && response.data.vote) {
-          this.ratingTotal = response.data?.vote.ratingTotal
-          this.ratingCount = response.data?.vote.ratingCount
+          const result = response.data.vote
+          if (result.__typename === 'Error') {
+            const error = result as Error;
+            console.log(error)
+          } else {
+            const vote = result as VoteUpdate
+            this.ratingTotal = vote.ratingTotal
+            this.ratingCount = vote.ratingCount
+          }
         }
       })
     }
+  }
+
+  banUser(ban: boolean) {
+    this.apollo.mutate<MutationresponseBanUser>({
+      mutation: MUTATION_BAN_USER,
+      variables: {
+        userId: this.messageUser?.id,
+        ban: ban
+      }
+    }).subscribe((response) => {
+      if (response.data && response.data.banUser) {
+        const result = response.data.banUser
+        if (result.__typename === 'Error') {
+          const error = result as Error;
+          console.log(error)
+        } else {
+          const user = result as User;
+        }
+      }
+    })
+  }
+
+  deleteMessage() {
+    this.apollo.mutate<MutationResponseDeleteMessage>({
+      mutation: MUTATION_DELETE_MESSAGE,
+      variables: {
+        messageId: this.message.id
+      }
+    }).subscribe((response) => {
+      if (response.data && response.data.deleteMessage) {
+        const result = response.data.deleteMessage
+        if (result.__typename === 'Error') {
+          const error = result as Error;
+          console.log(error)
+        } else {
+          const user = result as MessageDeleteSuccess;
+          this.messageDeleted.emit(this.message)
+        }
+      }
+    })
   }
 }

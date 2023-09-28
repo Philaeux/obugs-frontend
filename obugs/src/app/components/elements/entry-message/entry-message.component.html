@@ -1,7 +1,34 @@
 <div class="message">
     <div class="message-header">
-        <div>
-            {{userNickname}}
+        <div class="message-header-section">
+            <button *ngIf="auth.current_user && auth.current_user.isAdmin" mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button *ngIf="message.type == 'patch' && !message.isClosed" mat-menu-item
+                    (click)="acceptPatch.emit(message)">
+                    <mat-icon>done</mat-icon>
+                    <span>Apply patch</span>
+                </button>
+                <button *ngIf="message.type == 'patch' && !message.isClosed" mat-menu-item
+                    (click)="declinePatch.emit(message)">
+                    <mat-icon>close</mat-icon>
+                    <span>Decline patch</span>
+                </button>
+                <button mat-menu-item (click)="deleteMessage()">
+                    <mat-icon>delete</mat-icon>
+                    <span>Delete message</span>
+                </button>
+                <button *ngIf="!messageUser?.isBanned" mat-menu-item (click)="banUser(true)">
+                    <mat-icon>person_off</mat-icon>
+                    <span>Ban user</span>
+                </button>
+                <button *ngIf="messageUser?.isBanned" mat-menu-item (click)="banUser(false)">
+                    <mat-icon>person_check</mat-icon>
+                    <span>Unban user</span>
+                </button>
+            </mat-menu>
+            {{messageUser?.username}}
             <span *ngIf="message.type == 'creation'"> created this entry </span>
             <span *ngIf="message.type == 'comment'"> commented </span>
             <span *ngIf="message.type == 'patch'"> suggested a patch </span>
@@ -10,7 +37,7 @@
             </span>
         </div>
 
-        <div *ngIf="message.type == 'patch'" class="patch-vote">
+        <div *ngIf="message.type == 'patch'" class="message-header-section">
 
             <mat-icon *ngIf="auth.current_user != null && !message.isClosed" class="vote-arrow" (click)="vote(1)"
                 matTooltip="Approve this patch."
@@ -29,20 +56,7 @@
                 matTooltip="Rejected by {{closedByNickname}} {{this.message.closedAt | dateAgo}}."
                 class="red-icon">close</mat-icon>
             <mat-icon *ngIf="!message.isClosed && !auth.current_user" matTooltip="Vote is open.">lock_open</mat-icon>
-            <button *ngIf="auth.current_user && auth.current_user.isAdmin && !message.isClosed" mat-icon-button
-                [matMenuTriggerFor]="menu">
-                <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="acceptPatch.emit(message)">
-                    <mat-icon>done</mat-icon>
-                    <span>Apply patch</span>
-                </button>
-                <button mat-menu-item (click)="declinePatch.emit(message)">
-                    <mat-icon>close</mat-icon>
-                    <span>Decline patch</span>
-                </button>
-            </mat-menu>
+
             <button mat-button color="primary" (click)="showDetails = !showDetails" class="message-header-button">
                 <span *ngIf="showDetails">Hide</span>
                 <span *ngIf="!showDetails">Show</span>
