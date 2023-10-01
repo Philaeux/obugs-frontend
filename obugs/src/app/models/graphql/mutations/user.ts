@@ -1,22 +1,21 @@
 import { gql } from "apollo-angular";
-import { Error, User } from "../../models";
+import { OBugsError, User } from "../../models";
+import { ObugsFragments } from "../fragments";
 
 export const MUTATION_BAN_USER = gql`
     mutation BanUser($userId: UUID!, $ban: Boolean!) {
         banUser(userId: $userId, ban: $ban){
             __typename
-            ... on Error {
+            ... on OBugsError {
                 message
             }
             ... on User {
-                id
-                username
-                isAdmin
-                isBanned
+                ...UserFragment
             }
         }
     }
+    ${ObugsFragments.fragments.user}
 `
-export interface MutationresponseBanUser {
-    banUser: Error | User
+export interface MutationResponseBanUser {
+    banUser: OBugsError | User
 }

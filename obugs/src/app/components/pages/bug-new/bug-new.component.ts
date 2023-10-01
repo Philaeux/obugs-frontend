@@ -1,12 +1,12 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { Apollo } from 'apollo-angular';
-import { QUERY_LIST_TAGS, QueryResponseListTags } from "src/app/models/graphql/queries";
-import { MUTATION_CREATE_ENTRY, MutationResponseCreatEntry } from "src/app/models/graphql/mutations";
-import { Error, Entry } from 'src/app/models/models';
+import { QUERY_LIST_TAGS, QueryResponseListTags } from "src/app/models/graphql/queries/tag";
+import { OBugsError, Entry } from 'src/app/models/models';
 import { Subscription } from 'rxjs'
 import { Recaptchav2Service } from 'src/app/services/recaptchav2.service';
+import { MUTATION_CREATE_ENTRY, MutationResponseCreateEntry } from 'src/app/models/graphql/mutations/entry';
 
 
 @Component({
@@ -73,7 +73,7 @@ export class BugNewComponent implements OnInit, OnDestroy {
     if (this.form.valid) {
       grecaptcha.reset()
       this.apollo
-        .mutate<MutationResponseCreatEntry>({
+        .mutate<MutationResponseCreateEntry>({
           mutation: MUTATION_CREATE_ENTRY,
           variables: {
             recaptcha: token,
@@ -87,8 +87,8 @@ export class BugNewComponent implements OnInit, OnDestroy {
         .subscribe((response) => {
           if (response.data && response.data.createEntry) {
             const result = response.data.createEntry
-            if (result.__typename === 'Error') {
-              const error = result as Error;
+            if (result.__typename === 'OBugsError') {
+              const error = result as OBugsError;
               this.errorMessage = error.message;
             } else {
               const entry = result as Entry

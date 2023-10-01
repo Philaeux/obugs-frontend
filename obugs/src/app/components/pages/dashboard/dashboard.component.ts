@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { Entry, Tag } from "../../../models/models";
 import { Apollo } from 'apollo-angular';
-import { QUERY_LIST_ENTRIES, QUERY_LIST_TAGS, QueryResponseListEntries, QueryResponseListTags } from "src/app/models/graphql/queries";
+import { QUERY_LIST_ENTRIES, QueryResponseListEntries } from "src/app/models/graphql/queries/entry";
+import { QUERY_LIST_TAGS, QueryResponseListTags } from "src/app/models/graphql/queries/tag";
 
 @Component({
   selector: 'app-dashboard',

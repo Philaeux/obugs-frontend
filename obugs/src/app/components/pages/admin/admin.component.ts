@@ -1,14 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { EmptyObject } from 'apollo-angular/types';
-import { Software, User, Error, Tag } from 'src/app/models/models';
+import { Software, OBugsError, Tag } from 'src/app/models/models';
 import { AuthService } from 'src/app/services/auth.service';
 import { Subscription } from 'rxjs'
 import { Apollo } from 'apollo-angular';
-import { QUERY_LIST_SOFTWARE, QUERY_LIST_TAGS, QueryResponseListSoftware, QueryResponseListTags } from 'src/app/models/graphql/queries';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MUTATION_UPSERT_SOFTWARE, MutationResponseUpsertSoftware } from 'src/app/models/graphql/mutations/softwares';
-import { MUTATION_UPSERT_TAG, MutationResponseUpsertTag } from 'src/app/models/graphql/mutations/tags';
+import { MUTATION_UPSERT_SOFTWARE, MutationResponseUpsertSoftware } from 'src/app/models/graphql/mutations/software';
+import { MUTATION_UPSERT_TAG, MutationResponseUpsertTag } from 'src/app/models/graphql/mutations/tag';
+import { QUERY_LIST_SOFTWARE, QueryResponseListSoftware } from 'src/app/models/graphql/queries/software';
+import { QUERY_LIST_TAGS, QueryResponseListTags } from 'src/app/models/graphql/queries/tag';
 
 @Component({
   selector: 'app-admin',
@@ -121,8 +121,8 @@ export class AdminComponent implements OnInit, OnDestroy {
       }).subscribe((response) => {
         if (response.data != null && response.data.upsertSoftware != null) {
           const data = response.data?.upsertSoftware
-          if (data.__typename == 'Error') {
-            const error = data as Error;
+          if (data.__typename === 'OBugsError') {
+            const error = data as OBugsError;
             console.log(error.message);
           } else {
             const software = data as Software;
@@ -166,8 +166,8 @@ export class AdminComponent implements OnInit, OnDestroy {
       }).subscribe((response) => {
         if (response.data != null && response.data.upsertTag != null) {
           const data = response.data?.upsertTag
-          if (data.__typename == 'Error') {
-            const error = data as Error;
+          if (data.__typename === 'OBugsError') {
+            const error = data as OBugsError;
             console.log(error.message);
           } else {
             const tag = data as Tag;

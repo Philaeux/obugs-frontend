@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { QUERY_LIST_TAGS, QueryResponseListTags } from 'src/app/models/graphql/queries';
+import { QUERY_LIST_TAGS, QueryResponseListTags } from "src/app/models/graphql/queries/tag";
 import { Tag } from 'src/app/models/models';
 
 @Component({

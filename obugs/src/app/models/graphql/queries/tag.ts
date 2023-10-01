@@ -1,0 +1,16 @@
+import { gql } from "apollo-angular";
+import { Tag } from "../../models";
+import { ObugsFragments } from "../fragments";
+
+
+export const QUERY_LIST_TAGS = gql`
+    query GetTags($softwareId: String!) {
+        tags(softwareId: $softwareId) {
+            ...TagFragment
+        }
+    }
+    ${ObugsFragments.fragments.tag}
+`;
+export interface QueryResponseListTags {
+    tags: Tag[];
+}

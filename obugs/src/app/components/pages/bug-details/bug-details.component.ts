@@ -1,14 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Apollo } from 'apollo-angular';
-import { QUERY_ENTRY_DETAILS, QUERY_LIST_TAGS, QUERY_MY_VOTE, QueryResponseEntryDetails, QueryResponseListTags, QueryResponseMyVote } from "src/app/models/graphql/queries";
-import { MUTATION_COMMENT_ENTRY, MUTATION_PROCESS_PATCH, MUTATION_SUBMIT_PATCH, MUTATION_VOTE, MutationResponseCommentEntry, MutationResponseProcessPatch, MutationResponseSubmitPatch, MutationResponseVote } from "src/app/models/graphql/mutations";
-import { QUERY_ENTRY_MESSAGES, QueryResponseEntryMessages } from "src/app/models/graphql/queries";
-import { Entry, EntryMessage, Error, ProcessPatchSuccess, Tag, VoteUpdate } from 'src/app/models/models';
+import { QUERY_ENTRY_DETAILS, QueryResponseEntryDetails } from "src/app/models/graphql/queries/entry";
+import { QUERY_MY_VOTE, QueryResponseMyVote } from "src/app/models/graphql/queries/vote";
+import { QUERY_LIST_TAGS, QueryResponseListTags } from "src/app/models/graphql/queries/tag";
+import { QUERY_ENTRY_MESSAGES, QueryResponseEntryMessages } from "src/app/models/graphql/queries/entry_message";
+import { Entry, EntryMessage, OBugsError, ProcessPatchSuccess, Tag, VoteUpdate } from 'src/app/models/models';
 import { AuthService } from 'src/app/services/auth.service';
-import { environment } from 'src/environments/environment';
 import { Subscription } from 'rxjs'
 import { Recaptchav2Service } from 'src/app/services/recaptchav2.service';
+import { MUTATION_VOTE, MutationResponseVote } from 'src/app/models/graphql/mutations/vote';
+import { MUTATION_COMMENT_ENTRY, MUTATION_PROCESS_PATCH, MUTATION_SUBMIT_PATCH, MutationResponseCommentEntry, MutationResponseProcessPatch, MutationResponseSubmitPatch } from 'src/app/models/graphql/mutations/entry_message';
 
 @Component({
   selector: 'app-bug-details',
@@ -168,8 +170,8 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
     }).subscribe((response) => {
       if (response.data && response.data.vote) {
         const result = response.data.vote
-        if (result.__typename === 'Error') {
-          const error = result as Error;
+        if (result.__typename === 'OBugsError') {
+          const error = result as OBugsError;
           console.log(error)
         } else {
           const vote = result as VoteUpdate
@@ -205,10 +207,10 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(token: string): void {
+    this.errorMessage = '';
     if (this.editPanelIndex == 0) {
       // COMMENT
       if (this.editComment == '') return;
-      this.errorMessage = '';
       this.apollo.mutate<MutationResponseCommentEntry>({
         mutation: MUTATION_COMMENT_ENTRY,
         variables: {
@@ -220,8 +222,8 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
         grecaptcha.reset()
         if (response.data && response.data.commentEntry) {
           const result = response.data.commentEntry
-          if (result.__typename === 'Error') {
-            const error = result as Error;
+          if (result.__typename === 'OBugsError') {
+            const error = result as OBugsError;
             this.errorMessage = error.message;
           } else {
             const message = result as EntryMessage
@@ -255,8 +257,8 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
         grecaptcha.reset()
         if (response.data && response.data.submitPatch) {
           const result = response.data.submitPatch
-          if (result.__typename === 'Error') {
-            const error = result as Error;
+          if (result.__typename === 'OBugsError') {
+            const error = result as OBugsError;
             this.errorMessage = error.message;
           } else {
             const message = result as EntryMessage
@@ -296,8 +298,8 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
     }).subscribe((response) => {
       if (response.data && response.data.processPatch) {
         const result = response.data.processPatch
-        if (result.__typename === 'Error') {
-          const error = result as Error;
+        if (result.__typename === 'OBugsError') {
+          const error = result as OBugsError;
           console.log(error.message);
         } else {
           const pps = result as ProcessPatchSuccess

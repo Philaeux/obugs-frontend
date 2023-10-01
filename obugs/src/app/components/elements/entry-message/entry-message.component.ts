@@ -1,12 +1,13 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewEncapsulation } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { QUERY_USER_DETAILS, QUERY_MY_VOTE, QueryResponseUserDetails, QueryResponseMyVote } from 'src/app/models/graphql/queries';
-import { EntryMessage, Tag, Error, VoteUpdate, User } from 'src/app/models/models';
+import { QUERY_MY_VOTE, QueryResponseMyVote } from "src/app/models/graphql/queries/vote";
+import { QUERY_USER_DETAILS, QueryResponseUserDetails } from "src/app/models/graphql/queries/user";
+import { EntryMessage, Tag, OBugsError, VoteUpdate, User } from 'src/app/models/models';
 import { diff_match_patch as DiffMatchPatch } from 'diff-match-patch';
 import { AuthService } from 'src/app/services/auth.service';
-import { MUTATION_VOTE, MutationResponseVote } from 'src/app/models/graphql/mutations';
-import { MUTATION_BAN_USER, MutationresponseBanUser } from 'src/app/models/graphql/mutations/users';
-import { MUTATION_DELETE_MESSAGE, MessageDeleteSuccess, MutationResponseDeleteMessage } from 'src/app/models/graphql/mutations/entry_messages';
+import { MUTATION_VOTE, MutationResponseVote } from 'src/app/models/graphql/mutations/vote';
+import { MUTATION_BAN_USER, MutationResponseBanUser } from 'src/app/models/graphql/mutations/user';
+import { MUTATION_DELETE_MESSAGE, MessageDeleteSuccess, MutationResponseDeleteMessage } from 'src/app/models/graphql/mutations/entry_message';
 
 @Component({
   selector: 'app-entry-message',
@@ -135,8 +136,8 @@ export class EntryMessageComponent implements OnInit {
       }).subscribe((response) => {
         if (response.data && response.data.vote) {
           const result = response.data.vote
-          if (result.__typename === 'Error') {
-            const error = result as Error;
+          if (result.__typename === 'OBugsError') {
+            const error = result as OBugsError;
             console.log(error)
           } else {
             const vote = result as VoteUpdate
@@ -149,7 +150,7 @@ export class EntryMessageComponent implements OnInit {
   }
 
   banUser(ban: boolean) {
-    this.apollo.mutate<MutationresponseBanUser>({
+    this.apollo.mutate<MutationResponseBanUser>({
       mutation: MUTATION_BAN_USER,
       variables: {
         userId: this.messageUser?.id,
@@ -158,8 +159,8 @@ export class EntryMessageComponent implements OnInit {
     }).subscribe((response) => {
       if (response.data && response.data.banUser) {
         const result = response.data.banUser
-        if (result.__typename === 'Error') {
-          const error = result as Error;
+        if (result.__typename === 'OBugsError') {
+          const error = result as OBugsError;
           console.log(error)
         } else {
           const user = result as User;
@@ -177,8 +178,8 @@ export class EntryMessageComponent implements OnInit {
     }).subscribe((response) => {
       if (response.data && response.data.deleteMessage) {
         const result = response.data.deleteMessage
-        if (result.__typename === 'Error') {
-          const error = result as Error;
+        if (result.__typename === 'OBugsError') {
+          const error = result as OBugsError;
           console.log(error)
         } else {
           const user = result as MessageDeleteSuccess;

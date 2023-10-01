@@ -1,11 +1,11 @@
 import { Injectable, OnInit } from '@angular/core';
-import { AuthPayload, User, Error } from '../models/models';
+import { AuthPayload, User, OBugsError } from '../models/models';
 import { HttpClient } from '@angular/common/http';
 import { environment } from "../../environments/environment";
 import { BehaviorSubject, Observable, filter, tap } from 'rxjs';
 import { Apollo } from 'apollo-angular';
-import { QUERY_CURRENT_USER } from "../models/graphql/queries";
-import { QueryResponseCurrentUser } from "../models/graphql/queries";
+import { QUERY_CURRENT_USER } from "../models/graphql/queries/user";
+import { QueryResponseCurrentUser } from "../models/graphql/queries/user";
 import jwt_decode, { JwtPayload } from 'jwt-decode';
 
 @Injectable({
@@ -51,8 +51,8 @@ export class AuthService {
             query: QUERY_CURRENT_USER
           }).subscribe((response) => {
             const data = response.data.currentUser
-            if (data.__typename === 'Error') {
-              const error = data as Error
+            if (data.__typename === 'OBugsError') {
+              const error = data as OBugsError
               console.log(error.message)
               this.logout()
             } else {

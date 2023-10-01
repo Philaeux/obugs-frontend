@@ -1,5 +1,3 @@
-import { E } from "@angular/cdk/keycodes";
-
 export interface AuthPayload {
     error: string;
     message: string;
@@ -78,8 +76,8 @@ export interface EntryMessage {
     closedAt: string;
 }
 
-export interface Error {
-    __typename: 'Error';
+export interface OBugsError {
+    __typename: 'OBugsError';
     message: string;
 }
 
