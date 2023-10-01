@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Apollo } from 'apollo-angular';
 import { QUERY_ENTRY_DETAILS, QUERY_LIST_TAGS, QUERY_MY_VOTE, QueryResponseEntryDetails, QueryResponseListTags, QueryResponseMyVote } from "src/app/models/graphql/queries";
@@ -7,14 +7,15 @@ import { QUERY_ENTRY_MESSAGES, QueryResponseEntryMessages } from "src/app/models
 import { Entry, EntryMessage, Error, ProcessPatchSuccess, Tag, VoteUpdate } from 'src/app/models/models';
 import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
-import { ReCaptcha2Component } from 'ngx-captcha';
+import { Subscription } from 'rxjs'
+import { Recaptchav2Service } from 'src/app/services/recaptchav2.service';
 
 @Component({
   selector: 'app-bug-details',
   templateUrl: './bug-details.component.html',
   styleUrls: ['./bug-details.component.scss']
 })
-export class BugDetailsComponent implements OnInit {
+export class BugDetailsComponent implements OnInit, OnDestroy {
 
   softwareId: String | null = null;
   softwareTags: Tag[] = [];
@@ -22,10 +23,10 @@ export class BugDetailsComponent implements OnInit {
   entryId: String | null = null;
   entry: Entry | null = null;
   entryMessages: EntryMessage[] = [];
+  messagesLimit: number = 50;
+  messagesHasMore: boolean = false;
 
-  siteKey: string = environment.recaptchaSiteKey;
-  @ViewChild('recaptchaRef', { static: false }) recaptchaRef!: ReCaptcha2Component;
-  recaptcha: string = "";
+  subscription: Subscription | null = null;
   errorMessage: string = "";
 
   myVote: string | null = null;
@@ -44,10 +45,14 @@ export class BugDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private apollo: Apollo,
-    public auth: AuthService
+    public auth: AuthService,
+    private recaptchav2Service: Recaptchav2Service
   ) { }
 
   ngOnInit(): void {
+    this.recaptchav2Service.recaptchav2$.subscribe((token) => {
+      this.onSubmit(token)
+    });
     this.softwareId = this.route.snapshot.paramMap.get("software");
     let id = this.route.snapshot.paramMap.get("entry");
     if (id != null) {
@@ -84,18 +89,7 @@ export class BugDetailsComponent implements OnInit {
       });
 
     // MESSAGES
-    this.apollo.query<QueryResponseEntryMessages>({
-      query: QUERY_ENTRY_MESSAGES,
-      variables: {
-        entryId: this.entryId
-      }
-    }).subscribe((response) => {
-      if (response.data && response.data.entryMessages) {
-        for (let message of response.data.entryMessages) {
-          this.entryMessages.push(message)
-        }
-      }
-    })
+    this.fetchMoreMessages()
 
     // Software tags
     this.apollo
@@ -118,6 +112,33 @@ export class BugDetailsComponent implements OnInit {
           }
         }
       });
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) this.subscription.unsubscribe()
+  }
+
+  fetchMoreMessages(): void {
+    this.apollo.query<QueryResponseEntryMessages>({
+      query: QUERY_ENTRY_MESSAGES,
+      variables: {
+        entryId: this.entryId,
+        limit: this.messagesLimit,
+        offset: this.entryMessages.length
+      }
+    }).subscribe((response) => {
+      if (response.data && response.data.entryMessages) {
+        if (response.data.entryMessages.length == this.messagesLimit) {
+          this.messagesHasMore = true;
+        } else {
+          this.messagesHasMore = false;
+        }
+
+        for (let message of response.data.entryMessages) {
+          this.entryMessages.push(message)
+        }
+      }
+    })
   }
 
   resetEditsWithEntry(): void {
@@ -179,9 +200,11 @@ export class BugDetailsComponent implements OnInit {
     return 'fa-solid fa-link'
   }
 
-  onSubmit(): void {
-    if (this.recaptcha == '') return;
+  onSubmitButton() {
+    grecaptcha.execute()
+  }
 
+  onSubmit(token: string): void {
     if (this.editPanelIndex == 0) {
       // COMMENT
       if (this.editComment == '') return;
@@ -189,12 +212,12 @@ export class BugDetailsComponent implements OnInit {
       this.apollo.mutate<MutationResponseCommentEntry>({
         mutation: MUTATION_COMMENT_ENTRY,
         variables: {
-          recaptcha: this.recaptcha,
+          recaptcha: token,
           entryId: this.entryId,
           comment: this.editComment
         }
       }).subscribe((response) => {
-        this.recaptchaRef.resetCaptcha()
+        grecaptcha.reset()
         if (response.data && response.data.commentEntry) {
           const result = response.data.commentEntry
           if (result.__typename === 'Error') {
@@ -220,7 +243,7 @@ export class BugDetailsComponent implements OnInit {
       this.apollo.mutate<MutationResponseSubmitPatch>({
         mutation: MUTATION_SUBMIT_PATCH,
         variables: {
-          recaptcha: this.recaptcha,
+          recaptcha: token,
           entryId: this.entryId,
           title: this.editTitle,
           status: this.editStatus,
@@ -229,7 +252,7 @@ export class BugDetailsComponent implements OnInit {
           illustration: this.editIllustration
         }
       }).subscribe((response) => {
-        this.recaptchaRef.resetCaptcha()
+        grecaptcha.reset()
         if (response.data && response.data.submitPatch) {
           const result = response.data.submitPatch
           if (result.__typename === 'Error') {

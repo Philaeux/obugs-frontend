@@ -62,6 +62,11 @@
         <app-entry-message *ngFor="let message of this.entryMessages" [message]="message" [softwareTags]="softwareTags"
             (acceptPatch)="processPatch($event, true)" (declinePatch)="processPatch($event, false)"
             (messageDeleted)="removeMessage($event)"></app-entry-message>
+        <div style="text-align: center;">
+            <button *ngIf="messagesHasMore" mat-raised-button color="primary" (click)="fetchMoreMessages()">Load more
+                messages</button>
+        </div>
+
 
         <div class="comment-write">
             <mat-tab-group *ngIf="auth.current_user" animationDuration="0ms" [(selectedIndex)]="editPanelIndex">
@@ -120,10 +125,7 @@
                 {{errorMessage}}
             </div>
             <div class="comment-send">
-                <ngx-recaptcha2 [siteKey]="siteKey" [useGlobalDomain]="false" #recaptchaRef
-                    [(ngModel)]="recaptcha"></ngx-recaptcha2>
-                <button mat-raised-button color="primary" (click)="onSubmit()"
-                    [disabled]="recaptcha == ''">Submit</button>
+                <button mat-raised-button color="primary" (click)="onSubmitButton()">Submit</button>
             </div>
             <div *ngIf="!auth.current_user" class="login-message">Login to comment or submit a patch.</div>
         </div>

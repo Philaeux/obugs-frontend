@@ -1,0 +1,29 @@
+.mat-mdc-row .mat-mdc-cell {
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    cursor: pointer;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+    border-color: black;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.card-content {
+    display: flex;
+    gap: 8px;
+}
+
+.card-subcontent {
+    display: flex;
+    flex-direction: column;
+    width: calc(50% - 4px);
+}
+
+.filters {
+    display: flex;
+    gap: 10px;
+}

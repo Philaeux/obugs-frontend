@@ -16,7 +16,8 @@
       </div>
 
       <div class="bug-list">
-        <app-bug-row *ngFor="let entry of filteredEntries" (click)="openBugDetails(entry)" [entry]="entry"
+        <app-bug-row *ngFor="let entry of filteredEntries" (click)="openBugDetails(entry, false)"
+          (mousedown)="handleMiddleMouseClick($event, entry)" [entry]="entry"
           [softwareTags]="softwareTags"></app-bug-row>
       </div>
 
@@ -27,7 +28,8 @@
     <mat-divider [vertical]="true"></mat-divider>
     <div class="panel">
       <div class="bug-list">
-        <app-bug-row *ngFor="let entry of newEntries" (click)="openBugDetails(entry)" [entry]="entry"
+        <app-bug-row *ngFor="let entry of newEntries" (click)="openBugDetails(entry, false)"
+          (mousedown)="handleMiddleMouseClick($event, entry)" [entry]="entry"
           [softwareTags]="softwareTags"></app-bug-row>
       </div>
     </div>

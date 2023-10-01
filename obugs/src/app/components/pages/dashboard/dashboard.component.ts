@@ -93,8 +93,19 @@ export class DashboardComponent implements OnInit {
       });
   }
 
-  openBugDetails(entry: Entry) {
-    this.router.navigate([`s/${entry.softwareId}/${entry.id}`]);
+  handleMiddleMouseClick(event: MouseEvent, entry: Entry) {
+    if (event.button === 1) {
+      this.openBugDetails(entry, true);
+    }
+  }
+
+  openBugDetails(entry: Entry, newTab: boolean) {
+    if (newTab) {
+      const url = this.router.createUrlTree([`s/${entry.softwareId}/${entry.id}`]).toString();
+      window.open(url, '_blank');
+    } else {
+      this.router.navigate([`s/${entry.softwareId}/${entry.id}`]);
+    }
   }
 
   onStatusFilterChange() {

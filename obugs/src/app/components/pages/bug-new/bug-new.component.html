@@ -4,7 +4,7 @@
             <div class="mat-headline-5">Add a new Entry</div>
         </mat-card-title>
         <mat-card-content>
-            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <form [formGroup]="form" (ngSubmit)="onCreateButton()">
                 <!-- Title -->
                 <mat-form-field class="full-width">
                     <input matInput placeholder="Title" formControlName="title" required />
@@ -29,12 +29,7 @@
 
                 <div *ngIf="errorMessage != ''" class="error">{{errorMessage}}</div>
                 <div class="captcha-container">
-                    <ngx-recaptcha2 [siteKey]="siteKey" [useGlobalDomain]="false" formControlName="recaptcha"
-                        #captchaRef></ngx-recaptcha2><button mat-raised-button color="primary" type="submit"
-                        [disabled]="!form.valid">Create</button>
-                </div>
-
-                <div class="form-button">
+                    <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Create</button>
                 </div>
             </form>
         </mat-card-content>

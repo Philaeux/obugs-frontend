@@ -30,7 +30,9 @@ import { StatusChipComponent } from './components/elements/status-chip/status-ch
 import { EntryMessageComponent } from './components/elements/entry-message/entry-message.component';
 import { DateAgoPipe } from './pipes/date-ago.pipe';
 import { TagInputComponent } from './components/elements/tag-input/tag-input.component';
-import { NgxCaptchaModule } from 'ngx-captcha';
+import { AdminComponent } from './components/pages/admin/admin.component';
+import { Recaptchav2Service } from './services/recaptchav2.service';
+import { RecaptchaModule } from 'ng-recaptcha';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,8 @@ import { NgxCaptchaModule } from 'ngx-captcha';
     StatusChipComponent,
     EntryMessageComponent,
     DateAgoPipe,
-    TagInputComponent
+    TagInputComponent,
+    AdminComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -63,10 +66,11 @@ import { NgxCaptchaModule } from 'ngx-captcha';
     GraphQLModule,
     MarkdownModule.forRoot(),
     CommonModule,
-    NgxCaptchaModule
+    RecaptchaModule
   ],
   providers: [
-    AuthService
+    AuthService,
+    Recaptchav2Service
   ],
   bootstrap: [AppComponent]
 })

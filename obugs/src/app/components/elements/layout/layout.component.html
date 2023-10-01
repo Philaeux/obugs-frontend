@@ -15,6 +15,14 @@
                 </div>
             </mat-list-item>
 
+            <mat-list-item *ngIf="auth.current_user != null && auth.current_user.isAdmin" routerLink="/admin"
+                class="sidebar-item">
+                <div class="sidebar-item-content">
+                    <div class="sidebar-item-icon"><mat-icon>admin_panel_settings</mat-icon></div>
+                    <div class="sidebar-item-text">Admin</div>
+                </div>
+            </mat-list-item>
+
             <mat-divider></mat-divider>
 
             <mat-list-item *ngIf="softwareId != null" routerLink="/s/{{softwareId}}" class="sidebar-item">

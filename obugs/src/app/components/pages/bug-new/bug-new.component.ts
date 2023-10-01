@@ -1,12 +1,12 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { Apollo } from 'apollo-angular';
 import { QUERY_LIST_TAGS, QueryResponseListTags } from "src/app/models/graphql/queries";
 import { MUTATION_CREATE_ENTRY, MutationResponseCreatEntry } from "src/app/models/graphql/mutations";
-import { environment } from 'src/environments/environment';
-import { ReCaptcha2Component } from 'ngx-captcha';
 import { Error, Entry } from 'src/app/models/models';
+import { Subscription } from 'rxjs'
+import { Recaptchav2Service } from 'src/app/services/recaptchav2.service';
 
 
 @Component({
@@ -14,8 +14,9 @@ import { Error, Entry } from 'src/app/models/models';
   templateUrl: './bug-new.component.html',
   styleUrls: ['./bug-new.component.scss']
 })
-export class BugNewComponent {
+export class BugNewComponent implements OnInit, OnDestroy {
 
+  subscription: Subscription | null = null;
 
   softwareId: string | null = null;
   softwareTags: string[] = [];
@@ -23,24 +24,26 @@ export class BugNewComponent {
 
   form: FormGroup;
   selectedTags: string[] = [];
-  siteKey: string = environment.recaptchaSiteKey;
-  @ViewChild('captchaRef', { static: false }) captchaRef!: ReCaptcha2Component;
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private apollo: Apollo,
-    private router: Router
+    private router: Router,
+    private recaptchav2Service: Recaptchav2Service
   ) {
     this.form = this.fb.group({
       title: ['', [Validators.required]],
       description: ['', [Validators.required]],
-      illustration: [''],
-      recaptcha: ['', Validators.required]
+      illustration: ['']
     });
   }
 
   ngOnInit(): void {
+    this.recaptchav2Service.recaptchav2$.subscribe((token) => {
+      this.onSubmit(token)
+    });
+
     this.softwareId = this.route.snapshot.paramMap.get("software");
     this.apollo
       .query<QueryResponseListTags>({
@@ -57,14 +60,23 @@ export class BugNewComponent {
       });
   }
 
-  onSubmit() {
+  ngOnDestroy(): void {
+    if (this.subscription) this.subscription.unsubscribe()
+  }
+
+  onCreateButton() {
+    grecaptcha.execute()
+  }
+
+  onSubmit(token: string) {
     this.errorMessage = '';
     if (this.form.valid) {
+      grecaptcha.reset()
       this.apollo
         .mutate<MutationResponseCreatEntry>({
           mutation: MUTATION_CREATE_ENTRY,
           variables: {
-            recaptcha: this.form.value.recaptcha,
+            recaptcha: token,
             softwareId: this.softwareId,
             title: this.form.value.title,
             description: this.form.value.description,
@@ -73,7 +85,6 @@ export class BugNewComponent {
           }
         })
         .subscribe((response) => {
-          this.captchaRef.resetCaptcha();
           if (response.data && response.data.createEntry) {
             const result = response.data.createEntry
             if (result.__typename === 'Error') {

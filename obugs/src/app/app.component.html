@@ -1,1 +1,3 @@
 <router-outlet></router-outlet>
+<re-captcha #captchaRef="reCaptcha" (resolved)="resolved($event)" size="invisible" [siteKey]="siteKey">
+</re-captcha>

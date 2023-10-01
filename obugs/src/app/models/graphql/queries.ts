@@ -3,8 +3,8 @@ import { Entry, EntryMessage, Vote, Software, Tag, User, Error } from "../models
 
 
 export const QUERY_ENTRY_MESSAGES = gql`
-    query EntryMessages($entryId: UUID!) {
-        entryMessages(entryId: $entryId) {
+    query EntryMessages($entryId: UUID!, $limit: Int!, $offset: Int!) {
+        entryMessages(entryId: $entryId, limit: $limit, offset: $offset) {
             id
             entryId
             userId
@@ -33,6 +33,7 @@ export const QUERY_LIST_SOFTWARE = gql`
             fullName
             editor
             description
+            language
         }
     }
 `

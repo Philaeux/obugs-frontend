@@ -11,6 +11,7 @@ export interface Software {
     fullName: string;
     editor: string;
     description: string;
+    language: string;
 }
 
 export interface User {

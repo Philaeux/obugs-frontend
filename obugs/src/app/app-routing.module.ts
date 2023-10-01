@@ -7,11 +7,13 @@ import { DashboardComponent } from './components/pages/dashboard/dashboard.compo
 import { IndexComponent } from './components/pages/index/index.component';
 import { LoginComponent } from './components/pages/login/login.component';
 import { AppsComponent } from './components/pages/apps/apps.component';
+import { AdminComponent } from './components/pages/admin/admin.component';
 
 const routes: Routes = [
   { path: '', title: 'oBugs - Community-driven bug tracker', component: IndexComponent },
   { path: 'apps', title: 'oBugs - Applications', component: AppsComponent },
   { path: 'login', title: 'oBugs - Login', component: LoginComponent },
+  { path: 'admin', title: 'oBugs - Admin', component: AdminComponent },
   { path: 's/:software/new', component: BugNewComponent },
   { path: 's/:software/bug/search', component: BugSearchComponent },
   { path: 's/:software/:entry', component: BugDetailsComponent },

@@ -27,7 +27,7 @@
 
         <div class="form-column">
             <h2>Register</h2>
-            <form [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()">
+            <form [formGroup]="registerForm" (ngSubmit)="onRegisterButton()">
                 <mat-form-field class="full-width">
                     <input matInput placeholder="Username" formControlName="registerUsername">
                     <mat-error *ngIf="registerForm.get('registerUsername')?.hasError('required')">Username is
@@ -65,8 +65,6 @@
                         *ngIf="registerForm.get('repeatEmail')?.hasError('emailMismatch') && registerForm.get('repeatEmail')?.touched">Emails
                         must match.</mat-error>
                 </mat-form-field>
-                <ngx-recaptcha2 [siteKey]="siteKey" [useGlobalDomain]="false" formControlName="recaptcha"
-                    #captchaRef></ngx-recaptcha2>
                 <div *ngIf="errorRegister != ''" class="error">{{errorRegister}}</div>
                 <div *ngIf="messageRegister != ''" class="message">{{messageRegister}}</div>
                 <button class="register-button" mat-raised-button color="primary" type="submit"
