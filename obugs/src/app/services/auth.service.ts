@@ -57,7 +57,6 @@ export class AuthService {
               this.logout()
             } else {
               const user = data as User
-              console.log(user)
               this.current_user = user
               this.currentUserSubject.next(this.current_user)
             }
