@@ -39,7 +39,7 @@ export class TagChipComponent {
       if (this.tag) {
         return {
           'color': this.tag.fontColor,
-          'background-color': this.tag.backgroundColor
+          'background-color': this.tag.backgroundColor,
         }
       } else {
         return {}
