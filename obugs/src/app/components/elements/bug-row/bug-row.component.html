@@ -1,19 +1,27 @@
 <div class="bug">
-    <div class="bug-impact" matTooltip="Community impact">
-        {{entry.ratingTotal / entry.ratingCount | number: '1.0-1'}}
-    </div>
-    <div class="bug-rows">
-        <div class="bug-row-1">
-            <app-status-chip [status]="entry.status"></app-status-chip>
-            <div class="bug-title">
-                {{entry.title}}
+    <div class="bug-left">
+        <div class="bug-impact" matTooltip="Community impact">
+            {{entry.ratingTotal / entry.ratingCount | number: '1.0-1'}}
+        </div>
+        <div class="bug-rows">
+            <div class="bug-row-1">
+                <app-status-chip [status]="entry.status"></app-status-chip>
+                <div class="bug-title">
+                    {{entry.title}}
+                </div>
+
+            </div>
+            <div class="bug-row-2">
+                <div class="bug-updated-at" matTooltip="Last update">
+                    {{entry.updatedAt | dateAgo}}
+                </div>
+                <app-tag-chip *ngFor="let tag of entry.tags" [tag]="tag" [softwareTags]="softwareTags"></app-tag-chip>
             </div>
         </div>
-        <div class="bug-row-2">
-            <div class="bug-updated-at" matTooltip="Last update">
-                {{entry.updatedAt | dateAgo}}
-            </div>
-            <app-tag-chip *ngFor="let tag of entry.tags" [tag]="tag" [softwareTags]="softwareTags"></app-tag-chip>
+    </div>
+    <div *ngIf="entry.openPatchesCount != 0" class="bug-open-patches" matTooltip="Number of open patches">
+        <div class="bug-open-patches-txt">
+            {{entry.openPatchesCount}}
         </div>
     </div>
 </div>

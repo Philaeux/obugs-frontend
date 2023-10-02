@@ -1,10 +1,17 @@
 .bug {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     border-radius: 10px;
     border: solid;
     border-color: var(--mat-divider-color);
     border-width: 1px;
+    padding-right: 4px;
+}
+
+.bug-left {
+    display: flex;
+    align-items: center;
 }
 
 .bug:hover {
@@ -53,4 +60,22 @@
 .bug-title {
     font-weight: 500;
     font-size: 16px;
+}
+
+.bug-open-patches {
+    width: 30px;
+    height: 30px;
+    background-color: var(--mat-standard-button-toggle-selected-state-background-color);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-style: solid;
+    border-width: 1px;
+    border-color: var(--mat-divider-color);
+}
+
+.bug-open-patches-txt {
+    color: var(--mat-standard-button-toggle-selected-state-text-color);
+    font-size: 18px;
 }

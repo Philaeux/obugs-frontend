@@ -18,6 +18,9 @@ export interface User {
     username: string;
     isAdmin: boolean;
     isBanned: boolean;
+    softwareIsMod: string[];
+    softwareIsCurator: string[];
+    softwareIsEditor: string[];
 }
 
 export interface Tag {
@@ -42,6 +45,7 @@ export interface Entry {
     ratingTotal: number;
     ratingCount: number;
     tags: Tag[]
+    openPatchesCount: number;
 }
 
 export interface Vote {

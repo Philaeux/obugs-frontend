@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { User } from 'src/app/models/models';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -7,7 +8,7 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss']
 })
-export class LayoutComponent {
+export class LayoutComponent implements OnInit {
 
   darkMode = false;
   softwareId: string | null = null;

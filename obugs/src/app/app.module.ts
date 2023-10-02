@@ -3,7 +3,7 @@ import { MarkdownModule } from 'ngx-markdown'
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
@@ -70,7 +70,8 @@ import { RecaptchaModule } from 'ng-recaptcha';
   ],
   providers: [
     AuthService,
-    Recaptchav2Service
+    Recaptchav2Service,
+    Title
   ],
   bootstrap: [AppComponent]
 })

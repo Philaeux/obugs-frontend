@@ -7,6 +7,7 @@ import { OBugsError, Entry } from 'src/app/models/models';
 import { Subscription } from 'rxjs'
 import { Recaptchav2Service } from 'src/app/services/recaptchav2.service';
 import { MUTATION_CREATE_ENTRY, MutationResponseCreateEntry } from 'src/app/models/graphql/mutations/entry';
+import { Title } from '@angular/platform-browser';
 
 
 @Component({
@@ -30,7 +31,8 @@ export class BugNewComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private apollo: Apollo,
     private router: Router,
-    private recaptchav2Service: Recaptchav2Service
+    private recaptchav2Service: Recaptchav2Service,
+    private title: Title
   ) {
     this.form = this.fb.group({
       title: ['', [Validators.required]],
@@ -40,11 +42,12 @@ export class BugNewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.recaptchav2Service.recaptchav2$.subscribe((token) => {
+    this.subscription = this.recaptchav2Service.recaptchav2$.subscribe((token) => {
       this.onSubmit(token)
     });
 
     this.softwareId = this.route.snapshot.paramMap.get("software");
+    this.title.setTitle("oBugs - " + this.softwareId + " - New Entry")
     this.apollo
       .query<QueryResponseListTags>({
         query: QUERY_LIST_TAGS,

@@ -59,17 +59,16 @@
     </div>
 
     <div class="entry-comments">
-        <app-entry-message *ngFor="let message of this.entryMessages" [message]="message" [softwareTags]="softwareTags"
-            (acceptPatch)="processPatch($event, true)" (declinePatch)="processPatch($event, false)"
-            (messageDeleted)="removeMessage($event)"></app-entry-message>
+        <app-entry-message *ngFor="let message of this.entryMessages" [softwareId]="softwareId" [message]="message"
+            [softwareTags]="softwareTags" (acceptPatch)="processPatch($event, true)"
+            (declinePatch)="processPatch($event, false)" (messageDeleted)="removeMessage($event)"></app-entry-message>
         <div style="text-align: center;">
             <button *ngIf="messagesHasMore" mat-raised-button color="primary" (click)="fetchMoreMessages()">Load more
                 messages</button>
         </div>
 
-
         <div class="comment-write">
-            <mat-tab-group *ngIf="auth.current_user" animationDuration="0ms" [(selectedIndex)]="editPanelIndex">
+            <mat-tab-group *ngIf="auth.current_user != null" animationDuration="0ms" [(selectedIndex)]="editPanelIndex">
                 <mat-tab label="Write a comment">
                     <div class="tab-content">
                         <mat-form-field class="comment-form">
@@ -124,7 +123,7 @@
             <div *ngIf="errorMessage != ''" class="error">
                 {{errorMessage}}
             </div>
-            <div class="comment-send">
+            <div *ngIf="auth.current_user != null" class="comment-send">
                 <button mat-raised-button color="primary" (click)="onSubmitButton()">Submit</button>
             </div>
             <div *ngIf="!auth.current_user" class="login-message">Login to comment or submit a patch.</div>

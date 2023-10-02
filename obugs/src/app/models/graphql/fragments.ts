@@ -9,6 +9,9 @@ export const ObugsFragments = {
                 username
                 isAdmin
                 isBanned
+                softwareIsMod
+                softwareIsCurator
+                softwareIsEditor
             }
         `,
 

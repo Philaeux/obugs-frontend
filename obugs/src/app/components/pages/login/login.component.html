@@ -17,8 +17,8 @@
                     <mat-error *ngIf="loginForm.get('loginPassword')?.hasError('minlength')">Password is
                         at least 6 characters long.</mat-error>
                 </mat-form-field>
-                <div *ngIf="errorLogin != ''" class="error">{{errorLogin}}</div>
-                <div *ngIf="messageLogin != ''" class="message">{{messageLogin}}</div>
+                <div *ngIf="errorLogin != ''" class="login-error">{{errorLogin}}</div>
+                <div *ngIf="messageLogin != ''" class="login-message">{{messageLogin}}</div>
                 <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">Login</button>
             </form>
         </div>
@@ -65,8 +65,8 @@
                         *ngIf="registerForm.get('repeatEmail')?.hasError('emailMismatch') && registerForm.get('repeatEmail')?.touched">Emails
                         must match.</mat-error>
                 </mat-form-field>
-                <div *ngIf="errorRegister != ''" class="error">{{errorRegister}}</div>
-                <div *ngIf="messageRegister != ''" class="message">{{messageRegister}}</div>
+                <div *ngIf="errorRegister != ''" class="login-error">{{errorRegister}}</div>
+                <div *ngIf="messageRegister != ''" class="login-message">{{messageRegister}}</div>
                 <button class="register-button" mat-raised-button color="primary" type="submit"
                     [disabled]="!registerForm.valid">Create
                     Account</button>

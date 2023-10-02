@@ -19,13 +19,34 @@
   margin-top: 8px;
   display: grid;
   grid-gap: 8px;
-  grid-template-columns: repeat(2, minmax(100px, 1fr));
 }
 
-.index-card {}
+@media (max-width: 1000px) {
+  .index-cards {
+    grid-template-columns: repeat(1, minmax(100px, 1fr));
+  }
+}
+
+@media (min-width: 1000px) {
+  .index-cards {
+    grid-template-columns: repeat(2, minmax(100px, 1fr));
+  }
+}
+
+.index-section-content {
+  padding-left: 42px;
+  padding-right: 42px;
+  font-size: 20px;
+}
+
+.index-section-content p {
+  text-indent: 24px;
+}
+
 
 .index-section-title {
   text-align: center;
-  font-size: 30px;
-  margin-bottom: 16px;
+  font-size: 40px;
+  margin-top: 16px;
+  margin-bottom: 32px;
 }

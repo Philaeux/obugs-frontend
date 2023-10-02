@@ -57,6 +57,7 @@ export class AuthService {
               this.logout()
             } else {
               const user = data as User
+              console.log(user)
               this.current_user = user
               this.currentUserSubject.next(this.current_user)
             }
@@ -69,6 +70,7 @@ export class AuthService {
     this.current_user = null;
     this.currentUserSubject.next(null)
     localStorage.removeItem('access_token');
+    this.apollo.client.resetStore()
   }
 
   isExpired(token: string) {
@@ -80,5 +82,24 @@ export class AuthService {
       return true;
     }
     return false;
+  }
+
+  isAdmin() {
+    if (this.current_user == null) return false;
+    return this.current_user.isAdmin
+  }
+
+  isRole(softwareId: string | null, role: string) {
+    if (softwareId == null) return false;
+    if (this.current_user == null) return false;
+    if (role == 'mod') {
+      return this.current_user.softwareIsMod.includes(softwareId);
+    } else if (role == 'curator') {
+      return this.current_user.softwareIsCurator.includes(softwareId);
+    } else if (role == 'editor') {
+      return this.current_user.softwareIsEditor.includes(softwareId);
+    } else {
+      return false
+    }
   }
 }

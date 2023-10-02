@@ -22,6 +22,9 @@ export class EntryMessageComponent implements OnInit {
   @Input({ required: true })
   softwareTags!: Tag[];
 
+  @Input({ required: true })
+  softwareId: string | null = null;
+
   @Output() acceptPatch = new EventEmitter<EntryMessage>();
   @Output() declinePatch = new EventEmitter<EntryMessage>();
   @Output() messageDeleted = new EventEmitter<EntryMessage>();

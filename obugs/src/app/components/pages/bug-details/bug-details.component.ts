@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
 import { QUERY_ENTRY_DETAILS, QueryResponseEntryDetails } from "src/app/models/graphql/queries/entry";
 import { QUERY_MY_VOTE, QueryResponseMyVote } from "src/app/models/graphql/queries/vote";
@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs'
 import { Recaptchav2Service } from 'src/app/services/recaptchav2.service';
 import { MUTATION_VOTE, MutationResponseVote } from 'src/app/models/graphql/mutations/vote';
 import { MUTATION_COMMENT_ENTRY, MUTATION_PROCESS_PATCH, MUTATION_SUBMIT_PATCH, MutationResponseCommentEntry, MutationResponseProcessPatch, MutationResponseSubmitPatch } from 'src/app/models/graphql/mutations/entry_message';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-bug-details',
@@ -19,16 +20,17 @@ import { MUTATION_COMMENT_ENTRY, MUTATION_PROCESS_PATCH, MUTATION_SUBMIT_PATCH, 
 })
 export class BugDetailsComponent implements OnInit, OnDestroy {
 
-  softwareId: String | null = null;
+  softwareId: string | null = null;
   softwareTags: Tag[] = [];
   softwareTagsAsStrings: string[] = [];
-  entryId: String | null = null;
+  entryId: string | null = null;
   entry: Entry | null = null;
   entryMessages: EntryMessage[] = [];
   messagesLimit: number = 50;
   messagesHasMore: boolean = false;
 
-  subscription: Subscription | null = null;
+  subscriptionRecaptcha: Subscription | null = null;
+  subscriptionUser: Subscription | null = null;
   errorMessage: string = "";
 
   myVote: string | null = null;
@@ -48,18 +50,46 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private apollo: Apollo,
     public auth: AuthService,
-    private recaptchav2Service: Recaptchav2Service
+    private recaptchav2Service: Recaptchav2Service,
+    private title: Title,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.recaptchav2Service.recaptchav2$.subscribe((token) => {
-      this.onSubmit(token)
-    });
-    this.softwareId = this.route.snapshot.paramMap.get("software");
-    let id = this.route.snapshot.paramMap.get("entry");
-    if (id != null) {
+    const s = this.route.snapshot.paramMap.get("software");
+    if (s == null) {
+      this.router.navigate(["/apps"]);
+    } else {
+      this.softwareId = s
+    }
+
+    const id = this.route.snapshot.paramMap.get("entry");
+    if (id == null) {
+      this.router.navigate(["/s/" + this.softwareId]);
+    } else {
       this.entryId = id
     }
+
+    this.subscriptionRecaptcha = this.recaptchav2Service.recaptchav2$.subscribe((token) => {
+      this.onSubmit(token)
+    });
+
+    this.subscriptionUser = this.auth.currentUser$.subscribe((user) => {
+      if (user === undefined || user === null) return;
+      // User Vote
+      this.apollo
+        .query<QueryResponseMyVote>({
+          query: QUERY_MY_VOTE,
+          variables: {
+            subjectId: this.entryId,
+          }
+        })
+        .subscribe((response) => {
+          if (response.data && response.data.myVote) {
+            this.myVote = response.data.myVote.rating.toString();
+          };
+        });
+    })
 
     // BUG INFO
     this.apollo
@@ -70,24 +100,11 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
         }
       })
       .subscribe((response) => {
+        this.title.setTitle(response.data.entry.title);
         this.entry = response.data.entry;
         this.ratingCount = response.data.entry.ratingCount
         this.ratingTotal = response.data.entry.ratingTotal
         this.resetEditsWithEntry()
-      });
-
-    // MY VOTE
-    this.apollo
-      .query<QueryResponseMyVote>({
-        query: QUERY_MY_VOTE,
-        variables: {
-          subjectId: this.entryId,
-        }
-      })
-      .subscribe((response) => {
-        if (response.data && response.data.myVote) {
-          this.myVote = response.data.myVote.rating.toString();
-        };
       });
 
     // MESSAGES
@@ -117,7 +134,8 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) this.subscription.unsubscribe()
+    if (this.subscriptionRecaptcha) this.subscriptionRecaptcha.unsubscribe()
+    if (this.subscriptionUser) this.subscriptionUser.unsubscribe()
   }
 
   fetchMoreMessages(): void {

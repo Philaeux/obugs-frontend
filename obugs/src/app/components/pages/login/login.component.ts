@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.recaptchav2Service.recaptchav2$.subscribe((token) => {
+    this.subscription = this.recaptchav2Service.recaptchav2$.subscribe((token) => {
       this.onRegisterSubmit(token)
     });
 

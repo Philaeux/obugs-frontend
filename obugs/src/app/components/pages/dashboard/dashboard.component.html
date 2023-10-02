@@ -4,14 +4,22 @@
       <div class="filters">
         <mat-button-toggle-group name="status" aria-label="Status" multiple [(ngModel)]="statusFilter"
           (change)="onStatusFilterChange()">
-          <mat-button-toggle value="NEW">New</mat-button-toggle>
-          <mat-button-toggle value="CONFIRMED" checked>Confirmed</mat-button-toggle>
-          <mat-button-toggle value="WIP" checked>WIP</mat-button-toggle>
-          <mat-button-toggle value="CHECK" checked>Check</mat-button-toggle>
-          <mat-button-toggle value="FIXED">Fixed</mat-button-toggle>
-          <mat-button-toggle value="EXPECTED">Expected</mat-button-toggle>
-          <mat-button-toggle value="DUPLICATE">Duplicate</mat-button-toggle>
-          <mat-button-toggle value="CLOSED">Closed</mat-button-toggle>
+          <mat-button-toggle value="NEW" matTooltip="Every new entry on the website.">
+            New</mat-button-toggle>
+          <mat-button-toggle value="CONFIRMED" checked
+            matTooltip="The Bug has been confirmed by the community.">Confirmed</mat-button-toggle>
+          <mat-button-toggle value="WIP" checked
+            matTooltip="Developers have informed that they are working on a fix for this bug.">WIP</mat-button-toggle>
+          <mat-button-toggle value="CHECK" checked
+            matTooltip="A fix has been deployed, or the bug is very old. A bug check is necessary.">Check</mat-button-toggle>
+          <mat-button-toggle value="FIXED"
+            matTooltip="Bug has been dealt with and is not present anymore.">Fixed</mat-button-toggle>
+          <mat-button-toggle value="EXPECTED"
+            matTooltip="The described entry is the intended behavior from the software. No Action required">Expected</mat-button-toggle>
+          <mat-button-toggle value="DUPLICATE"
+            matTooltip="This entry is a duplicate of another already open bug. Use the main one instead.">Duplicate</mat-button-toggle>
+          <mat-button-toggle value="CLOSED"
+            matTooltip="This entry is out of scope (customer support), won't be fiexed, or non-sensical.">Closed</mat-button-toggle>
         </mat-button-toggle-group>
       </div>
 
