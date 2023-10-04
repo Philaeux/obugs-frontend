@@ -8,7 +8,7 @@ import { Recaptchav2Service } from './services/recaptchav2.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'oBugs';
+
   siteKey: string = environment.recaptchaSiteKey;
 
   constructor(private captchav2Service: Recaptchav2Service) { }

@@ -16,8 +16,8 @@ export interface QueryResponseEntryDetails {
 }
 
 export const QUERY_LIST_ENTRIES = gql`
-    query EntryList($softwareId: String!, $statusFilter: [String!]!, $limit: Int!, $offset: Int!) {
-        entries(softwareId: $softwareId, statusFilter: $statusFilter, limit: $limit, offset: $offset) {
+    query EntryList($softwareId: String!, $statusFilter: [String!]!, $order: String!, $limit: Int!, $offset: Int!) {
+        entries(softwareId: $softwareId, statusFilter: $statusFilter, order: $order, limit: $limit, offset: $offset) {
             ...EntryFragment
         }
     }

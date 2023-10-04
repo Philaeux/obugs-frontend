@@ -19,6 +19,7 @@ export class DashboardComponent implements OnInit {
   filterLimit = 20;
   filterHasMore: boolean = false;
   statusFilter: string[] = ['CONFIRMED', 'WIP', 'CHECK'];
+  orderingFilter: string = "updated";
 
   constructor(
     private router: Router,
@@ -56,6 +57,7 @@ export class DashboardComponent implements OnInit {
         variables: {
           softwareId: this.softwareId,
           statusFilter: this.statusFilter,
+          order: this.orderingFilter,
           limit: this.filterLimit,
           offset: this.filteredEntries.length
         }
@@ -81,6 +83,7 @@ export class DashboardComponent implements OnInit {
         variables: {
           softwareId: this.softwareId,
           statusFilter: ['NEW'],
+          order: this.orderingFilter,
           limit: 20,
           offset: 0
         }
@@ -109,7 +112,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  onStatusFilterChange() {
+  onFiltersChange() {
     this.filteredEntries = []
     this.fetchFilteredEntries()
   }

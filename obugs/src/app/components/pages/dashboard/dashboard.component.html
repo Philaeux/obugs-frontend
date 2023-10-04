@@ -2,8 +2,15 @@
   <div class="dashboard">
     <div class="panel">
       <div class="filters">
+        <mat-button-toggle-group name="ordering" aria-label="Order By" [(ngModel)]="orderingFilter"
+          (change)="onFiltersChange()">
+          <mat-button-toggle value="updated" matTooltip="Order by last update">Update
+            Date</mat-button-toggle>
+          <mat-button-toggle value="rating" matTooltip="Order by entry impact">Impact</mat-button-toggle>
+        </mat-button-toggle-group>
+
         <mat-button-toggle-group name="status" aria-label="Status" multiple [(ngModel)]="statusFilter"
-          (change)="onStatusFilterChange()">
+          (change)="onFiltersChange()">
           <mat-button-toggle value="NEW" matTooltip="Every new entry on the website.">
             New</mat-button-toggle>
           <mat-button-toggle value="CONFIRMED" checked

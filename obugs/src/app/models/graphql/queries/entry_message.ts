@@ -14,3 +14,15 @@ export const QUERY_ENTRY_MESSAGES = gql`
 export interface QueryResponseEntryMessages {
     entryMessages: EntryMessage[];
 }
+
+export const QUERY_PATCHES = gql`
+    query Patches($softwareId: String) {
+        patches(softwareId: $softwareId) {
+            ...EntryMessageFragment
+        }
+    }
+    ${ObugsFragments.fragments.entryMessage}
+`;
+export interface QueryResponsePatches {
+    patches: EntryMessage[];
+}

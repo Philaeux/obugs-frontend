@@ -93,7 +93,7 @@
         <div>
             <div class="change-title">Links</div>
             <div *ngIf="!stateAfter.illustration">- EMPTY -</div>
-            <div>{{stateAfter.illustration}}</div>
+            <div>{{stateAfter.illustration.replace(/\n/g, '<br />')}}</div>
         </div>
 
         <mat-divider></mat-divider>
@@ -114,18 +114,16 @@
         </div>
         <div *ngIf="stateAfter.status" class="change-item">
             <div class="change-title">Status</div>
-            <div>From</div>
             <app-status-chip [status]="stateBefore.status"></app-status-chip>
-            <div>to</div>
+            <mat-icon class="patch-change-icon">double_arrow</mat-icon>
             <app-status-chip [status]="stateAfter.status"></app-status-chip>
         </div>
         <div *ngIf="stateAfter.tags" class="change-item">
             <div class="change-title">Tags</div>
-            <div>From</div>
             <div *ngIf="stateBefore.tags.length == 0">- EMPTY -</div>
             <app-tag-chip *ngFor="let tag of stateBefore.tags" [tagName]="tag"
                 [softwareTags]="softwareTags"></app-tag-chip>
-            <div>to</div>
+            <mat-icon class="patch-change-icon">double_arrow</mat-icon>
             <div *ngIf="stateAfter.tags.length == 0">- EMPTY -</div>
             <app-tag-chip *ngFor="let tag of stateAfter.tags" [tagName]="tag"
                 [softwareTags]="softwareTags"></app-tag-chip>

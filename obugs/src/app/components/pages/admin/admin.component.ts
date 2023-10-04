@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Software, OBugsError, Tag } from 'src/app/models/models';
+import { Software, OBugsError, Tag, EntryMessage } from 'src/app/models/models';
 import { AuthService } from 'src/app/services/auth.service';
 import { Subscription } from 'rxjs'
 import { Apollo } from 'apollo-angular';
@@ -9,6 +9,7 @@ import { MUTATION_UPSERT_SOFTWARE, MutationResponseUpsertSoftware } from 'src/ap
 import { MUTATION_UPSERT_TAG, MutationResponseUpsertTag } from 'src/app/models/graphql/mutations/tag';
 import { QUERY_LIST_SOFTWARE, QueryResponseListSoftware } from 'src/app/models/graphql/queries/software';
 import { QUERY_LIST_TAGS, QueryResponseListTags } from 'src/app/models/graphql/queries/tag';
+import { QUERY_PATCHES, QueryResponsePatches } from 'src/app/models/graphql/queries/entry_message';
 
 @Component({
   selector: 'app-admin',
@@ -26,6 +27,8 @@ export class AdminComponent implements OnInit, OnDestroy {
   tags: Tag[] = [];
   tagFilter: string = "";
   tagEditForm: FormGroup;
+
+  patches: EntryMessage[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -184,5 +187,20 @@ export class AdminComponent implements OnInit, OnDestroy {
         }
       })
     }
+  }
+
+  refreshPatchList() {
+    this.apollo.query<QueryResponsePatches>({
+      query: QUERY_PATCHES,
+      variables: {
+        softwareId: null
+      }
+    }).subscribe((response) => {
+      this.patches = response.data.patches
+    })
+  }
+
+  onPatchSelect(row: EntryMessage) {
+
   }
 }
