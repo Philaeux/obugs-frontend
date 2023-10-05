@@ -111,7 +111,11 @@ export class EntryMessageComponent implements OnInit {
       }
     }
 
-    return unifiedText.replace(/\n/g, '<br />');
+    return this.newLineConvert(unifiedText);
+  }
+
+  newLineConvert(source: string) {
+    return source.replace(/\n/g, '<br/>')
   }
 
   vote(value: number) {

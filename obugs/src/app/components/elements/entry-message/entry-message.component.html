@@ -92,7 +92,7 @@
         <div>
             <div class="change-title">Links</div>
             <div *ngIf="!stateAfter.illustration">- EMPTY -</div>
-            <div>{{stateAfter.illustration.replace(/\n/g, '<br />')}}</div>
+            <div [innerHTML]="newLineConvert(stateAfter.illustration)"></div>
         </div>
 
         <mat-divider></mat-divider>
