@@ -15,7 +15,7 @@
                 <div class="bug-updated-at" matTooltip="Last update">
                     {{entry.updatedAt | dateAgo}}
                 </div>
-                <app-tag-chip *ngFor="let tag of entry.tags" [tag]="tag" [softwareTags]="softwareTags"></app-tag-chip>
+                <app-tag-chip *ngFor="let tag of entry.tags.edges" [tag]="tag.node"></app-tag-chip>
             </div>
         </div>
     </div>

@@ -16,24 +16,11 @@ export class TagChipComponent {
   @Input()
   tagName!: string;
 
-  @Input({ required: true })
-  softwareTags!: Tag[];
-
   chipStyle() {
     if (this.tagName) {
-      let targetTag = null;
-      for (let tag of this.softwareTags) {
-        if (tag.name == this.tagName) {
-          targetTag = tag;
-        }
-      }
-      if (targetTag) {
-        return {
-          'color': targetTag.fontColor,
-          'background-color': targetTag.backgroundColor
-        }
-      } else {
-        return {}
+      return {
+        'color': '#000000',
+        'background-color': '#e0e0e0'
       }
     } else {
       if (this.tag) {

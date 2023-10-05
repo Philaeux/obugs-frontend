@@ -35,18 +35,6 @@ export class DashboardComponent implements OnInit {
 
     this.fetchFilteredEntries()
     this.fetchNewEntries()
-
-    // Software tags
-    this.apollo
-      .query<QueryResponseListTags>({
-        query: QUERY_LIST_TAGS,
-        variables: {
-          softwareId: this.softwareId
-        }
-      })
-      .subscribe((response) => {
-        this.softwareTags = response.data.tags;
-      });
   }
 
   fetchFilteredEntries() {

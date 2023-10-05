@@ -9,42 +9,76 @@ export const ObugsFragments = {
                 username
                 isAdmin
                 isBanned
-                softwareIsMod
-                softwareIsCurator
-                softwareIsEditor
+                roles {
+                    edges {
+                        node {
+                            softwareId
+                            role
+                        }
+                    }
+                }
             }
         `,
 
         entry: gql`
             fragment EntryFragment on Entry {
+                __typename
                 id
                 title
                 softwareId
                 description
                 illustration
                 tags {
-                    id
-                    softwareId
-                    name
-                    fontColor
-                    backgroundColor
+                    edges {
+                        node {
+                            __typename
+                            id
+                            softwareId
+                            name
+                            fontColor
+                            backgroundColor
+                        }
+                    }
                 }
                 createdAt
                 updatedAt
                 status
+                rating
                 ratingTotal
                 ratingCount
                 openPatchesCount
             }
         `,
-        entryMessage: gql`
-            fragment EntryMessageFragment on EntryMessage {
+        entryMessageCreation: gql`
+            fragment EntryMessageCreationFragment on EntryMessageCreation {
+                    __typename
+                    id
+                    entryId
+                    userId
+                    createdAt
+                    type
+                    stateAfter
+            }
+        `,
+        entryMessageComment: gql`
+            fragment EntryMessageCommentFragment on EntryMessageComment {
+                    __typename
                     id
                     entryId
                     userId
                     createdAt
                     type
                     comment
+            }
+        `,
+        entryMessagePatch: gql`
+            fragment EntryMessagePatchFragment on EntryMessagePatch {
+                    __typename
+                    id
+                    entryId
+                    userId
+                    createdAt
+                    type
                     stateBefore
                     stateAfter
                     ratingTotal

@@ -10,7 +10,4 @@ export class BugRowComponent {
 
   @Input({ required: true })
   entry!: Entry;
-
-  @Input({ required: true })
-  softwareTags!: Tag[];
 }

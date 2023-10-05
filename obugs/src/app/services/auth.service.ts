@@ -92,11 +92,11 @@ export class AuthService {
     if (softwareId == null) return false;
     if (this.current_user == null) return false;
     if (role == 'mod') {
-      return this.current_user.softwareIsMod.includes(softwareId);
+      return this.current_user.roles.edges.find((role) => role.node.sofwareId == softwareId && role.node.role == 1) != undefined;
     } else if (role == 'curator') {
-      return this.current_user.softwareIsCurator.includes(softwareId);
+      return this.current_user.roles.edges.find((role) => role.node.sofwareId == softwareId && role.node.role == 2) != undefined;
     } else if (role == 'editor') {
-      return this.current_user.softwareIsEditor.includes(softwareId);
+      return this.current_user.roles.edges.find((role) => role.node.sofwareId == softwareId && role.node.role == 4) != undefined;
     } else {
       return false
     }

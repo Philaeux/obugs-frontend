@@ -6,10 +6,14 @@ import { ObugsFragments } from "../fragments";
 export const QUERY_ENTRY_MESSAGES = gql`
     query EntryMessages($entryId: UUID!, $limit: Int!, $offset: Int!) {
         entryMessages(entryId: $entryId, limit: $limit, offset: $offset) {
-            ...EntryMessageFragment
+            ...EntryMessageCommentFragment
+            ...EntryMessageCreationFragment
+            ...EntryMessagePatchFragment
         }
     }
-    ${ObugsFragments.fragments.entryMessage}
+    ${ObugsFragments.fragments.entryMessageComment}
+    ${ObugsFragments.fragments.entryMessageCreation}
+    ${ObugsFragments.fragments.entryMessagePatch}
 `;
 export interface QueryResponseEntryMessages {
     entryMessages: EntryMessage[];
@@ -18,10 +22,10 @@ export interface QueryResponseEntryMessages {
 export const QUERY_PATCHES = gql`
     query Patches($softwareId: String) {
         patches(softwareId: $softwareId) {
-            ...EntryMessageFragment
+            ...EntryMessagePatchFragment
         }
     }
-    ${ObugsFragments.fragments.entryMessage}
+    ${ObugsFragments.fragments.entryMessagePatch}
 `;
 export interface QueryResponsePatches {
     patches: EntryMessage[];

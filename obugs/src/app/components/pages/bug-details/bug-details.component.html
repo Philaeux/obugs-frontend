@@ -47,8 +47,8 @@
         </div>
 
         <div class="tag-list">
-            <div *ngIf="entry.tags.length == 0">No Tag.</div>
-            <app-tag-chip *ngFor="let tag of entry.tags" [tag]="tag" [softwareTags]="softwareTags"></app-tag-chip>
+            <div *ngIf="entry.tags.edges.length == 0">No Tag.</div>
+            <app-tag-chip *ngFor="let tag of entry.tags.edges" [tag]="tag.node"></app-tag-chip>
         </div>
 
         <mat-divider></mat-divider>
@@ -60,8 +60,8 @@
 
     <div class="entry-comments">
         <app-entry-message *ngFor="let message of this.entryMessages" [softwareId]="softwareId" [message]="message"
-            [softwareTags]="softwareTags" (acceptPatch)="processPatch($event, true)"
-            (declinePatch)="processPatch($event, false)" (messageDeleted)="removeMessage($event)"></app-entry-message>
+            (acceptPatch)="processPatch($event, true)" (declinePatch)="processPatch($event, false)"
+            (messageDeleted)="removeMessage($event)"></app-entry-message>
         <div style="text-align: center;">
             <button *ngIf="messagesHasMore" mat-raised-button color="primary" (click)="fetchMoreMessages()">Load more
                 messages</button>

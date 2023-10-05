@@ -9,12 +9,12 @@ export const MUTATION_COMMENT_ENTRY = gql`
             ... on OBugsError {
                 message
             }
-            ... on EntryMessage {
-                ...EntryMessageFragment
+            ... on EntryMessageComment {
+                ...EntryMessageCommentFragment
             }
         }
     }
-    ${ObugsFragments.fragments.entryMessage}
+    ${ObugsFragments.fragments.entryMessageComment}
 `
 export interface MutationResponseCommentEntry {
     commentEntry: OBugsError | EntryMessage;
@@ -48,12 +48,12 @@ export const MUTATION_SUBMIT_PATCH = gql`
             ... on OBugsError {
                 message
             }
-            ... on EntryMessage {
-                ...EntryMessageFragment
+            ... on EntryMessagePatch {
+                ...EntryMessagePatchFragment
             }
         }
     }
-    ${ObugsFragments.fragments.entryMessage}
+    ${ObugsFragments.fragments.entryMessagePatch}
 `
 export interface MutationResponseSubmitPatch {
     submitPatch: OBugsError | EntryMessage
@@ -71,13 +71,13 @@ export const MUTATION_PROCESS_PATCH = gql`
                     ...EntryFragment
                 }
                 entryMessage {
-                    ...EntryMessageFragment
+                    ...EntryMessagePatchFragment
                 }
             }
         }
     }
     ${ObugsFragments.fragments.entry}
-    ${ObugsFragments.fragments.entryMessage}
+    ${ObugsFragments.fragments.entryMessagePatch}
 `
 export interface MutationResponseProcessPatch {
     processPatch: OBugsError | ProcessPatchSuccess

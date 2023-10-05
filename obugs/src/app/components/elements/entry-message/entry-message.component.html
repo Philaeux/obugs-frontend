@@ -87,8 +87,7 @@
         <div *ngIf="stateAfter.tags" class="change-item">
             <div class="change-title">Tags</div>
             <div *ngIf="stateAfter.tags.length == 0">- EMPTY -</div>
-            <app-tag-chip *ngFor="let tag of stateAfter.tags" [tagName]="tag"
-                [softwareTags]="softwareTags"></app-tag-chip>
+            <app-tag-chip *ngFor="let tag of stateAfter.tags" [tagName]="tag"></app-tag-chip>
         </div>
         <div>
             <div class="change-title">Links</div>
@@ -121,12 +120,10 @@
         <div *ngIf="stateAfter.tags" class="change-item">
             <div class="change-title">Tags</div>
             <div *ngIf="stateBefore.tags.length == 0">- EMPTY -</div>
-            <app-tag-chip *ngFor="let tag of stateBefore.tags" [tagName]="tag"
-                [softwareTags]="softwareTags"></app-tag-chip>
+            <app-tag-chip *ngFor="let tag of stateBefore.tags" [tagName]="tag"></app-tag-chip>
             <mat-icon class="patch-change-icon">double_arrow</mat-icon>
             <div *ngIf="stateAfter.tags.length == 0">- EMPTY -</div>
-            <app-tag-chip *ngFor="let tag of stateAfter.tags" [tagName]="tag"
-                [softwareTags]="softwareTags"></app-tag-chip>
+            <app-tag-chip *ngFor="let tag of stateAfter.tags" [tagName]="tag"></app-tag-chip>
         </div>
         <div *ngIf="stateAfter.illustration">
             <div class="change-title">Links</div>

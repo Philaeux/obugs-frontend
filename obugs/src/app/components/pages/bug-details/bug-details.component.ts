@@ -166,9 +166,9 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
     if (this.entry) {
       this.editStatus = this.entry.status;
       this.editTitle = this.entry.title;
-      for (let tag of this.entry.tags) {
-        this.editTags.push(tag.name)
-        const index = this.softwareTagsAsStrings.indexOf(tag.name);
+      for (let tag of this.entry.tags.edges) {
+        this.editTags.push(tag.node.name)
+        const index = this.softwareTagsAsStrings.indexOf(tag.node.name);
         if (index != -1) {
           this.softwareTagsAsStrings.splice(index, 1);
         }
@@ -256,7 +256,7 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
       if (this.editTitle == this.entry?.title &&
         this.editIllustration == this.entry.illustration &&
         this.editDescription == this.entry.description &&
-        this.equalTags(this.entry.tags, this.editTags) &&
+        this.equalTags(this.entry.tags.edges, this.editTags) &&
         this.editStatus == this.entry.status)
         return;
 
@@ -289,12 +289,12 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  equalTags(entryTags: Tag[], editTags: string[]): boolean {
+  equalTags(entryTags: { node: Tag }[], editTags: string[]): boolean {
     if (entryTags.length != editTags.length) return false;
 
     let stringCopy: string[] = [];
     for (let tag of entryTags) {
-      stringCopy.push(tag.name)
+      stringCopy.push(tag.node.name)
     }
     stringCopy.sort();
     editTags.sort();

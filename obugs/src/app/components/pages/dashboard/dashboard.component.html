@@ -32,8 +32,7 @@
 
       <div class="bug-list">
         <app-bug-row *ngFor="let entry of filteredEntries" (click)="openBugDetails(entry, false)"
-          (mousedown)="handleMiddleMouseClick($event, entry)" [entry]="entry"
-          [softwareTags]="softwareTags"></app-bug-row>
+          (mousedown)="handleMiddleMouseClick($event, entry)" [entry]="entry"></app-bug-row>
       </div>
 
       <div *ngIf="filterHasMore" class="more-button">
@@ -44,8 +43,7 @@
     <div class="panel">
       <div class="bug-list">
         <app-bug-row *ngFor="let entry of newEntries" (click)="openBugDetails(entry, false)"
-          (mousedown)="handleMiddleMouseClick($event, entry)" [entry]="entry"
-          [softwareTags]="softwareTags"></app-bug-row>
+          (mousedown)="handleMiddleMouseClick($event, entry)" [entry]="entry"></app-bug-row>
       </div>
     </div>
   </div>

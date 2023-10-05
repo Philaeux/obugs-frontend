@@ -18,9 +18,17 @@ export interface User {
     username: string;
     isAdmin: boolean;
     isBanned: boolean;
-    softwareIsMod: string[];
-    softwareIsCurator: string[];
-    softwareIsEditor: string[];
+    roles: {
+        edges: {
+            node: UserSoftwareRole
+        }[]
+    }
+}
+
+export interface UserSoftwareRole {
+    __typename: 'UserSoftwareRole'
+    sofwareId: string;
+    role: number;
 }
 
 export interface Tag {
@@ -42,9 +50,14 @@ export interface Entry {
     createdAt: string;
     updatedAt: string;
     status: string;
+    rating: number;
     ratingTotal: number;
     ratingCount: number;
-    tags: Tag[]
+    tags: {
+        edges: {
+            node: Tag
+        }[]
+    }
     openPatchesCount: number;
 }
 
