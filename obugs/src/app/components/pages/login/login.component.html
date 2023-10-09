@@ -2,7 +2,7 @@
     <div class="container">
         <div class="form-column">
             <h2>Login</h2>
-            <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
+            <form [formGroup]="loginForm" (ngSubmit)="onLoginButton()">
                 <mat-form-field class="full-width">
                     <input matInput placeholder="Username" formControlName="loginUsername">
                     <mat-error *ngIf="loginForm.get('loginUsername')?.hasError('required')">Username is

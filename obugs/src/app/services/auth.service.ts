@@ -30,8 +30,8 @@ export class AuthService {
     return this.http.post<AuthPayload>(`${environment.obugsBackend}/activate`, { username: username, token: token });
   }
 
-  login(username: string, password: string): Observable<AuthPayload> {
-    return this.http.post<AuthPayload>(`${environment.obugsBackend}/login`, { username: username, password: password }).pipe(tap(data => {
+  login(username: string, password: string, recaptcha: string): Observable<AuthPayload> {
+    return this.http.post<AuthPayload>(`${environment.obugsBackend}/login`, { username: username, password: password, recaptcha: recaptcha }).pipe(tap(data => {
       if (data.error == '') {
         localStorage.setItem('access_token', data.message);
       }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/models/models';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -15,7 +15,8 @@ export class LayoutComponent implements OnInit {
 
   constructor(
     public auth: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -36,6 +37,14 @@ export class LayoutComponent implements OnInit {
   toggleDarkMode() {
     this.darkMode = !this.darkMode;
     localStorage.setItem('darkMode', JSON.stringify(this.darkMode));
+  }
+
+
+  handleMiddleMouseClick(event: MouseEvent, link: string) {
+    if (event.button === 1) {
+      const url = this.router.createUrlTree([link]).toString();
+      window.open(url, '_blank');
+    }
   }
 
 }

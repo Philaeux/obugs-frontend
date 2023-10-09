@@ -153,13 +153,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       backgroundColor: this.tagEditForm.value.backgroundColor,
     }
     if (this.tagEditForm.value.id != '') {
-      variables = {
-        id: this.tagEditForm.value.id,
-        softwareId: this.tagEditForm.value.softwareId,
-        name: this.tagEditForm.value.name,
-        fontColor: this.tagEditForm.value.fontColor,
-        backgroundColor: this.tagEditForm.value.backgroundColor,
-      }
+      variables.id = this.tagEditForm.value.id
     }
 
     if (this.tagEditForm.valid) {
@@ -196,11 +190,12 @@ export class AdminComponent implements OnInit, OnDestroy {
         softwareId: null
       }
     }).subscribe((response) => {
-      this.patches = response.data.patches
+      this.patches = response.data.openPatches
     })
   }
 
   onPatchSelect(row: EntryMessage) {
-
+    const url = this.router.createUrlTree(['/s/' + row.entry.softwareId + '/' + row.entry.id]).toString();
+    window.open(url, '_blank');
   }
 }

@@ -21,12 +21,18 @@ export interface QueryResponseEntryMessages {
 
 export const QUERY_PATCHES = gql`
     query Patches($softwareId: String) {
-        patches(softwareId: $softwareId) {
-            ...EntryMessagePatchFragment
+        openPatches(softwareId: $softwareId) {
+            id
+            createdAt
+            ratingTotal
+            ratingCount
+            entry {
+                id
+                softwareId
+            }
         }
     }
-    ${ObugsFragments.fragments.entryMessagePatch}
 `;
 export interface QueryResponsePatches {
-    patches: EntryMessage[];
+    openPatches: EntryMessage[];
 }

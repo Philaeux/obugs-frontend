@@ -7,7 +7,7 @@
 
 .panel {
     flex-grow: 1;
-    flex-basis: calc(50% - 4px);
+    width: calc(50% - 4px);
 
     display: flex;
     flex-direction: column;

@@ -16,16 +16,6 @@
             </div>
             <div class="column-center">
                 <app-status-chip [status]="entry.status"></app-status-chip>
-                <div *ngIf="entry.illustration === ''">No link.</div>
-                <div *ngIf="entry.illustration != ''" class="link-list">
-                    <div *ngFor="let link of entry.illustration.split('\n')" class="entry-illustration">
-                        <a [href]="link" target="_blank" matTooltip="{{link}}">
-                            <i *ngIf="!linkIcon(link).endsWith('.png')" class="link-icon {{linkIcon(link)}}"></i>
-                            <img *ngIf="linkIcon(link).endsWith('.png')" class="{{linkIcon(link)}}"
-                                src="/assets/icons/{{linkIcon(link)}}" alt="" class="link-icon">
-                        </a>
-                    </div>
-                </div>
             </div>
 
             <div class="entry-votes" matTooltip="Bug impact according to the community.">
@@ -36,7 +26,8 @@
 
             <div *ngIf="auth.current_user != null" class="entry-my-vote" matTooltip="Rate how important this entry is.">
                 <mat-button-toggle-group name="myVote" aria-label="My Vote" [(ngModel)]="myVote"
-                    (ngModelChange)="onVoteChange()">
+                    (ngModelChange)="onVoteChange()"
+                    [disabled]="entry.status ==='FIXED' || entry.status ==='EXPECTED' || entry.status === 'DUPLICATE' || entry.status ==='CLOSED'">
                     <mat-button-toggle value="1">1</mat-button-toggle>
                     <mat-button-toggle value="2">2</mat-button-toggle>
                     <mat-button-toggle value="3">3</mat-button-toggle>
@@ -47,13 +38,25 @@
         </div>
 
         <div class="tag-list">
-            <div *ngIf="entry.tags.edges.length == 0">No Tag.</div>
+            <div *ngIf="entry.tags.edges.length == 0">No Tag</div>
             <app-tag-chip *ngFor="let tag of entry.tags.edges" [tag]="tag.node"></app-tag-chip>
         </div>
 
         <mat-divider></mat-divider>
 
         <div class="entry-description">
+            <div class="link-list">
+                <div *ngIf="entry.illustration === ''">No Link</div>
+                <div *ngIf="entry.illustration != ''" class="link-list">
+                    <div *ngFor="let link of entry.illustration.split('\n')" class="entry-illustration">
+                        <a [href]="link" target="_blank" matTooltip="{{link}}">
+                            <i *ngIf="!linkIcon(link).endsWith('.png')" class="link-icon {{linkIcon(link)}}"></i>
+                            <img *ngIf="linkIcon(link).endsWith('.png')" class="{{linkIcon(link)}}"
+                                src="/assets/icons/{{linkIcon(link)}}" alt="" class="link-icon">
+                        </a>
+                    </div>
+                </div>
+            </div>
             <markdown katex mermaid [data]="entry.description"></markdown>
         </div>
     </div>

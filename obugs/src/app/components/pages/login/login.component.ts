@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 export class LoginComponent implements OnInit, OnDestroy {
 
   subscription: Subscription | null = null;
+  lastButton: string = "login";
 
   loginForm: FormGroup;
   registerForm: FormGroup;
@@ -45,7 +46,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscription = this.recaptchav2Service.recaptchav2$.subscribe((token) => {
-      this.onRegisterSubmit(token)
+      if (this.lastButton == 'register') {
+        this.onRegisterSubmit(token)
+      } else {
+        this.onLoginSubmit(token)
+      }
     });
 
     const username = this.route.snapshot.queryParamMap.get('username');
@@ -84,14 +89,20 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
-  onLoginSubmit(): void {
+  onLoginButton() {
+    this.lastButton = "login"
+    grecaptcha.execute()
+  }
+
+  onLoginSubmit(token: string): void {
     if (this.loginForm.valid) {
       this.errorLogin = "";
       this.messageLogin = "";
 
       this.authService.login(
         this.loginForm.value.loginUsername,
-        this.loginForm.value.loginPassword).subscribe(
+        this.loginForm.value.loginPassword,
+        token).subscribe(
           data => {
             this.errorLogin = data.error;
             if (this.errorLogin == "") {
@@ -103,6 +114,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onRegisterButton() {
+    this.lastButton = "register";
     grecaptcha.execute();
   }
 

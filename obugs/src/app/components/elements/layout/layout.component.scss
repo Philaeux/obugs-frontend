@@ -67,13 +67,11 @@
     flex-grow: 1;
     min-height: 100vh;
     padding-left: 88px;
+    max-width: calc(100% - 88px);
 }
 
 .top-bar {
     height: 60px;
-    //border-bottom: solid;
-    //border-width: 1px;
-    //border-color: var(--mat-divider-color);
     display: flex;
     justify-content: flex-end;
     align-items: center;

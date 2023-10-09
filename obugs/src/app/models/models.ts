@@ -91,6 +91,7 @@ export interface EntryMessage {
     accepted: boolean | null;
     closedById: string | null;
     closedAt: string;
+    entry: Entry
 }
 
 export interface OBugsError {

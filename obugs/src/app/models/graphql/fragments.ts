@@ -2,7 +2,6 @@ import { gql } from 'apollo-angular';
 
 export const ObugsFragments = {
     fragments: {
-
         user: gql`
             fragment UserFragment on User {
                 id

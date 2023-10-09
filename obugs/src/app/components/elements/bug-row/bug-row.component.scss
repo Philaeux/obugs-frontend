@@ -7,11 +7,14 @@
     border-color: var(--mat-divider-color);
     border-width: 1px;
     padding-right: 4px;
+    overflow: hidden;
 }
 
 .bug-left {
     display: flex;
     align-items: center;
+    flex-grow: 1;
+    width: calc(100% - 50px);
 }
 
 .bug:hover {
@@ -40,6 +43,8 @@
     flex-direction: column;
     line-height: 24px;
     font-size: 16px;
+    flex-grow: 1;
+    width: calc(100% - 55px);
 }
 
 .bug-row-1,
@@ -60,6 +65,10 @@
 .bug-title {
     font-weight: 500;
     font-size: 16px;
+    text-wrap: nowrap;
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .bug-open-patches {
