@@ -33,11 +33,13 @@ import { TagInputComponent } from './components/elements/tag-input/tag-input.com
 import { AdminComponent } from './components/pages/admin/admin.component';
 import { Recaptchav2Service } from './services/recaptchav2.service';
 import { RecaptchaModule } from 'ng-recaptcha';
+import { AppsNewComponent } from './components/pages/apps-new/apps-new.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AppsComponent,
+    AppsNewComponent,
     BugDetailsComponent,
     BugNewComponent,
     BugSearchComponent,

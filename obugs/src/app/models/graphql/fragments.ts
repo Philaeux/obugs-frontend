@@ -97,6 +97,13 @@ export const ObugsFragments = {
                 language
             }
         `,
+        softwareSuggestion: gql`
+            fragment SoftwareSuggestionFragment on SoftwareSuggestion {
+                id
+                name
+                description
+            }
+        `,
         tag: gql`
             fragment TagFragment on Tag {
                 id

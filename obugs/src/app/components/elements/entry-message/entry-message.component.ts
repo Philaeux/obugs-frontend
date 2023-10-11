@@ -2,12 +2,12 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, 
 import { Apollo } from 'apollo-angular';
 import { QUERY_MY_VOTE, QueryResponseMyVote } from "src/app/models/graphql/queries/vote";
 import { QUERY_USER_DETAILS, QueryResponseUserDetails } from "src/app/models/graphql/queries/user";
-import { EntryMessage, Tag, OBugsError, VoteUpdate, User } from 'src/app/models/models';
+import { EntryMessage, OBugsError, VoteUpdate, User, OperationDone } from 'src/app/models/models';
 import { diff_match_patch as DiffMatchPatch } from 'diff-match-patch';
 import { AuthService } from 'src/app/services/auth.service';
 import { MUTATION_VOTE, MutationResponseVote } from 'src/app/models/graphql/mutations/vote';
 import { MUTATION_BAN_USER, MutationResponseBanUser } from 'src/app/models/graphql/mutations/user';
-import { MUTATION_DELETE_MESSAGE, MessageDeleteSuccess, MutationResponseDeleteMessage } from 'src/app/models/graphql/mutations/entry_message';
+import { MUTATION_DELETE_MESSAGE, MutationResponseDeleteMessage } from 'src/app/models/graphql/mutations/entry_message';
 
 @Component({
   selector: 'app-entry-message',
@@ -186,7 +186,7 @@ export class EntryMessageComponent implements OnInit {
           const error = result as OBugsError;
           console.log(error)
         } else {
-          const user = result as MessageDeleteSuccess;
+          const user = result as OperationDone;
           this.messageDeleted.emit(this.message)
         }
       }

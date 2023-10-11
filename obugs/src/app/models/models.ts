@@ -12,6 +12,13 @@ export interface Software {
     language: string;
 }
 
+export interface SoftwareSuggestion {
+    __typename: 'SoftwareSuggestion'
+    id: string;
+    name: string;
+    description: string;
+}
+
 export interface User {
     __typename: 'User'
     id: string;
@@ -97,6 +104,11 @@ export interface EntryMessage {
 export interface OBugsError {
     __typename: 'OBugsError';
     message: string;
+}
+
+export interface OperationDone {
+    __typename: 'OperationDone';
+    success: boolean;
 }
 
 export interface ProcessPatchSuccess {

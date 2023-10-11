@@ -10,8 +10,8 @@ import { Software } from 'src/app/models/models';
   styleUrls: ['./apps.component.scss']
 })
 export class AppsComponent {
-  public softwares: Software[] = [];
-  displayedColumns: string[] = ['fullName', 'editor'];
+  softwares: Software[] = [];
+  softwareFilter: string = "";
 
   constructor(
     private router: Router,
@@ -27,12 +27,23 @@ export class AppsComponent {
   }
 
   refreshListSoftware() {
+    let search: string | null = null;
+    if (this.softwareFilter != '') {
+      search = this.softwareFilter;
+    }
     this.apollo
       .query<QueryResponseListSoftware>({
-        query: QUERY_LIST_SOFTWARE
+        query: QUERY_LIST_SOFTWARE,
+        variables: {
+          search: search
+        }
       })
       .subscribe((response) => {
         this.softwares = response.data.softwares;
       });
+  }
+
+  onEnterKey() {
+    this.refreshListSoftware();
   }
 }

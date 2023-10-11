@@ -14,19 +14,19 @@
     text-align: center;
 }
 
-mat-chip-row {
-    padding: 4px;
-}
-
-.tagOption {
-    z-index: 1000;
-    background-color: white !important;
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
 }
 
 .error {
     color: red;
     font-weight: bold;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    text-align: center;
+}
+
+.message {
+    color: green;
+    font-weight: bold;
 }

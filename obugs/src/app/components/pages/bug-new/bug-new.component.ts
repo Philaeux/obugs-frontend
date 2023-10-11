@@ -74,7 +74,6 @@ export class BugNewComponent implements OnInit, OnDestroy {
   onSubmit(token: string) {
     this.errorMessage = '';
     if (this.form.valid) {
-      grecaptcha.reset()
       this.apollo
         .mutate<MutationResponseCreateEntry>({
           mutation: MUTATION_CREATE_ENTRY,
@@ -99,6 +98,7 @@ export class BugNewComponent implements OnInit, OnDestroy {
             }
           }
         })
+      grecaptcha.reset()
     }
   }
 }

@@ -1,5 +1,5 @@
 import { gql } from "apollo-angular";
-import { EntryMessage, OBugsError, ProcessPatchSuccess } from "../../models";
+import { EntryMessage, OBugsError, OperationDone, ProcessPatchSuccess } from "../../models";
 import { ObugsFragments } from "../fragments";
 
 export const MUTATION_COMMENT_ENTRY = gql`
@@ -27,18 +27,14 @@ export const MUTATION_DELETE_MESSAGE = gql`
             ... on OBugsError {
                 message
             }
-            ... on MessageDeleteSuccess {
+            ... on OperationDone {
                 success
             }
         }
     }
 `
-export interface MessageDeleteSuccess {
-    __typename: "MessageDeleteSuccess"
-    success: boolean;
-}
 export interface MutationResponseDeleteMessage {
-    deleteMessage: OBugsError | MessageDeleteSuccess
+    deleteMessage: OBugsError | OperationDone
 }
 
 export const MUTATION_SUBMIT_PATCH = gql`

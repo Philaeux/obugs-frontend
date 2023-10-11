@@ -1,15 +1,25 @@
 <app-layout>
 
-    <div class="software-cards">
-        <mat-card *ngFor="let software of softwares" class="software-card" (click)="selectSoftware(software.id)">
-            <mat-card-header>
-                <mat-card-subtitle>{{software.editor}}</mat-card-subtitle>
-                <mat-card-title>{{software.fullName}}</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-                <p>{{software.description}}</p>
-            </mat-card-content>
-        </mat-card>
+    <div class="layout">
+        <div class="filters">
+            <mat-form-field class="app-filter-input">
+                <mat-label>Search</mat-label>
+                <input matInput placeholder="Software Name" [(ngModel)]="softwareFilter" (keyup.enter)="onEnterKey()"
+                    matTooltip="Press Enter to apply filter">
+            </mat-form-field>
+        </div>
+        <div class="filter-subtitle">Not finding a software? <a routerLink="/apps/new">Suggest it!</a></div>
+        <div class="software-cards">
+            <mat-card *ngFor="let software of softwares" class="software-card" (click)="selectSoftware(software.id)">
+                <mat-card-header>
+                    <mat-card-subtitle>{{software.editor}}</mat-card-subtitle>
+                    <mat-card-title>{{software.fullName}}</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <p>{{software.description}}</p>
+                </mat-card-content>
+            </mat-card>
+        </div>
     </div>
 
 </app-layout>

@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Software, OBugsError, Tag, EntryMessage } from 'src/app/models/models';
+import { Software, OBugsError, Tag, EntryMessage, SoftwareSuggestion, OperationDone } from 'src/app/models/models';
 import { AuthService } from 'src/app/services/auth.service';
 import { Subscription } from 'rxjs'
 import { Apollo } from 'apollo-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MUTATION_UPSERT_SOFTWARE, MutationResponseUpsertSoftware } from 'src/app/models/graphql/mutations/software';
+import { MUTATION_DELETE_SUGGESTION, MUTATION_UPSERT_SOFTWARE, MutationResponseDeleteSuggestion, MutationResponseUpsertSoftware } from 'src/app/models/graphql/mutations/software';
 import { MUTATION_UPSERT_TAG, MutationResponseUpsertTag } from 'src/app/models/graphql/mutations/tag';
-import { QUERY_LIST_SOFTWARE, QueryResponseListSoftware } from 'src/app/models/graphql/queries/software';
+import { QUERY_LIST_SOFTWARE, QUERY_LIST_SOFTWARE_SUGGESTIONS, QueryResponseListSoftware, QueryResponseListSoftwareSuggestions } from 'src/app/models/graphql/queries/software';
 import { QUERY_LIST_TAGS, QueryResponseListTags } from 'src/app/models/graphql/queries/tag';
 import { QUERY_PATCHES, QueryResponsePatches } from 'src/app/models/graphql/queries/entry_message';
 
@@ -29,6 +29,8 @@ export class AdminComponent implements OnInit, OnDestroy {
   tagEditForm: FormGroup;
 
   patches: EntryMessage[] = [];
+  suggestions: SoftwareSuggestion[] = [];
+  selectedSuggestion: SoftwareSuggestion | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -71,7 +73,10 @@ export class AdminComponent implements OnInit, OnDestroy {
   fetchSoftwares() {
     this.apollo
       .query<QueryResponseListSoftware>({
-        query: QUERY_LIST_SOFTWARE
+        query: QUERY_LIST_SOFTWARE,
+        variables: {
+          search: null
+        }
       })
       .subscribe((response) => {
         this.softwares = response.data.softwares;
@@ -197,5 +202,36 @@ export class AdminComponent implements OnInit, OnDestroy {
   onPatchSelect(row: EntryMessage) {
     const url = this.router.createUrlTree(['/s/' + row.entry.softwareId + '/' + row.entry.id]).toString();
     window.open(url, '_blank');
+  }
+
+  refreshSuggestionList() {
+    this.apollo.query<QueryResponseListSoftwareSuggestions>({
+      query: QUERY_LIST_SOFTWARE_SUGGESTIONS
+    }).subscribe((response) => {
+      this.suggestions = response.data.softwareSuggestions
+    })
+  }
+
+  onSuggestionSelect(row: SoftwareSuggestion) {
+    this.selectedSuggestion = row
+  }
+
+  deleteSuggestion() {
+    this.apollo.mutate<MutationResponseDeleteSuggestion>({
+      mutation: MUTATION_DELETE_SUGGESTION,
+      variables: {
+        suggestionId: this.selectedSuggestion?.id
+      }
+    }).subscribe((response) => {
+      const result = response.data!.deleteSuggestion
+      if (result.__typename === 'OBugsError') {
+        const error = result as OBugsError;
+        console.log(error)
+      } else {
+        const user = result as OperationDone;
+        this.suggestions = this.suggestions.filter((suggestion) => suggestion.id != this.selectedSuggestion?.id)
+        this.selectedSuggestion = null;
+      }
+    })
   }
 }

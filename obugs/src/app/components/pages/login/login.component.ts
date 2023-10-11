@@ -36,8 +36,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
 
     this.registerForm = this.fb.group({
-      registerUsername: ['', [Validators.required, Validators.minLength(3)]],
-      registerPassword: ['', [Validators.required, Validators.minLength(6)]],
+      registerUsername: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]],
+      registerPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(50)]],
       repeatPassword: ['', Validators.required],
       registerEmail: ['', [Validators.required, Validators.email]],
       repeatEmail: ['', [Validators.required, Validators.email]]
@@ -110,6 +110,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             }
           }
         )
+      grecaptcha.reset()
     }
   }
 
@@ -122,7 +123,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.registerForm.valid) {
       this.errorRegister = "";
       this.messageRegister = "";
-      grecaptcha.reset()
 
       this.authService.register(
         this.registerForm.value.registerUsername,
@@ -134,6 +134,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.messageRegister = data.message;
           }
         )
+      grecaptcha.reset()
     }
   }
 
