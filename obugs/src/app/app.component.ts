@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Recaptchav2Service } from './services/recaptchav2.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs';
+import { filter, map, mergeMap } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { User } from './models/models';
+import { T } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-root',
@@ -38,9 +39,15 @@ export class AppComponent implements OnInit {
       this.currentUrl = e.url;
     })
 
-    this.route.paramMap.subscribe(params => {
-      this.currentSoftwareId = params.get('software');
-    });
+    this.router.events.pipe(
+      filter(e => e instanceof NavigationEnd),
+      map(() => this.route),
+      map(route => {
+        while (route.firstChild) {
+          route = route.firstChild;
+        }
+        return route;
+      })).subscribe(data => this.currentSoftwareId = data.snapshot.params['software'])
 
     this.auth.currentUser$.subscribe((user) => {
       if (user === undefined) return;
