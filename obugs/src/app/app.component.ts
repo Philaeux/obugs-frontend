@@ -1,19 +1,66 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Recaptchav2Service } from './services/recaptchav2.service';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
+import { AuthService } from './services/auth.service';
+import { User } from './models/models';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   siteKey: string = environment.recaptchaSiteKey;
+  darkMode = false;
 
-  constructor(private captchav2Service: Recaptchav2Service) { }
+  currentUrl: string = "/";
+  currentUser: User | null = null;
+  currentSoftwareId: string | null = null;
+
+  constructor(
+    private captchav2Service: Recaptchav2Service,
+    public auth: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) { }
+
+  ngOnInit(): void {
+    const storedDarkMode = localStorage.getItem('darkMode');
+    if (storedDarkMode !== null) {
+      this.darkMode = JSON.parse(storedDarkMode);
+    }
+
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event) => {
+      let e = event as NavigationEnd
+      this.currentUrl = e.url;
+    })
+
+    this.route.paramMap.subscribe(params => {
+      this.currentSoftwareId = params.get('software');
+    });
+
+    this.auth.currentUser$.subscribe((user) => {
+      if (user === undefined) return;
+      this.currentUser = user;
+    })
+  }
 
   public resolved(captchaResponse: string): void {
     this.captchav2Service.recaptchav2Resolved(captchaResponse);
+  }
+
+  toggleDarkMode() {
+    this.darkMode = !this.darkMode;
+    localStorage.setItem('darkMode', JSON.stringify(this.darkMode));
+  }
+
+  handleMiddleMouseClick(event: MouseEvent, link: string) {
+    if (event.button === 1) {
+      const url = this.router.createUrlTree([link]).toString();
+      window.open(url, '_blank');
+    }
   }
 }

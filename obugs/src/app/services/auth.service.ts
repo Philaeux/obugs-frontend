@@ -34,6 +34,7 @@ export class AuthService {
     return this.http.post<AuthPayload>(`${environment.obugsBackend}/login`, { username: username, password: password, recaptcha: recaptcha }).pipe(tap(data => {
       if (data.error == '') {
         localStorage.setItem('access_token', data.message);
+        this.fetchUserInfo(data.message)
       }
     }));
   }
@@ -43,25 +44,29 @@ export class AuthService {
     if (access_token === null) {
       this.currentUserSubject.next(null)
     } else {
-      if (this.isExpired(access_token)) {
-        this.logout()
-      } else {
-        this.apollo
-          .query<QueryResponseCurrentUser>({
-            query: QUERY_CURRENT_USER
-          }).subscribe((response) => {
-            const data = response.data.currentUser
-            if (data.__typename === 'OBugsError') {
-              const error = data as OBugsError
-              console.log(error.message)
-              this.logout()
-            } else {
-              const user = data as User
-              this.current_user = user
-              this.currentUserSubject.next(this.current_user)
-            }
-          });
-      }
+      this.fetchUserInfo(access_token)
+    }
+  }
+
+  fetchUserInfo(access_token: string) {
+    if (this.isExpired(access_token)) {
+      this.logout()
+    } else {
+      this.apollo
+        .query<QueryResponseCurrentUser>({
+          query: QUERY_CURRENT_USER
+        }).subscribe((response) => {
+          const data = response.data.currentUser
+          if (data.__typename === 'OBugsError') {
+            const error = data as OBugsError
+            console.log(error.message)
+            this.logout()
+          } else {
+            const user = data as User
+            this.current_user = user
+            this.currentUserSubject.next(this.current_user)
+          }
+        });
     }
   }
 

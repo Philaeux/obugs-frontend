@@ -1,136 +1,132 @@
-<app-layout>
-    <div class="entry-details" *ngIf="entry != null">
-        <div class="mat-headline-5 left-pad">{{entry.title}}</div>
-        <mat-divider></mat-divider>
+<div class="entry-details" *ngIf="entry != null">
+    <div class="mat-headline-5 left-pad">{{entry.title}}</div>
+    <mat-divider></mat-divider>
 
-        <div class="entry-summary">
-            <div class="column">
-                <div class="mat-subtitle-2 italic">Created <span
-                        matTooltip="{{entry.createdAt+'+00:00' | date: 'MMMM d, y, H:mm:ss'}}">
-                        {{entry.createdAt | dateAgo}}.
-                    </span></div>
-                <div class="mat-subtitle-2 italic">Last update <span
-                        matTooltip="{{entry.updatedAt+'+00:00' | date: 'MMMM d, y, H:mm:ss'}}">
-                        {{entry.updatedAt | dateAgo}}.
-                    </span></div>
-            </div>
-            <div class="column-center">
-                <app-status-chip [status]="entry.status"></app-status-chip>
-            </div>
+    <div class="entry-summary">
+        <div class="column">
+            <div class="mat-subtitle-2 italic">Created <span
+                    matTooltip="{{entry.createdAt+'+00:00' | date: 'MMMM d, y, H:mm:ss'}}">
+                    {{entry.createdAt | dateAgo}}.
+                </span></div>
+            <div class="mat-subtitle-2 italic">Last update <span
+                    matTooltip="{{entry.updatedAt+'+00:00' | date: 'MMMM d, y, H:mm:ss'}}">
+                    {{entry.updatedAt | dateAgo}}.
+                </span></div>
+        </div>
+        <div class="column-center">
+            <app-status-chip [status]="entry.status"></app-status-chip>
+        </div>
 
-            <div class="entry-votes" matTooltip="Bug impact according to the community.">
-                <div class="entry-impact">{{ratingTotal / ratingCount | number: '1.0-1'}}</div>
-                <div class="entry-vote-total">({{ratingCount}} Vote<span *ngIf="ratingCount>1">s</span>)
-                </div>
-            </div>
-
-            <div *ngIf="auth.current_user != null" class="entry-my-vote" matTooltip="Rate how important this entry is.">
-                <mat-button-toggle-group name="myVote" aria-label="My Vote" [(ngModel)]="myVote"
-                    (ngModelChange)="onVoteChange()"
-                    [disabled]="entry.status ==='FIXED' || entry.status ==='EXPECTED' || entry.status === 'DUPLICATE' || entry.status ==='CLOSED'">
-                    <mat-button-toggle value="1">1</mat-button-toggle>
-                    <mat-button-toggle value="2">2</mat-button-toggle>
-                    <mat-button-toggle value="3">3</mat-button-toggle>
-                    <mat-button-toggle value="4">4</mat-button-toggle>
-                    <mat-button-toggle value="5">5</mat-button-toggle>
-                </mat-button-toggle-group>
+        <div class="entry-votes" matTooltip="Bug impact according to the community.">
+            <div class="entry-impact">{{ratingTotal / ratingCount | number: '1.0-1'}}</div>
+            <div class="entry-vote-total">({{ratingCount}} Vote<span *ngIf="ratingCount>1">s</span>)
             </div>
         </div>
 
-        <div class="tag-list">
-            <div *ngIf="entry.tags.edges.length == 0">No Tag</div>
-            <app-tag-chip *ngFor="let tag of entry.tags.edges" [tag]="tag.node"></app-tag-chip>
-        </div>
-
-        <mat-divider></mat-divider>
-
-        <div class="entry-description">
-            <div class="link-list">
-                <div *ngIf="entry.illustration === ''">No Link</div>
-                <div *ngIf="entry.illustration != ''" class="link-list">
-                    <div *ngFor="let link of entry.illustration.split('\n')" class="entry-illustration">
-                        <a [href]="link" target="_blank" matTooltip="{{link}}">
-                            <i *ngIf="!linkIcon(link).endsWith('.png')" class="link-icon {{linkIcon(link)}}"></i>
-                            <img *ngIf="linkIcon(link).endsWith('.png')" class="{{linkIcon(link)}}"
-                                src="/assets/icons/{{linkIcon(link)}}" alt="" class="link-icon">
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <markdown katex mermaid [data]="entry.description"></markdown>
+        <div *ngIf="auth.current_user != null" class="entry-my-vote" matTooltip="Rate how important this entry is.">
+            <mat-button-toggle-group name="myVote" aria-label="My Vote" [(ngModel)]="myVote"
+                (ngModelChange)="onVoteChange()"
+                [disabled]="entry.status ==='FIXED' || entry.status ==='EXPECTED' || entry.status === 'DUPLICATE' || entry.status ==='CLOSED'">
+                <mat-button-toggle value="1">1</mat-button-toggle>
+                <mat-button-toggle value="2">2</mat-button-toggle>
+                <mat-button-toggle value="3">3</mat-button-toggle>
+                <mat-button-toggle value="4">4</mat-button-toggle>
+                <mat-button-toggle value="5">5</mat-button-toggle>
+            </mat-button-toggle-group>
         </div>
     </div>
 
-    <div class="entry-comments">
-        <app-entry-message *ngFor="let message of this.entryMessages" [softwareId]="softwareId" [message]="message"
-            (acceptPatch)="processPatch($event, true)" (declinePatch)="processPatch($event, false)"
-            (messageDeleted)="removeMessage($event)"></app-entry-message>
-        <div style="text-align: center;">
-            <button *ngIf="messagesHasMore" mat-raised-button color="primary" (click)="fetchMoreMessages()">Load more
-                messages</button>
-        </div>
-
-        <div class="comment-write">
-            <mat-tab-group *ngIf="auth.current_user != null" animationDuration="0ms" [(selectedIndex)]="editPanelIndex">
-                <mat-tab label="Write a comment">
-                    <div class="tab-content">
-                        <mat-form-field class="comment-form">
-                            <mat-label>Leave a comment.</mat-label>
-                            <textarea matInput [(ngModel)]="editComment" rows="5"></textarea>
-                        </mat-form-field>
-                        <div *ngIf="editComment != ''" class="comment-preview-header">Comment Preview</div>
-                        <div *ngIf="editComment != ''" class="comment-preview">
-                            <markdown katex mermaid data="{{editComment}}"></markdown>
-                        </div>
-
-                    </div>
-                </mat-tab>
-                <mat-tab label="Propose a patch">
-                    <div class="tab-content">
-                        <mat-form-field class="comment-form">
-                            <mat-label>Title</mat-label>
-                            <input matInput [(ngModel)]="editTitle" />
-                        </mat-form-field>
-                        <div class="comment-form status-form">
-                            <mat-button-toggle-group [(ngModel)]="editStatus" aria-label="Status">
-                                <mat-button-toggle value="NEW">NEW</mat-button-toggle>
-                                <mat-button-toggle value="CONFIRMED">CONFIRMED</mat-button-toggle>
-                                <mat-button-toggle value="WIP">WIP</mat-button-toggle>
-                                <mat-button-toggle value="CHECK">CHECK</mat-button-toggle>
-                                <mat-button-toggle value="FIXED">FIXED</mat-button-toggle>
-                                <mat-button-toggle value="EXPECTED">EXPECTED</mat-button-toggle>
-                                <mat-button-toggle value="CLOSED">CLOSED</mat-button-toggle>
-                            </mat-button-toggle-group>
-                        </div>
-
-                        <div class="comment-form">
-                            <app-tag-input [selectedTags]="editTags"
-                                [softwareTags]="softwareTagsAsStrings"></app-tag-input>
-                        </div>
-                        <mat-form-field class="comment-form">
-                            <mat-label>Links (Youtube, Twitch, Imgur... 1 per line)</mat-label>
-                            <textarea matInput [(ngModel)]="editIllustration" rows="3"></textarea>
-                        </mat-form-field>
-                        <mat-form-field class="comment-form">
-                            <mat-label>Description (Markdown with Katex and Mermaid)</mat-label>
-                            <textarea matInput [(ngModel)]="editDescription" rows="10"></textarea>
-                        </mat-form-field>
-                        <div class="comment-preview-header">Description Preview</div>
-                        <div class="comment-preview">
-                            <markdown katex mermaid data="{{editDescription}}"></markdown>
-                        </div>
-                    </div>
-                </mat-tab>
-            </mat-tab-group>
-
-            <div *ngIf="errorMessage != ''" class="error">
-                {{errorMessage}}
-            </div>
-            <div *ngIf="auth.current_user != null" class="comment-send">
-                <button mat-raised-button color="primary" (click)="onSubmitButton()">Submit</button>
-            </div>
-            <div *ngIf="!auth.current_user" class="login-message">Login to comment or submit a patch.</div>
-        </div>
+    <div class="tag-list">
+        <div *ngIf="entry.tags.edges.length == 0">No Tag</div>
+        <app-tag-chip *ngFor="let tag of entry.tags.edges" [tag]="tag.node"></app-tag-chip>
     </div>
 
-</app-layout>
+    <mat-divider></mat-divider>
+
+    <div class="entry-description">
+        <div class="link-list">
+            <div *ngIf="entry.illustration === ''">No Link</div>
+            <div *ngIf="entry.illustration != ''" class="link-list">
+                <div *ngFor="let link of entry.illustration.split('\n')" class="entry-illustration">
+                    <a [href]="link" target="_blank" matTooltip="{{link}}">
+                        <i *ngIf="!linkIcon(link).endsWith('.png')" class="link-icon {{linkIcon(link)}}"></i>
+                        <img *ngIf="linkIcon(link).endsWith('.png')" class="{{linkIcon(link)}}"
+                            src="/assets/icons/{{linkIcon(link)}}" alt="" class="link-icon">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <markdown katex mermaid [data]="entry.description"></markdown>
+    </div>
+</div>
+
+<div class="entry-comments">
+    <app-entry-message *ngFor="let message of this.entryMessages" [softwareId]="softwareId" [message]="message"
+        (acceptPatch)="processPatch($event, true)" (declinePatch)="processPatch($event, false)"
+        (messageDeleted)="removeMessage($event)"></app-entry-message>
+    <div style="text-align: center;">
+        <button *ngIf="messagesHasMore" mat-raised-button color="primary" (click)="fetchMoreMessages()">Load more
+            messages</button>
+    </div>
+
+    <div class="comment-write">
+        <mat-tab-group *ngIf="auth.current_user != null" animationDuration="0ms" [(selectedIndex)]="editPanelIndex">
+            <mat-tab label="Write a comment">
+                <div class="tab-content">
+                    <mat-form-field class="comment-form">
+                        <mat-label>Leave a comment.</mat-label>
+                        <textarea matInput [(ngModel)]="editComment" rows="5"></textarea>
+                    </mat-form-field>
+                    <div *ngIf="editComment != ''" class="comment-preview-header">Comment Preview</div>
+                    <div *ngIf="editComment != ''" class="comment-preview">
+                        <markdown katex mermaid data="{{editComment}}"></markdown>
+                    </div>
+
+                </div>
+            </mat-tab>
+            <mat-tab label="Propose a patch">
+                <div class="tab-content">
+                    <mat-form-field class="comment-form">
+                        <mat-label>Title</mat-label>
+                        <input matInput [(ngModel)]="editTitle" />
+                    </mat-form-field>
+                    <div class="comment-form status-form">
+                        <mat-button-toggle-group [(ngModel)]="editStatus" aria-label="Status">
+                            <mat-button-toggle value="NEW">NEW</mat-button-toggle>
+                            <mat-button-toggle value="CONFIRMED">CONFIRMED</mat-button-toggle>
+                            <mat-button-toggle value="WIP">WIP</mat-button-toggle>
+                            <mat-button-toggle value="CHECK">CHECK</mat-button-toggle>
+                            <mat-button-toggle value="FIXED">FIXED</mat-button-toggle>
+                            <mat-button-toggle value="EXPECTED">EXPECTED</mat-button-toggle>
+                            <mat-button-toggle value="CLOSED">CLOSED</mat-button-toggle>
+                        </mat-button-toggle-group>
+                    </div>
+
+                    <div class="comment-form">
+                        <app-tag-input [selectedTags]="editTags" [softwareTags]="softwareTagsAsStrings"></app-tag-input>
+                    </div>
+                    <mat-form-field class="comment-form">
+                        <mat-label>Links (Youtube, Twitch, Imgur... 1 per line)</mat-label>
+                        <textarea matInput [(ngModel)]="editIllustration" rows="3"></textarea>
+                    </mat-form-field>
+                    <mat-form-field class="comment-form">
+                        <mat-label>Description (Markdown with Katex and Mermaid)</mat-label>
+                        <textarea matInput [(ngModel)]="editDescription" rows="10"></textarea>
+                    </mat-form-field>
+                    <div class="comment-preview-header">Description Preview</div>
+                    <div class="comment-preview">
+                        <markdown katex mermaid data="{{editDescription}}"></markdown>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+
+        <div *ngIf="errorMessage != ''" class="error">
+            {{errorMessage}}
+        </div>
+        <div *ngIf="auth.current_user != null" class="comment-send">
+            <button mat-raised-button color="primary" (click)="onSubmitButton()">Submit</button>
+        </div>
+        <div *ngIf="!auth.current_user" class="login-message">Login to comment or submit a patch.</div>
+    </div>
+</div>

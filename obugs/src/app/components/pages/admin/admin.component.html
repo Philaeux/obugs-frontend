@@ -1,191 +1,188 @@
-<app-layout>
-    <div class="container">
+<div class="container">
 
-        <!-- SOFTWARES -->
-        <mat-card>
-            <mat-card-content>
-                <div class="card-content">
-                    <div class="card-subcontent">
-                        <table mat-table [dataSource]="softwares" class="mat-elevation-z1">
-                            <ng-container matColumnDef="id">
-                                <th mat-header-cell *matHeaderCellDef>ID</th>
-                                <td mat-cell *matCellDef="let software">{{software.id}} </td>
-                            </ng-container>
-
-                            <ng-container matColumnDef="name">
-                                <th mat-header-cell *matHeaderCellDef>Software Name</th>
-                                <td mat-cell *matCellDef="let software">{{software.fullName}} </td>
-                            </ng-container>
-
-                            <ng-container matColumnDef="editor">
-                                <th mat-header-cell *matHeaderCellDef>Editor</th>
-                                <td mat-cell *matCellDef="let software">{{software.editor}} </td>
-                            </ng-container>
-
-                            <ng-container matColumnDef="language">
-                                <th mat-header-cell *matHeaderCellDef>Language</th>
-                                <td mat-cell *matCellDef="let software">{{software.language}} </td>
-                            </ng-container>
-
-                            <tr mat-header-row *matHeaderRowDef="['id', 'name', 'editor']"></tr>
-                            <tr mat-row *matRowDef="let row; columns: ['id', 'name', 'editor'];"
-                                (click)="onSoftwareSelect(row)"></tr>
-                        </table>
-                    </div>
-                    <div class="card-subcontent">
-                        <div class="mat-headline-5">Edit</div>
-                        <form [formGroup]="softwareEditForm" (ngSubmit)="upsertSoftware()">
-                            <mat-form-field class="full-width" matTooltip="Existing ID edits, new ID insert">
-                                <input matInput placeholder="ID" formControlName="id" required>
-                            </mat-form-field>
-                            <mat-form-field class="full-width">
-                                <input matInput placeholder="Full Name" formControlName="fullName" required>
-                            </mat-form-field>
-                            <mat-form-field class="full-width">
-                                <input matInput placeholder="Editor" formControlName="editor" required>
-                            </mat-form-field>
-                            <mat-form-field class="full-width">
-                                <input matInput placeholder="Language" formControlName="language" required>
-                            </mat-form-field>
-                            <mat-form-field class="full-width">
-                                <textarea matInput placeholder="Description" formControlName="description" required
-                                    rows="3"></textarea>
-                            </mat-form-field>
-                            <button mat-raised-button color="primary" type="submit"
-                                [disabled]="!softwareEditForm.valid">Upsert</button>
-                        </form>
-                    </div>
-                </div>
-
-            </mat-card-content>
-        </mat-card>
-
-        <!-- TAGS -->
-        <mat-card>
-            <mat-card-content>
-                <div class="card-content">
-                    <div class="card-subcontent">
-                        <div class="filters">
-                            <mat-form-field class="full-width">
-                                <input matInput placeholder="Software ID Filter" [(ngModel)]="tagFilter">
-                            </mat-form-field>
-                            <button mat-raised-button color="primary" (click)="refreshTagList()">Refresh</button>
-                        </div>
-                        <table mat-table [dataSource]="tags" class="mat-elevation-z1">
-                            <ng-container matColumnDef="id">
-                                <th mat-header-cell *matHeaderCellDef>ID</th>
-                                <td mat-cell *matCellDef="let tag">{{tag.id}} </td>
-                            </ng-container>
-
-                            <ng-container matColumnDef="softwareId">
-                                <th mat-header-cell *matHeaderCellDef>Software ID</th>
-                                <td mat-cell *matCellDef="let tag">{{tag.softwareId}} </td>
-                            </ng-container>
-
-                            <ng-container matColumnDef="name">
-                                <th mat-header-cell *matHeaderCellDef>Tag Name</th>
-                                <td mat-cell *matCellDef="let tag"
-                                    [ngStyle]="{'color': tag.fontColor, 'background-color':tag.backgroundColor}">
-                                    {{tag.name}} </td>
-                            </ng-container>
-
-                            <tr mat-header-row *matHeaderRowDef="['id', 'softwareId', 'name']"></tr>
-                            <tr mat-row *matRowDef="let row; columns: ['id', 'softwareId', 'name'];"
-                                (click)="onTagSelect(row)">
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="card-subcontent">
-                        <div class="mat-headline-5">Edit</div>
-                        <form [formGroup]="tagEditForm" (ngSubmit)="upsertTag()">
-                            <mat-form-field class="full-width" matTooltip="Existing ID edits, new ID insert">
-                                <input matInput placeholder="ID" formControlName="id">
-                            </mat-form-field>
-                            <mat-form-field class="full-width">
-                                <input matInput placeholder="Software ID" formControlName="softwareId" required>
-                            </mat-form-field>
-                            <mat-form-field class="full-width">
-                                <input matInput placeholder="Tag Name" formControlName="name" required>
-                            </mat-form-field>
-                            <mat-form-field class="full-width">
-                                <input matInput placeholder="Font Color" formControlName="fontColor" required>
-                            </mat-form-field>
-                            <mat-form-field class="full-width">
-                                <input matInput placeholder="Background Color" formControlName="backgroundColor"
-                                    required>
-                            </mat-form-field>
-                            <button mat-raised-button color="primary" type="submit"
-                                [disabled]="!tagEditForm.valid">Upsert</button>
-                        </form>
-                    </div>
-                </div>
-            </mat-card-content>
-        </mat-card>
-
-        <!-- PATCHES -->
-        <mat-card>
-            <mat-card-content>
-                <div class="card-content">
-                    <button mat-raised-button color="primary" (click)="refreshPatchList()">Refresh</button>
-                    <table mat-table [dataSource]="patches" class="mat-elevation-z1">
-                        <ng-container matColumnDef="createdAt">
-                            <th mat-header-cell *matHeaderCellDef>Date</th>
-                            <td mat-cell *matCellDef="let message">{{message.createdAt | dateAgo}} </td>
+    <!-- SOFTWARES -->
+    <mat-card>
+        <mat-card-content>
+            <div class="card-content">
+                <div class="card-subcontent">
+                    <table mat-table [dataSource]="softwares" class="mat-elevation-z1">
+                        <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef>ID</th>
+                            <td mat-cell *matCellDef="let software">{{software.id}} </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="approbation">
-                            <th mat-header-cell *matHeaderCellDef>Approbation</th>
-                            <td mat-cell *matCellDef="let message">
-                                {{(message.ratingCount+message.ratingTotal)*50.0/message.ratingCount | number:
-                                '1.0-1'}}&nbsp;% </td>
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef>Software Name</th>
+                            <td mat-cell *matCellDef="let software">{{software.fullName}} </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="votes">
-                            <th mat-header-cell *matHeaderCellDef>Votes</th>
-                            <td mat-cell *matCellDef="let message">
-                                {{message.ratingCount}}</td>
+                        <ng-container matColumnDef="editor">
+                            <th mat-header-cell *matHeaderCellDef>Editor</th>
+                            <td mat-cell *matCellDef="let software">{{software.editor}} </td>
                         </ng-container>
 
-                        <tr mat-header-row *matHeaderRowDef="['createdAt', 'approbation', 'votes']"></tr>
-                        <tr mat-row *matRowDef="let row; columns: ['createdAt', 'approbation', 'votes'];"
-                            (click)="onPatchSelect(row)"></tr>
+                        <ng-container matColumnDef="language">
+                            <th mat-header-cell *matHeaderCellDef>Language</th>
+                            <td mat-cell *matCellDef="let software">{{software.language}} </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="['id', 'name', 'editor']"></tr>
+                        <tr mat-row *matRowDef="let row; columns: ['id', 'name', 'editor'];"
+                            (click)="onSoftwareSelect(row)"></tr>
                     </table>
                 </div>
-            </mat-card-content>
-        </mat-card>
-
-        <!-- SUGGESTIONS -->
-        <mat-card>
-            <mat-card-content>
-                <div class="card-content">
-                    <div class="card-subcontent">
-                        <button mat-raised-button color="primary" (click)="refreshSuggestionList()">Refresh</button>
-                        <table mat-table [dataSource]="suggestions" class="mat-elevation-z1">
-                            <ng-container matColumnDef="name">
-                                <th mat-header-cell *matHeaderCellDef>Name</th>
-                                <td mat-cell *matCellDef="let suggestion">{{suggestion.name}} </td>
-                            </ng-container>
-
-                            <ng-container matColumnDef="description">
-                                <th mat-header-cell *matHeaderCellDef>Description</th>
-                                <td mat-cell *matCellDef="let suggestion">{{ suggestion.description}}</td>
-                            </ng-container>
-
-                            <tr mat-header-row *matHeaderRowDef="['name', 'description']"></tr>
-                            <tr mat-row *matRowDef="let row; columns: ['name', 'description'];"
-                                (click)="onSuggestionSelect(row)"></tr>
-                        </table>
-                    </div>
-                    <div class="card-subcontent">
-                        <div *ngIf="selectedSuggestion === null">Select a suggestion</div>
-                        <div *ngIf="selectedSuggestion != null">Name: {{selectedSuggestion.name}}</div>
-                        <div *ngIf="selectedSuggestion != null">Description: {{selectedSuggestion.description}}</div>
-                        <button *ngIf="selectedSuggestion != null" mat-raised-button color="primary"
-                            (click)="deleteSuggestion()">Delete</button>
-                    </div>
+                <div class="card-subcontent">
+                    <div class="mat-headline-5">Edit</div>
+                    <form [formGroup]="softwareEditForm" (ngSubmit)="upsertSoftware()">
+                        <mat-form-field class="full-width" matTooltip="Existing ID edits, new ID insert">
+                            <input matInput placeholder="ID" formControlName="id" required>
+                        </mat-form-field>
+                        <mat-form-field class="full-width">
+                            <input matInput placeholder="Full Name" formControlName="fullName" required>
+                        </mat-form-field>
+                        <mat-form-field class="full-width">
+                            <input matInput placeholder="Editor" formControlName="editor" required>
+                        </mat-form-field>
+                        <mat-form-field class="full-width">
+                            <input matInput placeholder="Language" formControlName="language" required>
+                        </mat-form-field>
+                        <mat-form-field class="full-width">
+                            <textarea matInput placeholder="Description" formControlName="description" required
+                                rows="3"></textarea>
+                        </mat-form-field>
+                        <button mat-raised-button color="primary" type="submit"
+                            [disabled]="!softwareEditForm.valid">Upsert</button>
+                    </form>
                 </div>
-            </mat-card-content>
-        </mat-card>
+            </div>
 
-    </div>
-</app-layout>
+        </mat-card-content>
+    </mat-card>
+
+    <!-- TAGS -->
+    <mat-card>
+        <mat-card-content>
+            <div class="card-content">
+                <div class="card-subcontent">
+                    <div class="filters">
+                        <mat-form-field class="full-width">
+                            <input matInput placeholder="Software ID Filter" [(ngModel)]="tagFilter">
+                        </mat-form-field>
+                        <button mat-raised-button color="primary" (click)="refreshTagList()">Refresh</button>
+                    </div>
+                    <table mat-table [dataSource]="tags" class="mat-elevation-z1">
+                        <ng-container matColumnDef="id">
+                            <th mat-header-cell *matHeaderCellDef>ID</th>
+                            <td mat-cell *matCellDef="let tag">{{tag.id}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="softwareId">
+                            <th mat-header-cell *matHeaderCellDef>Software ID</th>
+                            <td mat-cell *matCellDef="let tag">{{tag.softwareId}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef>Tag Name</th>
+                            <td mat-cell *matCellDef="let tag"
+                                [ngStyle]="{'color': tag.fontColor, 'background-color':tag.backgroundColor}">
+                                {{tag.name}} </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="['id', 'softwareId', 'name']"></tr>
+                        <tr mat-row *matRowDef="let row; columns: ['id', 'softwareId', 'name'];"
+                            (click)="onTagSelect(row)">
+                        </tr>
+                    </table>
+                </div>
+                <div class="card-subcontent">
+                    <div class="mat-headline-5">Edit</div>
+                    <form [formGroup]="tagEditForm" (ngSubmit)="upsertTag()">
+                        <mat-form-field class="full-width" matTooltip="Existing ID edits, new ID insert">
+                            <input matInput placeholder="ID" formControlName="id">
+                        </mat-form-field>
+                        <mat-form-field class="full-width">
+                            <input matInput placeholder="Software ID" formControlName="softwareId" required>
+                        </mat-form-field>
+                        <mat-form-field class="full-width">
+                            <input matInput placeholder="Tag Name" formControlName="name" required>
+                        </mat-form-field>
+                        <mat-form-field class="full-width">
+                            <input matInput placeholder="Font Color" formControlName="fontColor" required>
+                        </mat-form-field>
+                        <mat-form-field class="full-width">
+                            <input matInput placeholder="Background Color" formControlName="backgroundColor" required>
+                        </mat-form-field>
+                        <button mat-raised-button color="primary" type="submit"
+                            [disabled]="!tagEditForm.valid">Upsert</button>
+                    </form>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+    <!-- PATCHES -->
+    <mat-card>
+        <mat-card-content>
+            <div class="card-content">
+                <button mat-raised-button color="primary" (click)="refreshPatchList()">Refresh</button>
+                <table mat-table [dataSource]="patches" class="mat-elevation-z1">
+                    <ng-container matColumnDef="createdAt">
+                        <th mat-header-cell *matHeaderCellDef>Date</th>
+                        <td mat-cell *matCellDef="let message">{{message.createdAt | dateAgo}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="approbation">
+                        <th mat-header-cell *matHeaderCellDef>Approbation</th>
+                        <td mat-cell *matCellDef="let message">
+                            {{(message.ratingCount+message.ratingTotal)*50.0/message.ratingCount | number:
+                            '1.0-1'}}&nbsp;% </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="votes">
+                        <th mat-header-cell *matHeaderCellDef>Votes</th>
+                        <td mat-cell *matCellDef="let message">
+                            {{message.ratingCount}}</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="['createdAt', 'approbation', 'votes']"></tr>
+                    <tr mat-row *matRowDef="let row; columns: ['createdAt', 'approbation', 'votes'];"
+                        (click)="onPatchSelect(row)"></tr>
+                </table>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+    <!-- SUGGESTIONS -->
+    <mat-card>
+        <mat-card-content>
+            <div class="card-content">
+                <div class="card-subcontent">
+                    <button mat-raised-button color="primary" (click)="refreshSuggestionList()">Refresh</button>
+                    <table mat-table [dataSource]="suggestions" class="mat-elevation-z1">
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef>Name</th>
+                            <td mat-cell *matCellDef="let suggestion">{{suggestion.name}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="description">
+                            <th mat-header-cell *matHeaderCellDef>Description</th>
+                            <td mat-cell *matCellDef="let suggestion">{{ suggestion.description}}</td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="['name', 'description']"></tr>
+                        <tr mat-row *matRowDef="let row; columns: ['name', 'description'];"
+                            (click)="onSuggestionSelect(row)"></tr>
+                    </table>
+                </div>
+                <div class="card-subcontent">
+                    <div *ngIf="selectedSuggestion === null">Select a suggestion</div>
+                    <div *ngIf="selectedSuggestion != null">Name: {{selectedSuggestion.name}}</div>
+                    <div *ngIf="selectedSuggestion != null">Description: {{selectedSuggestion.description}}</div>
+                    <button *ngIf="selectedSuggestion != null" mat-raised-button color="primary"
+                        (click)="deleteSuggestion()">Delete</button>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+</div>

@@ -1,31 +1,29 @@
-<app-layout>
-    <mat-card class="form-card">
-        <mat-card-title>
-            <div class="mat-headline-5">Submit a new Software</div>
-        </mat-card-title>
-        <mat-card-content>
-            <form [formGroup]="form" (ngSubmit)="onCreateButton()" class="form">
-                <mat-form-field class="full-width">
-                    <input matInput placeholder="Name" formControlName="name" required />
-                    <mat-error *ngIf="form.get('name')?.hasError('required')">Name is required</mat-error>
-                    <mat-error *ngIf="form.get('name')?.hasError('maxlength')">Name is at max 50 characters
-                        long.</mat-error>
-                </mat-form-field>
+<mat-card class="form-card">
+    <mat-card-title>
+        <div class="mat-headline-5">Submit a new Software</div>
+    </mat-card-title>
+    <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="onCreateButton()" class="form">
+            <mat-form-field class="full-width">
+                <input matInput placeholder="Name" formControlName="name" required />
+                <mat-error *ngIf="form.get('name')?.hasError('required')">Name is required</mat-error>
+                <mat-error *ngIf="form.get('name')?.hasError('maxlength')">Name is at max 50 characters
+                    long.</mat-error>
+            </mat-form-field>
 
-                <mat-form-field class="full-width">
-                    <textarea matInput placeholder="Describe the software, why we should add it, give some tag ideas..."
-                        formControlName="description" required rows="10"></textarea>
-                    <mat-error *ngIf="form.get('description')?.hasError('required')">Description is required</mat-error>
-                    <mat-error *ngIf="form.get('description')?.hasError('maxlength')">Description is at max 3000
-                        characters long.</mat-error>
-                </mat-form-field>
+            <mat-form-field class="full-width">
+                <textarea matInput placeholder="Describe the software, why we should add it, give some tag ideas..."
+                    formControlName="description" required rows="10"></textarea>
+                <mat-error *ngIf="form.get('description')?.hasError('required')">Description is required</mat-error>
+                <mat-error *ngIf="form.get('description')?.hasError('maxlength')">Description is at max 3000
+                    characters long.</mat-error>
+            </mat-form-field>
 
-                <div *ngIf="error != ''" class="error">{{error}}</div>
-                <div *ngIf="message != ''" class="message">{{message}}</div>
-                <div class="captcha-container">
-                    <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Submit</button>
-                </div>
-            </form>
-        </mat-card-content>
-    </mat-card>
-</app-layout>
+            <div *ngIf="error != ''" class="error">{{error}}</div>
+            <div *ngIf="message != ''" class="message">{{message}}</div>
+            <div class="captcha-container">
+                <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Submit</button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

@@ -1,64 +1,60 @@
-<app-layout>
+<mat-card class="title-card">
+  <mat-card-content class="title-card-content">
+    <div class="mat-headline-1">oBugs</div>
+    <div class="title-card-subtitle mat-headline-5">oBugs is a community-driven bug tracking system where users curate
+      a live database of
+      known issues for their favorite software.</div>
+    <button mat-raised-button color="primary" class="title-card-button" routerLink="/apps">Start Contributing</button>
+  </mat-card-content>
+</mat-card>
 
-  <mat-card class="title-card">
-    <mat-card-content class="title-card-content">
-      <div class="mat-headline-1">oBugs</div>
-      <div class="title-card-subtitle mat-headline-5">oBugs is a community-driven bug tracking system where users curate
-        a live database of
-        known issues for their favorite software.</div>
-      <button mat-raised-button color="primary" class="title-card-button" routerLink="/apps">Start Contributing</button>
-    </mat-card-content>
-  </mat-card>
+<div class="index-cards">
 
-  <div class="index-cards">
-
-    <div class="index-card">
-      <mat-card>
-        <mat-card-content>
-          <div class="index-section-title">Motivations</div>
-          <div class="index-section-content mat-body">
-            <markdown katex mermaid [src]="'assets/md/index-motivations.md'">
-            </markdown>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
-
-    <div class="index-card">
-      <mat-card>
-        <mat-card-content>
-          <div class="index-section-title">Entry Lifecycle</div>
-          <div class="index-section-content mat-body">
-            <markdown katex mermaid [src]="'assets/md/index-lifecycle.md'">
-            </markdown>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
-
-    <div class="index-card">
-      <mat-card>
-        <mat-card-content>
-          <div class="index-section-title">Empower Reporting</div>
-          <div class="index-section-content mat-body">
-            <markdown katex mermaid [src]="'assets/md/index-tools.md'">
-            </markdown>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
-
-    <div class="index-card">
-      <mat-card>
-        <mat-card-content>
-          <div class="index-section-title">Contact Us</div>
-          <div class="index-section-content mat-body">
-            <markdown katex mermaid [src]="'assets/md/index-contact.md'">
-            </markdown>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
+  <div class="index-card">
+    <mat-card>
+      <mat-card-content>
+        <div class="index-section-title">Motivations</div>
+        <div class="index-section-content mat-body">
+          <markdown katex mermaid [src]="'assets/md/index-motivations.md'">
+          </markdown>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 
-</app-layout>
+  <div class="index-card">
+    <mat-card>
+      <mat-card-content>
+        <div class="index-section-title">Entry Lifecycle</div>
+        <div class="index-section-content mat-body">
+          <markdown katex mermaid [src]="'assets/md/index-lifecycle.md'">
+          </markdown>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="index-card">
+    <mat-card>
+      <mat-card-content>
+        <div class="index-section-title">Empower Reporting</div>
+        <div class="index-section-content mat-body">
+          <markdown katex mermaid [src]="'assets/md/index-tools.md'">
+          </markdown>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="index-card">
+    <mat-card>
+      <mat-card-content>
+        <div class="index-section-title">Contact Us</div>
+        <div class="index-section-content mat-body">
+          <markdown katex mermaid [src]="'assets/md/index-contact.md'">
+          </markdown>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

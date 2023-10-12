@@ -15,7 +15,6 @@ import { CommonModule } from '@angular/common';
 import { MaterialModule } from './material.module';
 
 import { BugDetailsComponent } from './components/pages/bug-details/bug-details.component';
-import { BugSearchComponent } from './components/pages/bug-search/bug-search.component';
 import { BugNewComponent } from './components/pages/bug-new/bug-new.component';
 import { DashboardComponent } from './components/pages/dashboard/dashboard.component';
 import { IndexComponent } from './components/pages/index/index.component';
@@ -23,7 +22,6 @@ import { BugRowComponent } from './components/elements/bug-row/bug-row.component
 import { GraphQLModule } from './graphql.module';
 import { LoginComponent } from './components/pages/login/login.component';
 import { AuthService } from './services/auth.service';
-import { LayoutComponent } from './components/elements/layout/layout.component';
 import { AppsComponent } from './components/pages/apps/apps.component';
 import { TagChipComponent } from './components/elements/tag-chip/tag-chip.component';
 import { StatusChipComponent } from './components/elements/status-chip/status-chip.component';
@@ -42,12 +40,10 @@ import { AppsNewComponent } from './components/pages/apps-new/apps-new.component
     AppsNewComponent,
     BugDetailsComponent,
     BugNewComponent,
-    BugSearchComponent,
     DashboardComponent,
     IndexComponent,
     BugRowComponent,
     LoginComponent,
-    LayoutComponent,
     TagChipComponent,
     StatusChipComponent,
     EntryMessageComponent,
