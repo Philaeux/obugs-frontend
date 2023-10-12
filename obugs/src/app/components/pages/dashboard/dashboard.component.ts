@@ -13,11 +13,13 @@ import { QUERY_LIST_TAGS, QueryResponseListTags } from "src/app/models/graphql/q
 export class DashboardComponent implements OnInit {
 
   softwareId: string | null = null;
-  softwareTags: Tag[] = [];
-  filteredEntries: Entry[] = [];
+
   newEntries: Entry[] = [];
-  filterLimit = 20;
+
+  filteredEntries: Entry[] = [];
   filterHasMore: boolean = false;
+  filterLimit = 20;
+  searchFilter: string = "";
   statusFilter: string[] = ['CONFIRMED', 'WIP', 'CHECK'];
   orderingFilter: string = "updated";
 
@@ -44,6 +46,7 @@ export class DashboardComponent implements OnInit {
         query: QUERY_LIST_ENTRIES,
         variables: {
           softwareId: this.softwareId,
+          searchFilter: this.searchFilter,
           statusFilter: this.statusFilter,
           order: this.orderingFilter,
           limit: this.filterLimit,
@@ -70,6 +73,7 @@ export class DashboardComponent implements OnInit {
         query: QUERY_LIST_ENTRIES,
         variables: {
           softwareId: this.softwareId,
+          searchFilter: null,
           statusFilter: ['NEW'],
           order: this.orderingFilter,
           limit: 20,

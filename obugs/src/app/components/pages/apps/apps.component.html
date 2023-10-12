@@ -2,8 +2,8 @@
     <div class="filters">
         <mat-form-field class="app-filter-input">
             <mat-label>Search</mat-label>
-            <input matInput placeholder="Software Name" [(ngModel)]="softwareFilter" (keyup.enter)="onEnterKey()"
-                matTooltip="Press Enter to apply filter">
+            <input matInput placeholder="Search" [(ngModel)]="softwareFilter" (keyup.enter)="onEnterKey()"
+                matTooltip="Enter to search">
         </mat-form-field>
     </div>
     <div class="filter-subtitle">Not finding a software? <a routerLink="/apps/new">Suggest it!</a></div>

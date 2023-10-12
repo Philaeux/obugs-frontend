@@ -14,10 +14,23 @@
     gap: 4px;
 }
 
-.filters {
+.filters-1,
+.filters-2 {
     display: flex;
     justify-content: center;
     gap: 4px;
+}
+
+.filters-2 {
+    margin-top: -20px;
+}
+
+.filters-1-input {
+    width: 300px;
+}
+
+.filters-1-div {
+    margin-top: 3px;
 }
 
 .bug-list {
