@@ -113,7 +113,6 @@
                         <mat-label>Description (Markdown with Katex and Mermaid)</mat-label>
                         <textarea matInput [(ngModel)]="editDescription" rows="10"></textarea>
                     </mat-form-field>
-                    <div class="comment-preview-header">Description Preview</div>
                     <div class="comment-preview">
                         <markdown katex mermaid [data]="editDescription"></markdown>
                     </div>
