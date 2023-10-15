@@ -26,8 +26,12 @@
                 <mat-error *ngIf="form.get('description')?.hasError('required')">Description is required</mat-error>
             </mat-form-field>
 
+            <div *ngIf="form.value.description != ''" class="comment-preview">
+                <markdown katex mermaid [data]="form.value.description"></markdown>
+            </div>
+
             <div *ngIf="errorMessage != ''" class="error">{{errorMessage}}</div>
-            <div class="captcha-container">
+            <div class="button-container">
                 <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Create</button>
             </div>
         </form>

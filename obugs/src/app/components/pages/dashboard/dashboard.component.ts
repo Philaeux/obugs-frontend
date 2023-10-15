@@ -4,6 +4,7 @@ import { Entry, Tag } from "../../../models/models";
 import { Apollo } from 'apollo-angular';
 import { QUERY_LIST_ENTRIES, QueryResponseListEntries } from "src/app/models/graphql/queries/entry";
 import { QUERY_LIST_TAGS, QueryResponseListTags } from "src/app/models/graphql/queries/tag";
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,14 +27,19 @@ export class DashboardComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private apollo: Apollo
+    private apollo: Apollo,
+    private location: Location
   ) { }
 
   ngOnInit(): void {
     this.softwareId = this.route.snapshot.paramMap.get("software");
-    if (this.softwareId == null) {
-      this.router.navigate(["/"]);
-    }
+    if (this.softwareId == null || this.softwareId == undefined) this.router.navigate(["/"]);
+    const search = this.route.snapshot.queryParams['search'];
+    if (search != null && search != undefined) this.searchFilter = search
+    const order = this.route.snapshot.queryParams['order'];
+    if (order != null && order != undefined) this.orderingFilter = order
+    const status: string = this.route.snapshot.queryParams['status']
+    if (status != null && status != undefined) this.statusFilter = status.split(',')
 
     this.fetchFilteredEntries()
     this.fetchNewEntries()
@@ -75,7 +81,7 @@ export class DashboardComponent implements OnInit {
           softwareId: this.softwareId,
           searchFilter: null,
           statusFilter: ['NEW'],
-          order: this.orderingFilter,
+          order: 'updated',
           limit: 20,
           offset: 0
         }
@@ -105,6 +111,12 @@ export class DashboardComponent implements OnInit {
   }
 
   onFiltersChange() {
+    let queryParams: any = {}
+    if (this.searchFilter != '') queryParams.search = this.searchFilter
+    if (this.orderingFilter != 'updated') queryParams.order = this.orderingFilter
+    if (!this.statusFilter.every(element => ['CONFIRMED', 'WIP', 'CHECK'].includes(element))) queryParams.status = this.statusFilter
+    this.location.go(location.pathname, new URLSearchParams(queryParams).toString())
+
     this.filteredEntries = []
     this.fetchFilteredEntries()
   }

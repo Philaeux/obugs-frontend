@@ -1,7 +1,7 @@
 /* form.component.scss */
 
 .form-card {
-    width: 700px;
+    width: 914px;
     margin: 0 auto;
     padding: 16px;
 
@@ -28,5 +28,19 @@ mat-chip-row {
     font-weight: bold;
     padding-bottom: 10px;
     padding-top: 10px;
+    text-align: center;
+}
+
+.comment-preview {
+    width: 840px;
+    margin-bottom: 10px;
+    padding-left: 4px;
+    padding-right: 4px;
+    border: solid;
+    border-width: 1px;
+    border-color: var(--mat-standard-button-toggle-divider-color);
+}
+
+.button-container {
     text-align: center;
 }

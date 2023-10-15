@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
 import { QUERY_LIST_SOFTWARE, QueryResponseListSoftware } from "src/app/models/graphql/queries/software";
 import { Software } from 'src/app/models/models';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-apps',
@@ -15,10 +16,15 @@ export class AppsComponent {
 
   constructor(
     private router: Router,
-    private apollo: Apollo
+    private apollo: Apollo,
+    private location: Location,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    const search = this.route.snapshot.queryParams['search'];
+    if (search != undefined) this.softwareFilter = search
+
     this.refreshListSoftware();
   }
 
@@ -30,7 +36,9 @@ export class AppsComponent {
     let search: string | null = null;
     if (this.softwareFilter != '') {
       search = this.softwareFilter;
+      this.location.go(location.pathname, new URLSearchParams({ search: search }).toString())
     }
+
     this.apollo
       .query<QueryResponseListSoftware>({
         query: QUERY_LIST_SOFTWARE,
