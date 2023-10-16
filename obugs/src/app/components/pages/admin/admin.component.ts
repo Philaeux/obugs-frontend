@@ -2,33 +2,35 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Software, OBugsError, Tag, EntryMessage, SoftwareSuggestion, OperationDone } from 'src/app/models/models';
 import { AuthService } from 'src/app/services/auth.service';
-import { Subscription } from 'rxjs'
+import { Subscription, interval, timer } from 'rxjs'
 import { Apollo } from 'apollo-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MUTATION_DELETE_SUGGESTION, MUTATION_UPSERT_SOFTWARE, MutationResponseDeleteSuggestion, MutationResponseUpsertSoftware } from 'src/app/models/graphql/mutations/software';
 import { MUTATION_UPSERT_TAG, MutationResponseUpsertTag } from 'src/app/models/graphql/mutations/tag';
 import { QUERY_LIST_SOFTWARE, QUERY_LIST_SOFTWARE_SUGGESTIONS, QueryResponseListSoftware, QueryResponseListSoftwareSuggestions } from 'src/app/models/graphql/queries/software';
-import { QUERY_LIST_TAGS, QueryResponseListTags } from 'src/app/models/graphql/queries/tag';
-import { QUERY_PATCHES, QueryResponsePatches } from 'src/app/models/graphql/queries/entry_message';
+import { Title } from '@angular/platform-browser';
+import { ApiService } from 'src/app/services/api.service';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss']
 })
-export class AdminComponent implements OnInit, OnDestroy {
-
-
-  subscription: Subscription | null = null;
-
+export class AdminComponent implements OnInit {
   softwares: Software[] = [];
+  softwareFilter: string = "";
   softwareEditForm: FormGroup;
 
   tags: Tag[] = [];
-  tagFilter: string = "";
+  tagSoftwareFilter: string = "";
+  tagNameFilter: string = "";
   tagEditForm: FormGroup;
 
   patches: EntryMessage[] = [];
+  patchSoftwareFilter: string = "";
+
   suggestions: SoftwareSuggestion[] = [];
   selectedSuggestion: SoftwareSuggestion | null = null;
 
@@ -36,8 +38,11 @@ export class AdminComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private auth: AuthService,
     private router: Router,
-    private apollo: Apollo
+    private apollo: Apollo,
+    private title: Title,
+    private api: ApiService
   ) {
+    this.title.setTitle('oBugs - Admin')
     this.softwareEditForm = this.fb.group({
       id: ['', [Validators.required]],
       fullName: ['', [Validators.required]],
@@ -56,26 +61,37 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subscription = this.auth.currentUser$.subscribe((user) => {
+    this.auth.currentUser$.pipe(untilDestroyed(this)).subscribe((user) => {
       if (user === undefined) return;
       if (user === null || !user.isAdmin) {
         this.router.navigate([`/`]);
       }
     })
 
-    this.fetchSoftwares();
+    timer(0, 60000 * 5).pipe(untilDestroyed(this)).subscribe(() => {
+      this.refreshPatchList()
+      this.refreshSuggestionList()
+    })
   }
 
-  ngOnDestroy(): void {
-    if (this.subscription) this.subscription.unsubscribe()
+  updateTitle(): void {
+    if (this.patches.length + this.suggestions.length != 0) {
+      this.title.setTitle('(' + (this.patches.length + this.suggestions.length) + ') oBugs - Admin')
+    } else {
+      this.title.setTitle('oBugs - Admin')
+    }
   }
 
-  fetchSoftwares() {
+  refreshSoftwareList() {
+    let search: string | null = null;
+    if (this.softwareFilter != '') {
+      search = this.softwareFilter;
+    }
     this.apollo
       .query<QueryResponseListSoftware>({
         query: QUERY_LIST_SOFTWARE,
         variables: {
-          search: null
+          search: search
         }
       })
       .subscribe((response) => {
@@ -93,14 +109,8 @@ export class AdminComponent implements OnInit, OnDestroy {
     })
   }
 
-
   refreshTagList() {
-    this.apollo.query<QueryResponseListTags>({
-      query: QUERY_LIST_TAGS,
-      variables: {
-        softwareId: this.tagFilter
-      }
-    }).subscribe((response) => {
+    this.api.tagList(this.tagSoftwareFilter, this.tagNameFilter).subscribe((response) => {
       this.tags = response.data.tags
     })
   }
@@ -189,13 +199,9 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   refreshPatchList() {
-    this.apollo.query<QueryResponsePatches>({
-      query: QUERY_PATCHES,
-      variables: {
-        softwareId: null
-      }
-    }).subscribe((response) => {
+    this.api.patchListOpen(this.patchSoftwareFilter).subscribe((response) => {
       this.patches = response.data.openPatches
+      this.updateTitle()
     })
   }
 
@@ -209,6 +215,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       query: QUERY_LIST_SOFTWARE_SUGGESTIONS
     }).subscribe((response) => {
       this.suggestions = response.data.softwareSuggestions
+      this.updateTitle()
     })
   }
 

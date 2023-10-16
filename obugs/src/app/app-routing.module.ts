@@ -14,7 +14,7 @@ const routes: Routes = [
   { path: 'apps', title: 'oBugs - Applications', component: AppsComponent },
   { path: 'apps/new', title: 'oBugs - Suggest a new Software', component: AppsNewComponent },
   { path: 'login', title: 'oBugs - Login', component: LoginComponent },
-  { path: 'admin', title: 'oBugs - Admin', component: AdminComponent },
+  { path: 'admin', component: AdminComponent },
   { path: 's/:software/new', component: BugNewComponent },
   { path: 's/:software/:entry', component: BugDetailsComponent },
   { path: 's/:software', component: DashboardComponent },

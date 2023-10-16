@@ -32,6 +32,7 @@ import { AdminComponent } from './components/pages/admin/admin.component';
 import { Recaptchav2Service } from './services/recaptchav2.service';
 import { RecaptchaModule } from 'ng-recaptcha';
 import { AppsNewComponent } from './components/pages/apps-new/apps-new.component';
+import { ApiService } from './services/api.service';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { AppsNewComponent } from './components/pages/apps-new/apps-new.component
   providers: [
     AuthService,
     Recaptchav2Service,
-    Title
+    Title,
+    ApiService
   ],
   bootstrap: [AppComponent]
 })

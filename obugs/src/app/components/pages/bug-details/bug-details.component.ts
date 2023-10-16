@@ -115,7 +115,8 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
       .query<QueryResponseListTags>({
         query: QUERY_LIST_TAGS,
         variables: {
-          softwareId: this.softwareId
+          softwareId: this.softwareId,
+          search: null
         }
       })
       .subscribe((response) => {

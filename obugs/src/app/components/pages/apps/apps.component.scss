@@ -33,3 +33,12 @@
 .software-card:hover {
     cursor: pointer;
 }
+
+.software-header {
+    display: block;
+}
+
+.software-subtitle {
+    display: flex;
+    justify-content: space-between;
+}

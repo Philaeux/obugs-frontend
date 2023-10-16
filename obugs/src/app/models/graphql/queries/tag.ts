@@ -4,8 +4,8 @@ import { ObugsFragments } from "../fragments";
 
 
 export const QUERY_LIST_TAGS = gql`
-    query GetTags($softwareId: String!) {
-        tags(softwareId: $softwareId) {
+    query GetTags($softwareId: String!, $search: String) {
+        tags(softwareId: $softwareId, search: $search) {
             ...TagFragment
         }
     }
