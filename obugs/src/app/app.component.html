@@ -2,7 +2,7 @@
     <div class="sidebar">
         <mat-nav-list>
             <mat-list-item routerLink="/" (mousedown)="handleMiddleMouseClick($event, '/')"
-                class="sidebar-item sidebar-item-first">
+                [activated]="currentUrl == '/'" class="sidebar-item sidebar-item-first">
                 <div class="sidebar-item-content">
                     <div class="sidebar-item-icon"><mat-icon>bug_report</mat-icon></div>
                     <div class="sidebar-item-text">oBugs</div>
@@ -10,7 +10,7 @@
             </mat-list-item>
 
             <mat-list-item routerLink="/apps" (mousedown)="handleMiddleMouseClick($event, '/apps')"
-                class="sidebar-item">
+                [activated]="currentUrl == '/apps'" class="sidebar-item">
                 <div class="sidebar-item-content">
                     <div class="sidebar-item-icon"><mat-icon>apps</mat-icon></div>
                     <div class="sidebar-item-text">Apps</div>
@@ -18,7 +18,8 @@
             </mat-list-item>
 
             <mat-list-item *ngIf="currentUser != null && currentUser.isAdmin" routerLink="/admin"
-                (mousedown)="handleMiddleMouseClick($event, '/admin')" class="sidebar-item">
+                [activated]="currentUrl == '/admin'" (mousedown)="handleMiddleMouseClick($event, '/admin')"
+                class="sidebar-item">
                 <div class="sidebar-item-content">
                     <div class="sidebar-item-icon"><mat-icon>admin_panel_settings</mat-icon></div>
                     <div class="sidebar-item-text">Admin</div>
@@ -28,10 +29,11 @@
             <mat-divider></mat-divider>
 
             <mat-list-item *ngIf="currentSoftwareId != null" routerLink="/s/{{currentSoftwareId}}"
+                [activated]="currentUrl == '/s/' + currentSoftwareId"
                 (mousedown)="handleMiddleMouseClick($event, '/s/' + currentSoftwareId)" class="sidebar-item">
                 <div class="sidebar-item-content">
                     <div class="sidebar-item-icon">
-                        <img class="software-icon" src="assets/icons/{{currentSoftwareId}}.ico"
+                        <img class="software-icon" src="assets/icons/{{currentSoftwareId}}.png"
                             alt="{{currentSoftwareId}}">
                     </div>
                     <div class="sidebar-item-text">{{currentSoftwareId}}</div>
@@ -39,7 +41,7 @@
             </mat-list-item>
 
             <mat-list-item *ngIf="currentSoftwareId != null && currentUser != null"
-                routerLink="/s/{{currentSoftwareId}}/new"
+                [activated]="currentUrl == '/s/' + currentSoftwareId + '/new'" routerLink="/s/{{currentSoftwareId}}/new"
                 (mousedown)="handleMiddleMouseClick($event, '/s/' + currentSoftwareId + '/new')" class="sidebar-item">
                 <div class="sidebar-item-content">
                     <div class="sidebar-item-icon"><mat-icon>add</mat-icon></div>

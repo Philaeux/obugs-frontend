@@ -88,6 +88,7 @@ export class BugNewComponent implements OnInit, OnDestroy {
           }
         })
         .subscribe((response) => {
+          grecaptcha.reset()
           if (response.data && response.data.createEntry) {
             const result = response.data.createEntry
             if (result.__typename === 'OBugsError') {
@@ -99,7 +100,6 @@ export class BugNewComponent implements OnInit, OnDestroy {
             }
           }
         })
-      grecaptcha.reset()
     }
   }
 }

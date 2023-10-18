@@ -207,6 +207,7 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
     const twitchRegex = /^(https?:\/\/)?(www\.)?((clips\.)?twitch\.tv)\//;
     const githubRegex = /^(https?:\/\/)?(www\.)?(github\.com|user-images\.githubusercontent\.com)\//;
     const imgurRegex = /^(https?:\/\/)?(www\.)?((i\.)?imgur\.com)\//;
+    const redditRegex = /^(https?:\/\/)?(www\.)?((old\.)?reddit\.com)\//;
 
     if (youtubeRegex.test(link)) {
       return 'fab fa-youtube';
@@ -216,6 +217,8 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
       return 'fab fa-github';
     } else if (imgurRegex.test(link)) {
       return 'imgur.png';
+    } else if (redditRegex.test(link)) {
+      return 'reddit.png';
     }
 
     return 'fa-solid fa-link'

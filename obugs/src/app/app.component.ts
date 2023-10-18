@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
   siteKey: string = environment.recaptchaSiteKey;
   darkMode = false;
 
-  currentUrl: string = "/";
+  currentUrl: string = "";
   currentUser: User | null = null;
   currentSoftwareId: string | null = null;
 
