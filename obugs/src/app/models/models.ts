@@ -22,9 +22,11 @@ export interface SoftwareSuggestion {
 export interface User {
     __typename: 'User'
     id: string;
-    username: string;
+    githubId: number | null;
+    githubName: string | null;
     isAdmin: boolean;
     isBanned: boolean;
+    username: string;
     roles: {
         edges: {
             node: UserSoftwareRole

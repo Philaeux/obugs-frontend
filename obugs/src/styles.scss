@@ -43,6 +43,6 @@ $warn-palette: map.get($color-config, 'warn');
       visibility: hidden;
 }
 
-markdown a {
-      color: var(--mat-sidenav-container-text-color);
+a {
+      color: cornflowerblue;
 }

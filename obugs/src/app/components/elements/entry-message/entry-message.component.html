@@ -33,7 +33,7 @@
                     <span>Unban user</span>
                 </button>
             </mat-menu>
-            {{messageUser?.username}}
+            <app-username [user]="messageUser"></app-username>
             <span *ngIf="message.type == 'creation'"> created this entry </span>
             <span *ngIf="message.type == 'comment'"> commented </span>
             <span *ngIf="message.type == 'patch'"> suggested a patch </span>

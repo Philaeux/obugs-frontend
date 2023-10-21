@@ -5,9 +5,11 @@ export const ObugsFragments = {
         user: gql`
             fragment UserFragment on User {
                 id
-                username
+                githubId
+                githubName
                 isAdmin
                 isBanned
+                username
                 roles {
                     edges {
                         node {

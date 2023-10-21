@@ -33,6 +33,7 @@ import { Recaptchav2Service } from './services/recaptchav2.service';
 import { RecaptchaModule } from 'ng-recaptcha';
 import { AppsNewComponent } from './components/pages/apps-new/apps-new.component';
 import { ApiService } from './services/api.service';
+import { UsernameComponent } from './components/elements/username/username.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { ApiService } from './services/api.service';
     DateAgoPipe,
     TagInputComponent,
     AdminComponent,
+    UsernameComponent
   ],
   imports: [
     AppRoutingModule,

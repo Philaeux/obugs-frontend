@@ -91,7 +91,11 @@ export class EntryMessageComponent implements OnInit {
           }
         })
         .subscribe((response) => {
-          this.closedByNickname = response.data.user.username;
+          if (response.data.user.githubName != null) {
+            this.closedByNickname = response.data.user.githubName + ' (Github User)'
+          } else {
+            this.closedByNickname = response.data.user.username + ' (oBugs User)';
+          }
         });
     }
   }

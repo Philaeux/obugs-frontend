@@ -66,10 +66,7 @@
                 <mat-icon>login</mat-icon>
             </button>
 
-            <mat-icon *ngIf="auth.current_user">person</mat-icon>
-            <div *ngIf="auth.current_user" class="top-bar-username">
-                {{auth.current_user.username}}
-            </div>
+            <app-username [user]="currentUser"></app-username>
             <button *ngIf="auth.current_user" (click)="auth.logout()" mat-mini-fab aria-label="Logout" color="primary"
                 matTooltip="Logout">
                 <mat-icon>logout</mat-icon>

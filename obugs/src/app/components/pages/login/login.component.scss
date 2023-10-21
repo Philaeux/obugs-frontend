@@ -17,17 +17,7 @@
     align-items: center;
     text-align: center;
     align-self: center;
-}
-
-.divider {
-    width: 1px;
-    background-color: #aaa;
-    margin: 0 20px;
-    align-self: stretch;
-}
-
-.full-width {
-    width: 100%;
+    gap: 16px;
 }
 
 .login-error {
@@ -43,6 +33,7 @@
     padding-top: 10px;
 }
 
-.register-button {
-    margin-top: 15px;
+.login-with-github {
+    background-color: black !important;
+    color: white !important;
 }

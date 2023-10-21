@@ -1,12 +1,11 @@
-import { Injectable, OnInit } from '@angular/core';
-import { AuthPayload, User, OBugsError } from '../models/models';
-import { HttpClient } from '@angular/common/http';
-import { environment } from "../../environments/environment";
-import { BehaviorSubject, Observable, filter, tap } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { User, OBugsError } from '../models/models';
+import { BehaviorSubject, Observable, filter, of, tap } from 'rxjs';
 import { Apollo } from 'apollo-angular';
 import { QUERY_CURRENT_USER } from "../models/graphql/queries/user";
 import { QueryResponseCurrentUser } from "../models/graphql/queries/user";
 import jwt_decode, { JwtPayload } from 'jwt-decode';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,28 +17,10 @@ export class AuthService {
 
   public current_user: User | null = null;
 
-  constructor(private http: HttpClient, private apollo: Apollo) {
-    this.initUserIfNecessary()
-  }
-
-  register(username: string, password: string, email: string, recaptcha: string = ""): Observable<AuthPayload> {
-    return this.http.post<AuthPayload>(`${environment.obugsBackend}/register`, { username: username, password: password, email: email, recaptcha: recaptcha });
-  }
-
-  activate(username: string, token: string): Observable<AuthPayload> {
-    return this.http.post<AuthPayload>(`${environment.obugsBackend}/activate`, { username: username, token: token });
-  }
-
-  login(username: string, password: string, recaptcha: string): Observable<AuthPayload> {
-    return this.http.post<AuthPayload>(`${environment.obugsBackend}/login`, { username: username, password: password, recaptcha: recaptcha }).pipe(tap(data => {
-      if (data.error == '') {
-        localStorage.setItem('access_token', data.message);
-        this.fetchUserInfo(data.message)
-      }
-    }));
-  }
-
-  initUserIfNecessary() {
+  constructor(
+    private apollo: Apollo,
+    private api: ApiService
+  ) {
     const access_token = localStorage.getItem('access_token');
     if (access_token === null) {
       this.currentUserSubject.next(null)
@@ -52,22 +33,36 @@ export class AuthService {
     if (this.isExpired(access_token)) {
       this.logout()
     } else {
-      this.apollo
-        .query<QueryResponseCurrentUser>({
-          query: QUERY_CURRENT_USER
-        }).subscribe((response) => {
-          const data = response.data.currentUser
-          if (data.__typename === 'OBugsError') {
-            const error = data as OBugsError
-            console.log(error.message)
-            this.logout()
-          } else {
-            const user = data as User
-            this.current_user = user
-            this.currentUserSubject.next(this.current_user)
-          }
-        });
+      this.api.userCurrent().subscribe((response) => {
+        const data = response.data.currentUser
+        if (data.__typename === 'OBugsError') {
+          const error = data as OBugsError
+          console.log(error.message)
+          this.logout()
+        } else {
+          const user = data as User
+          this.current_user = user
+          this.currentUserSubject.next(this.current_user)
+        }
+      });
     }
+  }
+
+  login(token: string) {
+    localStorage.setItem('access_token', token)
+
+    return this.api.userCurrent().pipe(tap((response) => {
+      const data = response.data.currentUser
+      if (data.__typename === 'OBugsError') {
+        const error = data as OBugsError
+        console.log(error.message)
+        this.logout()
+      } else {
+        const user = data as User
+        this.current_user = user
+        this.currentUserSubject.next(this.current_user)
+      }
+    }));
   }
 
   logout() {
