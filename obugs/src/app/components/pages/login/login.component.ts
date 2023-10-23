@@ -39,4 +39,9 @@ export class LoginComponent implements OnInit {
     const githubOauth = environment.obugsBackend + "/oauth/github/start"
     window.open(githubOauth, "_self")
   }
+
+  onLoginWithReddit() {
+    const githubOauth = environment.obugsBackend + "/oauth/reddit/start"
+    window.open(githubOauth, "_self")
+  }
 }

@@ -7,6 +7,8 @@ export const ObugsFragments = {
                 id
                 githubId
                 githubName
+                redditId
+                redditName
                 isAdmin
                 isBanned
                 username

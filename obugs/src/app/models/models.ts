@@ -24,6 +24,8 @@ export interface User {
     id: string;
     githubId: number | null;
     githubName: string | null;
+    redditId: string | null;
+    redditName: string | null;
     isAdmin: boolean;
     isBanned: boolean;
     username: string;
