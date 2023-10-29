@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-index',
@@ -8,8 +9,10 @@ import { Component, OnInit } from '@angular/core';
 export class IndexComponent implements OnInit {
 
   constructor(
-
-  ) { }
+    private title: Title
+  ) {
+    this.title.setTitle('oBugs - Community-driven bug tracker')
+  }
 
   ngOnInit(): void {
 

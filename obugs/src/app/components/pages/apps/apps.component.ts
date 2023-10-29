@@ -4,6 +4,7 @@ import { Apollo } from 'apollo-angular';
 import { QUERY_LIST_SOFTWARE, QueryResponseListSoftware } from "src/app/models/graphql/queries/software";
 import { Software } from 'src/app/models/models';
 import { Location } from '@angular/common';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-apps',
@@ -15,11 +16,14 @@ export class AppsComponent {
   softwareFilter: string = "";
 
   constructor(
+    private title: Title,
     private router: Router,
     private apollo: Apollo,
     private location: Location,
     private route: ActivatedRoute
-  ) { }
+  ) {
+    this.title.setTitle('oBugs - Applications')
+  }
 
   ngOnInit(): void {
     const search = this.route.snapshot.queryParams['search'];

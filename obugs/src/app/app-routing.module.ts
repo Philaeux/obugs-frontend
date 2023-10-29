@@ -10,10 +10,10 @@ import { AdminComponent } from './components/pages/admin/admin.component';
 import { AppsNewComponent } from './components/pages/apps-new/apps-new.component';
 
 const routes: Routes = [
-  { path: '', title: 'oBugs - Community-driven bug tracker', component: IndexComponent },
-  { path: 'apps', title: 'oBugs - Applications', component: AppsComponent },
-  { path: 'apps/new', title: 'oBugs - Suggest a new Software', component: AppsNewComponent },
-  { path: 'login', title: 'oBugs - Login', component: LoginComponent },
+  { path: '', component: IndexComponent },
+  { path: 'apps', component: AppsComponent },
+  { path: 'apps/new', component: AppsNewComponent },
+  { path: 'login', component: LoginComponent },
   { path: 'admin', component: AdminComponent },
   { path: 's/:software/new', component: BugNewComponent },
   { path: 's/:software/:entry', component: BugDetailsComponent },

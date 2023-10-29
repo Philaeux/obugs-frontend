@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { Apollo } from 'apollo-angular';
 import { Subscription } from 'rxjs';
 import { MUTATION_SUGGEST_SOFTWARE, MutationResponseSuggestSoftware } from 'src/app/models/graphql/mutations/software';
@@ -19,10 +20,12 @@ export class AppsNewComponent implements OnInit, OnDestroy {
   message: string = "";
 
   constructor(
+    private title: Title,
     public fb: FormBuilder,
     private recaptchav2Service: Recaptchav2Service,
     private apollo: Apollo
   ) {
+    this.title.setTitle('oBugs - Suggest a new Software')
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(50)]],
       description: ['', [Validators.required, Validators.maxLength(3000)]]
