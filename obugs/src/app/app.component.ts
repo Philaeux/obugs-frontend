@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Recaptchav2Service } from './services/recaptchav2.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter, map, mergeMap } from 'rxjs';
+import { filter, map } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { User } from './models/models';
-import { T } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-root',

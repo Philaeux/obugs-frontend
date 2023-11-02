@@ -1,13 +1,8 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewEncapsulation } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import { QUERY_MY_VOTE, QueryResponseMyVote } from "src/app/models/graphql/queries/vote";
-import { QUERY_USER_DETAILS, QueryResponseUserDetails } from "src/app/models/graphql/queries/user";
-import { EntryMessage, OBugsError, VoteUpdate, User, OperationDone } from 'src/app/models/models';
-import { diff_match_patch as DiffMatchPatch } from 'diff-match-patch';
+import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { MUTATION_VOTE, MutationResponseVote } from 'src/app/models/graphql/mutations/vote';
-import { MUTATION_BAN_USER, MutationResponseBanUser } from 'src/app/models/graphql/mutations/user';
-import { MUTATION_DELETE_MESSAGE, MutationResponseDeleteMessage } from 'src/app/models/graphql/mutations/entry_message';
+import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { diff_match_patch as DiffMatchPatch } from 'diff-match-patch';
+import { EntryMessage, OBugsError, VoteUpdate, User, OperationDone } from 'src/app/models/models';
 
 @Component({
   selector: 'app-entry-message',
@@ -16,11 +11,8 @@ import { MUTATION_DELETE_MESSAGE, MutationResponseDeleteMessage } from 'src/app/
   encapsulation: ViewEncapsulation.None,
 })
 export class EntryMessageComponent implements OnInit {
-  @Input({ required: true })
-  message!: EntryMessage;
-
-  @Input({ required: true })
-  softwareId: string | null = null;
+  @Input({ required: true }) message!: EntryMessage;
+  @Input({ required: true }) softwareId: string | null = null;
 
   @Output() acceptPatch = new EventEmitter<EntryMessage>();
   @Output() declinePatch = new EventEmitter<EntryMessage>();
@@ -37,12 +29,10 @@ export class EntryMessageComponent implements OnInit {
   dmp = new DiffMatchPatch.diff_match_patch();
   showDetails: boolean = false;
 
-
   constructor(
-    private apollo: Apollo,
+    private api: ApiService,
     public auth: AuthService
   ) { }
-
 
   ngOnInit(): void {
     if (this.message.stateAfter) {
@@ -58,24 +48,12 @@ export class EntryMessageComponent implements OnInit {
       this.ratingCount = this.message.ratingCount;
     }
 
-    this.apollo
-      .watchQuery<QueryResponseUserDetails>({
-        query: QUERY_USER_DETAILS,
-        variables: {
-          userId: this.message.userId,
-        }
-      })
-      .valueChanges.subscribe(({ data, loading }) => {
-        this.messageUser = data.user;
-      });
+    this.api.userDetails(this.message.userId).subscribe((response) => {
+      this.messageUser = response.data.user;
+    });
 
     if (this.auth.current_user != null && this.message.type == 'patch') {
-      this.apollo.query<QueryResponseMyVote>({
-        query: QUERY_MY_VOTE,
-        variables: {
-          subjectId: this.message.id
-        }
-      }).subscribe((response) => {
+      this.api.voteGet(this.message.id).subscribe((response) => {
         if (response.data.myVote) {
           this.petitionVote = response.data.myVote.rating;
         }
@@ -83,20 +61,15 @@ export class EntryMessageComponent implements OnInit {
     }
 
     if (this.message.type == 'patch' && this.message.isClosed != null && this.message.isClosed && this.message.closedById != null) {
-      this.apollo
-        .query<QueryResponseUserDetails>({
-          query: QUERY_USER_DETAILS,
-          variables: {
-            userId: this.message.closedById,
-          }
-        })
-        .subscribe((response) => {
-          if (response.data.user.githubName != null) {
-            this.closedByNickname = response.data.user.githubName + ' (Github User)'
-          } else {
-            this.closedByNickname = response.data.user.username + ' (oBugs User)';
-          }
-        });
+      this.api.userDetails(this.message.closedById).subscribe((response) => {
+        if (response.data.user.githubName != null) {
+          this.closedByNickname = response.data.user.githubName + ' (Github User)'
+        } else if (response.data.user.redditName != null) {
+          this.closedByNickname = response.data.user.redditName + ' (Reddit User)'
+        } else {
+          this.closedByNickname = response.data.user.username + ' (oBugs User)'
+        }
+      })
     }
   }
 
@@ -135,17 +108,11 @@ export class EntryMessageComponent implements OnInit {
       this.petitionVote = value
       this.ratingTotal += value
 
-      this.apollo.mutate<MutationResponseVote>({
-        mutation: MUTATION_VOTE,
-        variables: {
-          subjectId: this.message.id,
-          rating: this.petitionVote
-        }
-      }).subscribe((response) => {
+      this.api.voteSet(this.message.id, this.petitionVote).subscribe((response) => {
         if (response.data && response.data.vote) {
           const result = response.data.vote
           if (result.__typename === 'OBugsError') {
-            const error = result as OBugsError;
+            const error = result as OBugsError
             console.log(error)
           } else {
             const vote = result as VoteUpdate
@@ -158,32 +125,23 @@ export class EntryMessageComponent implements OnInit {
   }
 
   banUser(ban: boolean) {
-    this.apollo.mutate<MutationResponseBanUser>({
-      mutation: MUTATION_BAN_USER,
-      variables: {
-        userId: this.messageUser?.id,
-        ban: ban
-      }
-    }).subscribe((response) => {
-      if (response.data && response.data.banUser) {
-        const result = response.data.banUser
-        if (result.__typename === 'OBugsError') {
-          const error = result as OBugsError;
-          console.log(error)
-        } else {
-          const user = result as User;
+    if (this.messageUser != null && this.messageUser != undefined) {
+      this.api.userBan(this.messageUser.id, ban).subscribe((response) => {
+        if (response.data && response.data.banUser) {
+          const result = response.data.banUser
+          if (result.__typename === 'OBugsError') {
+            const error = result as OBugsError;
+            console.log(error)
+          } else {
+            const user = result as User;
+          }
         }
-      }
-    })
+      })
+    }
   }
 
   deleteMessage() {
-    this.apollo.mutate<MutationResponseDeleteMessage>({
-      mutation: MUTATION_DELETE_MESSAGE,
-      variables: {
-        messageId: this.message.id
-      }
-    }).subscribe((response) => {
+    this.api.messageDelete(this.message.id).subscribe((response) => {
       if (response.data && response.data.deleteMessage) {
         const result = response.data.deleteMessage
         if (result.__typename === 'OBugsError') {

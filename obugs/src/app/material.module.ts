@@ -23,27 +23,27 @@ import { MatChipsModule } from '@angular/material/chips'
 import { MatTabsModule } from '@angular/material/tabs'
 
 const MaterialComponents = [
+  MatAutocompleteModule,
   MatButtonModule,
+  MatButtonToggleModule,
   MatCardModule,
+  MatChipsModule,
+  MatFormFieldModule,
   MatGridListModule,
   MatIconModule,
+  MatInputModule,
   MatListModule,
   MatMenuModule,
   MatPaginatorModule,
+  MatProgressSpinnerModule,
   MatSidenavModule,
+  MatSlideToggleModule,
   MatSortModule,
   MatTableModule,
+  MatTabsModule,
   MatToolbarModule,
-  MatTreeModule,
   MatTooltipModule,
-  MatSlideToggleModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatProgressSpinnerModule,
-  MatButtonToggleModule,
-  MatChipsModule,
-  MatAutocompleteModule,
-  MatTabsModule
+  MatTreeModule
 ]
 
 @NgModule({

@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
+import { ApiService } from 'src/app/services/api.service';
+import { Component, OnInit } from '@angular/core';
 import { Entry } from "../../../models/models";
-import { Apollo } from 'apollo-angular';
-import { QUERY_LIST_ENTRIES, QueryResponseListEntries } from "src/app/models/graphql/queries/entry";
 import { Location } from '@angular/common';
 
 @Component({
@@ -24,10 +23,10 @@ export class DashboardComponent implements OnInit {
   orderingFilter: string = "updated";
 
   constructor(
-    private router: Router,
+    private api: ApiService,
+    private location: Location,
     private route: ActivatedRoute,
-    private apollo: Apollo,
-    private location: Location
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -45,53 +44,37 @@ export class DashboardComponent implements OnInit {
   }
 
   fetchFilteredEntries() {
-    // Entries
-    this.apollo
-      .subscribe<QueryResponseListEntries>({
-        query: QUERY_LIST_ENTRIES,
-        variables: {
-          softwareId: this.softwareId,
-          searchFilter: this.searchFilter,
-          statusFilter: this.statusFilter,
-          order: this.orderingFilter,
-          limit: this.filterLimit,
-          offset: this.filteredEntries.length
+    if (this.softwareId == null) return
+    this.api.entryList(
+      this.softwareId,
+      this.searchFilter,
+      this.statusFilter,
+      this.orderingFilter,
+      this.filterLimit,
+      this.filteredEntries.length
+    ).subscribe((response) => {
+      if (response.data) {
+        if (response.data.entries.length == this.filterLimit) {
+          this.filterHasMore = true
+        } else {
+          this.filterHasMore = false
         }
-      })
-      .subscribe((response) => {
-        if (response.data) {
-          if (response.data.entries.length == this.filterLimit) {
-            this.filterHasMore = true;
-          } else {
-            this.filterHasMore = false;
-          }
-          for (let entry of response.data.entries) {
-            this.filteredEntries.push(entry)
-          }
+        for (let entry of response.data.entries) {
+          this.filteredEntries.push(entry)
         }
-      });
+      }
+    })
   }
 
   fetchNewEntries() {
-    this.apollo
-      .subscribe<QueryResponseListEntries>({
-        query: QUERY_LIST_ENTRIES,
-        variables: {
-          softwareId: this.softwareId,
-          searchFilter: null,
-          statusFilter: ['NEW'],
-          order: 'updated',
-          limit: 20,
-          offset: 0
+    if (this.softwareId == null) return
+    this.api.entryList(this.softwareId, '', ['NEW'], 'updated', 20, 0).subscribe((response) => {
+      if (response.data) {
+        for (let entry of response.data.entries) {
+          this.newEntries.push(entry)
         }
-      })
-      .subscribe((response) => {
-        if (response.data) {
-          for (let entry of response.data.entries) {
-            this.newEntries.push(entry)
-          }
-        }
-      });
+      }
+    });
   }
 
   handleMiddleMouseClick(event: MouseEvent, entry: Entry) {

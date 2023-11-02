@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { User, OBugsError } from '../models/models';
-import { BehaviorSubject, Observable, filter, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Apollo } from 'apollo-angular';
-import { QUERY_CURRENT_USER } from "../models/graphql/queries/user";
-import { QueryResponseCurrentUser } from "../models/graphql/queries/user";
 import jwt_decode, { JwtPayload } from 'jwt-decode';
 import { ApiService } from './api.service';
 

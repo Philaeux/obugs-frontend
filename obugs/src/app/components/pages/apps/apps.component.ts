@@ -1,10 +1,9 @@
-import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Apollo } from 'apollo-angular';
-import { QUERY_LIST_SOFTWARE, QueryResponseListSoftware } from "src/app/models/graphql/queries/software";
-import { Software } from 'src/app/models/models';
+import { Component } from '@angular/core';
 import { Location } from '@angular/common';
+import { Software } from 'src/app/models/models';
 import { Title } from '@angular/platform-browser';
+import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-apps',
@@ -16,11 +15,11 @@ export class AppsComponent {
   softwareFilter: string = "";
 
   constructor(
-    private title: Title,
-    private router: Router,
-    private apollo: Apollo,
+    private api: ApiService,
     private location: Location,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router,
+    private title: Title,
   ) {
     this.title.setTitle('oBugs - Applications')
   }
@@ -37,22 +36,15 @@ export class AppsComponent {
   }
 
   refreshListSoftware() {
-    let search: string | null = null;
     if (this.softwareFilter != '') {
-      search = this.softwareFilter;
-      this.location.go(location.pathname, new URLSearchParams({ search: search }).toString())
+      this.location.go(location.pathname, new URLSearchParams({ search: this.softwareFilter }).toString())
+    } else {
+      this.location.go(location.pathname)
     }
 
-    this.apollo
-      .query<QueryResponseListSoftware>({
-        query: QUERY_LIST_SOFTWARE,
-        variables: {
-          search: search
-        }
-      })
-      .subscribe((response) => {
-        this.softwares = response.data.softwares;
-      });
+    this.api.softwareList(this.softwareFilter).subscribe((response) => {
+      this.softwares = response.data.softwares;
+    });
   }
 
   onEnterKey() {

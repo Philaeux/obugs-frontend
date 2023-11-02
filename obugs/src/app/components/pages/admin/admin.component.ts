@@ -1,15 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ApiService } from 'src/app/services/api.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Software, OBugsError, Tag, EntryMessage, SoftwareSuggestion, OperationDone } from 'src/app/models/models';
-import { AuthService } from 'src/app/services/auth.service';
-import { Subscription, interval, timer } from 'rxjs'
-import { Apollo } from 'apollo-angular';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MUTATION_DELETE_SUGGESTION, MUTATION_UPSERT_SOFTWARE, MutationResponseDeleteSuggestion, MutationResponseUpsertSoftware } from 'src/app/models/graphql/mutations/software';
-import { MUTATION_UPSERT_TAG, MutationResponseUpsertTag } from 'src/app/models/graphql/mutations/tag';
-import { QUERY_LIST_SOFTWARE, QUERY_LIST_SOFTWARE_SUGGESTIONS, QueryResponseListSoftware, QueryResponseListSoftwareSuggestions } from 'src/app/models/graphql/queries/software';
+import { timer } from 'rxjs'
 import { Title } from '@angular/platform-browser';
-import { ApiService } from 'src/app/services/api.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 @UntilDestroy()
@@ -35,12 +31,11 @@ export class AdminComponent implements OnInit {
   selectedSuggestion: SoftwareSuggestion | null = null;
 
   constructor(
-    private fb: FormBuilder,
+    private api: ApiService,
     private auth: AuthService,
+    private fb: FormBuilder,
     private router: Router,
-    private apollo: Apollo,
     private title: Title,
-    private api: ApiService
   ) {
     this.title.setTitle('oBugs - Admin')
     this.softwareEditForm = this.fb.group({
@@ -83,20 +78,9 @@ export class AdminComponent implements OnInit {
   }
 
   refreshSoftwareList() {
-    let search: string | null = null;
-    if (this.softwareFilter != '') {
-      search = this.softwareFilter;
-    }
-    this.apollo
-      .query<QueryResponseListSoftware>({
-        query: QUERY_LIST_SOFTWARE,
-        variables: {
-          search: search
-        }
-      })
-      .subscribe((response) => {
-        this.softwares = response.data.softwares;
-      });
+    this.api.softwareList(this.softwareFilter).subscribe((response) => {
+      this.softwares = response.data.softwares;
+    });
   }
 
   onSoftwareSelect(software: Software) {
@@ -127,16 +111,13 @@ export class AdminComponent implements OnInit {
 
   upsertSoftware() {
     if (this.softwareEditForm.valid) {
-      this.apollo.mutate<MutationResponseUpsertSoftware>({
-        mutation: MUTATION_UPSERT_SOFTWARE,
-        variables: {
-          id: this.softwareEditForm.value.id,
-          fullName: this.softwareEditForm.value.fullName,
-          editor: this.softwareEditForm.value.editor,
-          language: this.softwareEditForm.value.language,
-          description: this.softwareEditForm.value.description,
-        }
-      }).subscribe((response) => {
+      this.api.softwareUpsert(
+        this.softwareEditForm.value.id,
+        this.softwareEditForm.value.fullName,
+        this.softwareEditForm.value.editor,
+        this.softwareEditForm.value.language,
+        this.softwareEditForm.value.description,
+      ).subscribe((response) => {
         if (response.data != null && response.data.upsertSoftware != null) {
           const data = response.data?.upsertSoftware
           if (data.__typename === 'OBugsError') {
@@ -160,22 +141,14 @@ export class AdminComponent implements OnInit {
   }
 
   upsertTag() {
-    let variables: any = {
-      id: null,
-      softwareId: this.tagEditForm.value.softwareId,
-      name: this.tagEditForm.value.name,
-      fontColor: this.tagEditForm.value.fontColor,
-      backgroundColor: this.tagEditForm.value.backgroundColor,
-    }
-    if (this.tagEditForm.value.id != '') {
-      variables.id = this.tagEditForm.value.id
-    }
-
     if (this.tagEditForm.valid) {
-      this.apollo.mutate<MutationResponseUpsertTag>({
-        mutation: MUTATION_UPSERT_TAG,
-        variables: variables
-      }).subscribe((response) => {
+      this.api.tagUpsert(
+        this.tagEditForm.value.id,
+        this.tagEditForm.value.softwareId,
+        this.tagEditForm.value.name,
+        this.tagEditForm.value.fontColor,
+        this.tagEditForm.value.backgroundColor,
+      ).subscribe((response) => {
         if (response.data != null && response.data.upsertTag != null) {
           const data = response.data?.upsertTag
           if (data.__typename === 'OBugsError') {
@@ -211,9 +184,7 @@ export class AdminComponent implements OnInit {
   }
 
   refreshSuggestionList() {
-    this.apollo.query<QueryResponseListSoftwareSuggestions>({
-      query: QUERY_LIST_SOFTWARE_SUGGESTIONS
-    }).subscribe((response) => {
+    this.api.softwareSuggestionList().subscribe((response) => {
       this.suggestions = response.data.softwareSuggestions
       this.updateTitle()
     })
@@ -224,21 +195,18 @@ export class AdminComponent implements OnInit {
   }
 
   deleteSuggestion() {
-    this.apollo.mutate<MutationResponseDeleteSuggestion>({
-      mutation: MUTATION_DELETE_SUGGESTION,
-      variables: {
-        suggestionId: this.selectedSuggestion?.id
-      }
-    }).subscribe((response) => {
-      const result = response.data!.deleteSuggestion
-      if (result.__typename === 'OBugsError') {
-        const error = result as OBugsError;
-        console.log(error)
-      } else {
-        const user = result as OperationDone;
-        this.suggestions = this.suggestions.filter((suggestion) => suggestion.id != this.selectedSuggestion?.id)
-        this.selectedSuggestion = null;
-      }
-    })
+    if (this.selectedSuggestion != null) {
+      this.api.softwareSuggestionDelete(this.selectedSuggestion.id).subscribe((response) => {
+        const result = response.data!.deleteSuggestion
+        if (result.__typename === 'OBugsError') {
+          const error = result as OBugsError;
+          console.log(error)
+        } else {
+          const user = result as OperationDone;
+          this.suggestions = this.suggestions.filter((suggestion) => suggestion.id != this.selectedSuggestion?.id)
+          this.selectedSuggestion = null;
+        }
+      })
+    }
   }
 }

@@ -1,13 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { Apollo } from 'apollo-angular';
-import { QUERY_LIST_TAGS, QueryResponseListTags } from "src/app/models/graphql/queries/tag";
+import { ApiService } from 'src/app/services/api.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OBugsError, Entry } from 'src/app/models/models';
-import { Subscription } from 'rxjs'
 import { Recaptchav2Service } from 'src/app/services/recaptchav2.service';
-import { MUTATION_CREATE_ENTRY, MutationResponseCreateEntry } from 'src/app/models/graphql/mutations/entry';
+import { Subscription } from 'rxjs'
 import { Title } from '@angular/platform-browser';
+import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 
 
 @Component({
@@ -27,12 +25,12 @@ export class BugNewComponent implements OnInit, OnDestroy {
   selectedTags: string[] = [];
 
   constructor(
+    private api: ApiService,
     private fb: FormBuilder,
-    private route: ActivatedRoute,
-    private apollo: Apollo,
-    private router: Router,
     private recaptchav2Service: Recaptchav2Service,
-    private title: Title
+    private route: ActivatedRoute,
+    private router: Router,
+    private title: Title,
   ) {
     this.form = this.fb.group({
       title: ['', [Validators.required]],
@@ -48,20 +46,13 @@ export class BugNewComponent implements OnInit, OnDestroy {
 
     this.softwareId = this.route.snapshot.paramMap.get("software");
     this.title.setTitle("oBugs - " + this.softwareId + " - New Entry")
-    this.apollo
-      .query<QueryResponseListTags>({
-        query: QUERY_LIST_TAGS,
-        variables: {
-          softwareId: this.softwareId,
-          search: null
-        }
-      })
-      .subscribe((response) => {
-        this.softwareTags = []
-        for (var tag of response.data.tags) {
-          this.softwareTags.push(tag.name);
-        };
-      });
+    if (this.softwareId == undefined) return
+    this.api.tagList(this.softwareId, '').subscribe((response) => {
+      this.softwareTags = []
+      for (var tag of response.data.tags) {
+        this.softwareTags.push(tag.name);
+      };
+    });
   }
 
   ngOnDestroy(): void {
@@ -73,33 +64,28 @@ export class BugNewComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(token: string) {
-    this.errorMessage = '';
-    if (this.form.valid) {
-      this.apollo
-        .mutate<MutationResponseCreateEntry>({
-          mutation: MUTATION_CREATE_ENTRY,
-          variables: {
-            recaptcha: token,
-            softwareId: this.softwareId,
-            title: this.form.value.title,
-            description: this.form.value.description,
-            illustration: this.form.value.illustration,
-            tags: this.selectedTags
+    this.errorMessage = ''
+    if (this.form.valid && this.softwareId != null) {
+      this.api.entryAdd(
+        token,
+        this.softwareId,
+        this.form.value.title,
+        this.form.value.description,
+        this.form.value.illustration,
+        this.selectedTags
+      ).subscribe((response) => {
+        grecaptcha.reset()
+        if (response.data && response.data.createEntry) {
+          const result = response.data.createEntry
+          if (result.__typename === 'OBugsError') {
+            const error = result as OBugsError
+            this.errorMessage = error.message
+          } else {
+            const entry = result as Entry
+            this.router.navigate(["/s/" + entry.softwareId + "/" + entry.id])
           }
-        })
-        .subscribe((response) => {
-          grecaptcha.reset()
-          if (response.data && response.data.createEntry) {
-            const result = response.data.createEntry
-            if (result.__typename === 'OBugsError') {
-              const error = result as OBugsError;
-              this.errorMessage = error.message;
-            } else {
-              const entry = result as Entry
-              this.router.navigate(["/s/" + entry.softwareId + "/" + entry.id]);
-            }
-          }
-        })
+        }
+      })
     }
   }
 }

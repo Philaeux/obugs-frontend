@@ -1,11 +1,10 @@
+import { ApiService } from 'src/app/services/api.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
-import { Apollo } from 'apollo-angular';
-import { Subscription } from 'rxjs';
-import { MUTATION_SUGGEST_SOFTWARE, MutationResponseSuggestSoftware } from 'src/app/models/graphql/mutations/software';
 import { OBugsError, SoftwareSuggestion } from 'src/app/models/models';
 import { Recaptchav2Service } from 'src/app/services/recaptchav2.service';
+import { Subscription } from 'rxjs';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-apps-new',
@@ -20,10 +19,10 @@ export class AppsNewComponent implements OnInit, OnDestroy {
   message: string = "";
 
   constructor(
+    private api: ApiService,
+    private recaptchav2Service: Recaptchav2Service,
     private title: Title,
     public fb: FormBuilder,
-    private recaptchav2Service: Recaptchav2Service,
-    private apollo: Apollo
   ) {
     this.title.setTitle('oBugs - Suggest a new Software')
     this.form = this.fb.group({
@@ -51,14 +50,7 @@ export class AppsNewComponent implements OnInit, OnDestroy {
   }
 
   submitSoftware(token: string) {
-    this.apollo.mutate<MutationResponseSuggestSoftware>({
-      mutation: MUTATION_SUGGEST_SOFTWARE,
-      variables: {
-        recaptcha: token,
-        name: this.form.value.name,
-        description: this.form.value.description
-      }
-    }).subscribe((response) => {
+    this.api.softwareSuggestionAdd(token, this.form.value.name, this.form.value.description).subscribe((response) => {
       if (response.data && response.data.suggestSoftware) {
         const result = response.data.suggestSoftware
         if (result.__typename === 'OBugsError') {

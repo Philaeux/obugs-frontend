@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Title } from '@angular/platform-browser';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 @UntilDestroy()
 @Component({
@@ -17,10 +17,10 @@ export class LoginComponent implements OnInit {
   errorLogin: string = "";
 
   constructor(
-    private title: Title,
+    private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService
+    private title: Title,
   ) {
     this.title.setTitle('oBugs - Login')
   }

@@ -1,16 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Apollo } from 'apollo-angular';
-import { QUERY_ENTRY_DETAILS, QueryResponseEntryDetails } from "src/app/models/graphql/queries/entry";
-import { QUERY_MY_VOTE, QueryResponseMyVote } from "src/app/models/graphql/queries/vote";
-import { QUERY_LIST_TAGS, QueryResponseListTags } from "src/app/models/graphql/queries/tag";
-import { QUERY_ENTRY_MESSAGES, QueryResponseEntryMessages } from "src/app/models/graphql/queries/entry_message";
-import { Entry, EntryMessage, OBugsError, ProcessPatchSuccess, Tag, VoteUpdate } from 'src/app/models/models';
+import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { Subscription } from 'rxjs'
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Entry, EntryMessage, OBugsError, ProcessPatchSuccess, Tag, VoteUpdate } from 'src/app/models/models';
 import { Recaptchav2Service } from 'src/app/services/recaptchav2.service';
-import { MUTATION_VOTE, MutationResponseVote } from 'src/app/models/graphql/mutations/vote';
-import { MUTATION_COMMENT_ENTRY, MUTATION_PROCESS_PATCH, MUTATION_SUBMIT_PATCH, MutationResponseCommentEntry, MutationResponseProcessPatch, MutationResponseSubmitPatch } from 'src/app/models/graphql/mutations/entry_message';
+import { Subscription } from 'rxjs'
 import { Title } from '@angular/platform-browser';
 
 @Component({
@@ -47,12 +41,12 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
   editDescription: string = "";
 
   constructor(
-    private route: ActivatedRoute,
-    private apollo: Apollo,
-    public auth: AuthService,
+    private api: ApiService,
     private recaptchav2Service: Recaptchav2Service,
+    private route: ActivatedRoute,
+    private router: Router,
     private title: Title,
-    private router: Router
+    public auth: AuthService,
   ) { }
 
   ngOnInit(): void {
@@ -76,50 +70,31 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
 
     this.subscriptionUser = this.auth.currentUser$.subscribe((user) => {
       if (user === undefined || user === null) return;
-      // User Vote
-      this.apollo
-        .query<QueryResponseMyVote>({
-          query: QUERY_MY_VOTE,
-          variables: {
-            subjectId: this.entryId,
-          }
-        })
-        .subscribe((response) => {
+      if (this.entryId != undefined) {
+        this.api.voteGet(this.entryId).subscribe((response) => {
           if (response.data && response.data.myVote) {
             this.myVote = response.data.myVote.rating.toString();
-          };
-        });
+          }
+        })
+      }
     })
 
-    // BUG INFO
-    this.apollo
-      .query<QueryResponseEntryDetails>({
-        query: QUERY_ENTRY_DETAILS,
-        variables: {
-          entryId: this.entryId,
-        }
-      })
-      .subscribe((response) => {
-        this.title.setTitle(response.data.entry.title);
-        this.entry = response.data.entry;
+    if (this.entryId != undefined) {
+      this.api.entryDetails(this.entryId).subscribe((response) => {
+        this.title.setTitle(response.data.entry.title)
+        this.entry = response.data.entry
         this.ratingCount = response.data.entry.ratingCount
         this.ratingTotal = response.data.entry.ratingTotal
         this.resetEditsWithEntry()
-      });
+      })
+    }
 
     // MESSAGES
     this.fetchMoreMessages()
 
     // Software tags
-    this.apollo
-      .query<QueryResponseListTags>({
-        query: QUERY_LIST_TAGS,
-        variables: {
-          softwareId: this.softwareId,
-          search: null
-        }
-      })
-      .subscribe((response) => {
+    if (this.softwareId != undefined) {
+      this.api.tagList(this.softwareId, '').subscribe((response) => {
         this.softwareTags = response.data.tags;
         this.softwareTagsAsStrings = []
         for (var tag of response.data.tags) {
@@ -131,7 +106,8 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
             this.softwareTagsAsStrings.splice(index, 1);
           }
         }
-      });
+      })
+    }
   }
 
   ngOnDestroy(): void {
@@ -140,14 +116,8 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
   }
 
   fetchMoreMessages(): void {
-    this.apollo.query<QueryResponseEntryMessages>({
-      query: QUERY_ENTRY_MESSAGES,
-      variables: {
-        entryId: this.entryId,
-        limit: this.messagesLimit,
-        offset: this.entryMessages.length
-      }
-    }).subscribe((response) => {
+    if (this.entryId == undefined) return
+    this.api.messageList(this.entryId, this.messagesLimit, this.entryMessages.length).subscribe((response) => {
       if (response.data && response.data.entryMessages) {
         if (response.data.entryMessages.length == this.messagesLimit) {
           this.messagesHasMore = true;
@@ -180,13 +150,8 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
   }
 
   onVoteChange(): void {
-    this.apollo.mutate<MutationResponseVote>({
-      mutation: MUTATION_VOTE,
-      variables: {
-        subjectId: this.entryId,
-        rating: parseInt(this.myVote!)
-      }
-    }).subscribe((response) => {
+    if (this.entryId == undefined || this.myVote == null) return
+    this.api.voteSet(this.entryId, parseInt(this.myVote)).subscribe((response) => {
       if (response.data && response.data.vote) {
         const result = response.data.vote
         if (result.__typename === 'OBugsError') {
@@ -199,7 +164,7 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
         }
       }
     })
-  };
+  }
 
   linkIcon(link: string): string {
     // Regular expression to match YouTube URLs
@@ -232,15 +197,8 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
     this.errorMessage = '';
     if (this.editPanelIndex == 0) {
       // COMMENT
-      if (this.editComment == '') return;
-      this.apollo.mutate<MutationResponseCommentEntry>({
-        mutation: MUTATION_COMMENT_ENTRY,
-        variables: {
-          recaptcha: token,
-          entryId: this.entryId,
-          comment: this.editComment
-        }
-      }).subscribe((response) => {
+      if (this.editComment == '' || this.entryId == undefined) return;
+      this.api.messageAdd(token, this.entryId, this.editComment).subscribe((response) => {
         grecaptcha.reset()
         if (response.data && response.data.commentEntry) {
           const result = response.data.commentEntry
@@ -263,19 +221,9 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
         this.equalTags(this.entry.tags.edges, this.editTags) &&
         this.editStatus == this.entry.status)
         return;
+      if (this.entryId == undefined) return
 
-      this.apollo.mutate<MutationResponseSubmitPatch>({
-        mutation: MUTATION_SUBMIT_PATCH,
-        variables: {
-          recaptcha: token,
-          entryId: this.entryId,
-          title: this.editTitle,
-          status: this.editStatus,
-          tags: this.editTags,
-          description: this.editDescription,
-          illustration: this.editIllustration
-        }
-      }).subscribe((response) => {
+      this.api.patchAdd(token, this.entryId, this.editTitle, this.editStatus, this.editTags, this.editDescription, this.editIllustration).subscribe((response) => {
         grecaptcha.reset()
         if (response.data && response.data.submitPatch) {
           const result = response.data.submitPatch
@@ -311,13 +259,7 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
   }
 
   processPatch(message: EntryMessage, accept: boolean) {
-    this.apollo.mutate<MutationResponseProcessPatch>({
-      mutation: MUTATION_PROCESS_PATCH,
-      variables: {
-        messageId: message.id,
-        accept: accept
-      }
-    }).subscribe((response) => {
+    this.api.patchProcess(message.id, accept).subscribe((response) => {
       if (response.data && response.data.processPatch) {
         const result = response.data.processPatch
         if (result.__typename === 'OBugsError') {

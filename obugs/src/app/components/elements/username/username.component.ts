@@ -8,8 +8,7 @@ import { User } from 'src/app/models/models';
 })
 export class UsernameComponent {
 
-  @Input()
-  user: User | null = null;
+  @Input() user: User | null = null;
 
   getUserName(user: User): string {
     if (user.githubName != null) return user.githubName
@@ -18,7 +17,7 @@ export class UsernameComponent {
   }
 
   getUserProvider(user: User | null): string {
-    if (user == null) return 'oBugs';
+    if (user == null) return 'oBugs'
     if (user.githubName != null) return 'Github'
     if (user.redditName != null) return 'Reddit'
     return 'oBugs'

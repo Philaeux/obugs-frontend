@@ -23,7 +23,7 @@ Using Powershell as console. You may require to start as administrator for some 
 * Install project libraries:  
 `cd ./obugs; npm install`
 * Start the project:  
-`cd ./obugs; ng serve --open`
+`cd ./obugs; ng serve --host=127.0.0.1`
 
 After some time, the browser should display the main page, with hot reload after every change.
 
@@ -51,17 +51,12 @@ source ~/.profile
 * Install project libraries:  
 `cd ./obugs; npm install`
 * Start the project:  
-`cd ./obugs; ng serve --open`
+`cd ./obugs; ng serve --host=127.0.0.1`
 
 ### Production
 
 ## Create output
-To turn the angular project into a production ready website, the command `ng build` output the results into `/obugs-frontend/obugs/dist/obugs`
+To turn the angular project into a production ready website, the command `ng build --configuration production` output the results into `/obugs-frontend/obugs/dist/obugs`
 
 ## Deploy
-Website will be deployed into a Nginx on a production server.
-````
-docker compose build
-docker compose down
-docker compose up -d
-``
+Use the two scripts `deploy1.sh` to build on dev machines un upload to remote server and `deploy2.sh` to deploy a docker container on the server.

@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
+import { AdminComponent } from './components/pages/admin/admin.component';
+import { AppsComponent } from './components/pages/apps/apps.component';
+import { AppsNewComponent } from './components/pages/apps-new/apps-new.component';
 import { BugDetailsComponent } from './components/pages/bug-details/bug-details.component';
 import { BugNewComponent } from './components/pages/bug-new/bug-new.component';
 import { DashboardComponent } from './components/pages/dashboard/dashboard.component';
 import { IndexComponent } from './components/pages/index/index.component';
 import { LoginComponent } from './components/pages/login/login.component';
-import { AppsComponent } from './components/pages/apps/apps.component';
-import { AdminComponent } from './components/pages/admin/admin.component';
-import { AppsNewComponent } from './components/pages/apps-new/apps-new.component';
 
 const routes: Routes = [
   { path: '', component: IndexComponent },
