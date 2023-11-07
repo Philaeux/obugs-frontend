@@ -1,25 +1,30 @@
 import { ApiService } from 'src/app/services/api.service';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { OBugsError, SoftwareSuggestion } from 'src/app/models/models';
+import { OBugsError, SoftwareSuggestion, User } from 'src/app/models/models';
 import { Recaptchav2Service } from 'src/app/services/recaptchav2.service';
 import { Subscription } from 'rxjs';
 import { Title } from '@angular/platform-browser';
+import { AuthService } from 'src/app/services/auth.service';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-apps-new',
   templateUrl: './apps-new.component.html',
   styleUrls: ['./apps-new.component.scss']
 })
-export class AppsNewComponent implements OnInit, OnDestroy {
+export class AppsNewComponent implements OnInit {
 
-  subscription: Subscription | null = null;
   form: FormGroup;
   error: string = "";
   message: string = "";
 
+  currentUser: User | null = null;
+
   constructor(
     private api: ApiService,
+    private auth: AuthService,
     private recaptchav2Service: Recaptchav2Service,
     private title: Title,
     public fb: FormBuilder,
@@ -32,13 +37,14 @@ export class AppsNewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subscription = this.recaptchav2Service.recaptchav2$.subscribe((token) => {
+    this.recaptchav2Service.recaptchav2$.pipe(untilDestroyed(this)).subscribe((token) => {
       this.submitSoftware(token);
     });
-  }
 
-  public ngOnDestroy() {
-    if (this.subscription) this.subscription.unsubscribe()
+    this.auth.currentUser$.pipe(untilDestroyed(this)).subscribe((user) => {
+      if (user === undefined) return;
+      this.currentUser = user;
+    })
   }
 
   onCreateButton() {
@@ -51,6 +57,7 @@ export class AppsNewComponent implements OnInit, OnDestroy {
 
   submitSoftware(token: string) {
     this.api.softwareSuggestionAdd(token, this.form.value.name, this.form.value.description).subscribe((response) => {
+      grecaptcha.reset()
       if (response.data && response.data.suggestSoftware) {
         const result = response.data.suggestSoftware
         if (result.__typename === 'OBugsError') {

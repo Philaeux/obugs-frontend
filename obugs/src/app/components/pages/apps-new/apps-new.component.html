@@ -1,4 +1,4 @@
-<mat-card class="form-card">
+<mat-card *ngIf="currentUser != null" class="form-card">
     <mat-card-title>
         <div class="mat-headline-5">Submit a new Software</div>
     </mat-card-title>
@@ -25,5 +25,13 @@
                 <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Submit</button>
             </div>
         </form>
+    </mat-card-content>
+</mat-card>
+
+<mat-card *ngIf="currentUser == null" class="form-card">
+    <mat-card-content>
+        <div style="text-align: center;">
+            You must be <a routerLink="/login">logged in</a> to suggest a new software.
+        </div>
     </mat-card-content>
 </mat-card>

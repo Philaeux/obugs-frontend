@@ -1,21 +1,19 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { OBugsError, Entry } from 'src/app/models/models';
 import { Recaptchav2Service } from 'src/app/services/recaptchav2.service';
-import { Subscription } from 'rxjs'
 import { Title } from '@angular/platform-browser';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
-
+@UntilDestroy()
 @Component({
   selector: 'app-bug-new',
   templateUrl: './bug-new.component.html',
   styleUrls: ['./bug-new.component.scss']
 })
-export class BugNewComponent implements OnInit, OnDestroy {
-
-  subscription: Subscription | null = null;
+export class BugNewComponent implements OnInit {
 
   softwareId: string | null = null;
   softwareTags: string[] = [];
@@ -40,7 +38,7 @@ export class BugNewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subscription = this.recaptchav2Service.recaptchav2$.subscribe((token) => {
+    this.recaptchav2Service.recaptchav2$.pipe(untilDestroyed(this)).subscribe((token) => {
       this.onSubmit(token)
     });
 
@@ -53,10 +51,6 @@ export class BugNewComponent implements OnInit, OnDestroy {
         this.softwareTags.push(tag.name);
       };
     });
-  }
-
-  ngOnDestroy(): void {
-    if (this.subscription) this.subscription.unsubscribe()
   }
 
   onCreateButton() {

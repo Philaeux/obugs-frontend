@@ -1,6 +1,6 @@
 <div class="container">
     <div class="form-column">
-        <h1>Providers</h1>
+        <h1>Select a login provider</h1>
         <div *ngIf="errorLogin != ''" class="login-error">{{errorLogin}}</div>
         <div *ngIf="messageLogin != ''" class="login-message">{{messageLogin}}</div>
         <button class="login-with-github" mat-raised-button (click)="onLoginWithGithub()"><i class="fab fa-github"></i>
