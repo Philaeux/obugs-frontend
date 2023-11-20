@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AdminComponent } from './components/pages/admin/admin.component';
+import { AppManageComponent } from './components/pages/app-manage/app-manage.component';
 import { AppsComponent } from './components/pages/apps/apps.component';
 import { AppsNewComponent } from './components/pages/apps-new/apps-new.component';
 import { BugDetailsComponent } from './components/pages/bug-details/bug-details.component';
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'admin', component: AdminComponent },
   { path: 's/:software/new', component: BugNewComponent },
+  { path: 's/:software/manage', component: AppManageComponent },
   { path: 's/:software/:entry', component: BugDetailsComponent },
   { path: 's/:software', component: DashboardComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' },

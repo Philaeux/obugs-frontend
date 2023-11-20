@@ -32,3 +32,16 @@ export const QUERY_USER_DETAILS = gql`
 export interface QueryResponseUserDetails {
     user: User;
 }
+
+export const QUERY_USERS = gql`
+    query Users($search: String) {
+        users(search: $search) {
+            ...UserFragment
+        }
+    }
+    ${ObugsFragments.fragments.user}
+`
+
+export interface QueryResponseUsers {
+    users: User[];
+}

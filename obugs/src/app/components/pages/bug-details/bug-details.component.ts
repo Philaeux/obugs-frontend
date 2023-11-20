@@ -1,18 +1,19 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Entry, EntryMessage, OBugsError, ProcessPatchSuccess, Tag, VoteUpdate } from 'src/app/models/models';
 import { Recaptchav2Service } from 'src/app/services/recaptchav2.service';
-import { Subscription } from 'rxjs'
 import { Title } from '@angular/platform-browser';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+@UntilDestroy()
 @Component({
   selector: 'app-bug-details',
   templateUrl: './bug-details.component.html',
   styleUrls: ['./bug-details.component.scss']
 })
-export class BugDetailsComponent implements OnInit, OnDestroy {
+export class BugDetailsComponent implements OnInit {
 
   softwareId: string | null = null;
   softwareTags: Tag[] = [];
@@ -23,8 +24,6 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
   messagesLimit: number = 50;
   messagesHasMore: boolean = false;
 
-  subscriptionRecaptcha: Subscription | null = null;
-  subscriptionUser: Subscription | null = null;
   errorMessage: string = "";
 
   myVote: string | null = null;
@@ -64,11 +63,11 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
       this.entryId = id
     }
 
-    this.subscriptionRecaptcha = this.recaptchav2Service.recaptchav2$.subscribe((token) => {
+    this.recaptchav2Service.recaptchav2$.pipe(untilDestroyed(this)).subscribe((token) => {
       this.onSubmit(token)
     });
 
-    this.subscriptionUser = this.auth.currentUser$.subscribe((user) => {
+    this.auth.currentUser$.pipe(untilDestroyed(this)).subscribe((user) => {
       if (user === undefined || user === null) return;
       if (this.entryId != undefined) {
         this.api.voteGet(this.entryId).subscribe((response) => {
@@ -108,11 +107,6 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
         }
       })
     }
-  }
-
-  ngOnDestroy(): void {
-    if (this.subscriptionRecaptcha) this.subscriptionRecaptcha.unsubscribe()
-    if (this.subscriptionUser) this.subscriptionUser.unsubscribe()
   }
 
   fetchMoreMessages(): void {
@@ -172,7 +166,7 @@ export class BugDetailsComponent implements OnInit, OnDestroy {
     const twitchRegex = /^(https?:\/\/)?(www\.)?((clips\.)?twitch\.tv)\//;
     const githubRegex = /^(https?:\/\/)?(www\.)?(github\.com|user-images\.githubusercontent\.com)\//;
     const imgurRegex = /^(https?:\/\/)?(www\.)?((i\.)?imgur\.com)\//;
-    const redditRegex = /^(https?:\/\/)?(www\.)?((old\.)?reddit\.com)\//;
+    const redditRegex = /^(https?:\/\/)?(www\.)?((old\.)?reddit\.com|(preview\.)redd\.it)\//;
 
     if (youtubeRegex.test(link)) {
       return 'fab fa-youtube';

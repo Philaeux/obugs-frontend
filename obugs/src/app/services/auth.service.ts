@@ -86,17 +86,18 @@ export class AuthService {
     return this.current_user.isAdmin
   }
 
-  isRole(softwareId: string | null, role: string) {
+  isRole(softwareId: string | null, softwareRole: number) {
+    return this.isUserRole(this.current_user, softwareId, softwareRole)
+  }
+
+  isUserRole(user: User | null, softwareId: string | null, softwareRole: number) {
+    if (user == null) return false;
     if (softwareId == null) return false;
-    if (this.current_user == null) return false;
-    if (role == 'mod') {
-      return this.current_user.roles.edges.find((role) => role.node.sofwareId == softwareId && role.node.role == 1) != undefined;
-    } else if (role == 'curator') {
-      return this.current_user.roles.edges.find((role) => role.node.sofwareId == softwareId && role.node.role == 2) != undefined;
-    } else if (role == 'editor') {
-      return this.current_user.roles.edges.find((role) => role.node.sofwareId == softwareId && role.node.role == 4) != undefined;
-    } else {
-      return false
+    for (const edge of user.roles.edges) {
+      if (edge.node.softwareId == softwareId && (edge.node.role & softwareRole) != 0) {
+        return true
+      }
     }
+    return false
   }
 }

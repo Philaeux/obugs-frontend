@@ -1,0 +1,123 @@
+<div class="container">
+
+    <mat-card>
+        <mat-card-header class="card-title">
+            <mat-card-title>
+                Permission on {{softwareId}}
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="card-content">
+                <ul>
+                    <li *ngIf="auth.isAdmin()">oBugs Admin: every rights on all softwares.</li>
+                    <li *ngIf="auth.isRole(softwareId, 4)">{{softwareId}} Editor: manage user roles.</li>
+                    <li *ngIf="auth.isRole(softwareId, 2)">{{softwareId}} Curator: accept/reject patches.</li>
+                    <li *ngIf="auth.isRole(softwareId, 1)">{{softwareId}} Mod: delete messages and mute users.</li>
+                </ul>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card *ngIf="auth.isAdmin() || auth.isRole(softwareId, 2)">
+        <mat-card-header class="card-title">
+            <mat-card-title>
+                Open Patches
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="card-content">
+                <div class="card-subcontent">
+                    <div class="filters">
+                        <button mat-raised-button (click)="refreshPatchList()">Refresh</button>
+                    </div>
+                </div>
+                <div class="card-subcontent">
+                    <table mat-table [dataSource]="patches" class="mat-elevation-z1">
+                        <ng-container matColumnDef="createdAt">
+                            <th mat-header-cell *matHeaderCellDef>Date</th>
+                            <td mat-cell *matCellDef="let message">{{message.createdAt | dateAgo}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="approbation">
+                            <th mat-header-cell *matHeaderCellDef>Approbation</th>
+                            <td mat-cell *matCellDef="let message">
+                                {{(message.ratingCount+message.ratingTotal)*50.0/message.ratingCount | number:
+                                '1.0-1'}}&nbsp;% </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="votes">
+                            <th mat-header-cell *matHeaderCellDef>Votes</th>
+                            <td mat-cell *matCellDef="let message">
+                                {{message.ratingCount}}</td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="['createdAt', 'approbation', 'votes']">
+                        </tr>
+                        <tr mat-row *matRowDef="let row; columns: ['createdAt', 'approbation', 'votes'];"
+                            (click)="onPatchSelect(row)"></tr>
+                    </table>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card *ngIf="auth.isAdmin() || auth.isRole(softwareId, 4)">
+        <mat-card-header class="card-title">
+            <mat-card-title>
+                Users
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="card-content">
+                <div class="card-subcontent">
+                    <div class="filters">
+                        <div class="mat-headline-5">Search</div>
+                        <mat-form-field class="full-width">
+                            <input matInput placeholder="User ID" [(ngModel)]="userNameFilter"
+                                (keyup.enter)="refreshUserList()">
+                        </mat-form-field>
+                        <div *ngIf="selectedUser != null" class="mat-headline-5">Selected User</div>
+                        <div *ngIf="selectedUser != null">
+                            <div *ngIf="selectedUser.redditName != null">Reddit Name:
+                                {{selectedUser.redditName}}</div>
+                            <div *ngIf="selectedUser.githubName != null">GitHub Name:
+                                {{selectedUser.githubName}}</div>
+                            <div>
+                                <mat-checkbox [(ngModel)]="selectedIsEditor"
+                                (change)="onRoleChange(4, $event)">
+                                Editor</mat-checkbox>
+                            </div>
+                            <div>
+                                <mat-checkbox [(ngModel)]="selectedIsCurator"
+                                (change)="onRoleChange(2, $event)">
+                                Curator</mat-checkbox>
+                            </div>
+                            <div>
+                                <mat-checkbox  [(ngModel)]="selectedIsMod"
+                                (change)="onRoleChange(1, $event)">
+                                Moderator</mat-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-subcontent">
+                    <table mat-table [dataSource]="users" class="mat-elevation-z1">
+                        <ng-container matColumnDef="github">
+                            <th mat-header-cell *matHeaderCellDef>GitHub</th>
+                            <td mat-cell *matCellDef="let user">{{user.githubName}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="reddit">
+                            <th mat-header-cell *matHeaderCellDef>Reddit</th>
+                            <td mat-cell *matCellDef="let user">{{user.redditName}}</td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="['github', 'reddit']"></tr>
+                        <tr mat-row *matRowDef="let row; columns: ['github', 'reddit'];" (click)="onUserSelect(row)">
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+</div>

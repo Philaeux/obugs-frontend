@@ -16,6 +16,7 @@ import { RecaptchaModule } from 'ng-recaptcha';
 import { AdminComponent } from './components/pages/admin/admin.component';
 import { ApiService } from './services/api.service';
 import { AppComponent } from './app.component';
+import { AppManageComponent } from './components/pages/app-manage/app-manage.component';
 import { AppsComponent } from './components/pages/apps/apps.component';
 import { AppsNewComponent } from './components/pages/apps-new/apps-new.component';
 import { AuthService } from './services/auth.service';
@@ -37,6 +38,7 @@ import { UsernameComponent } from './components/elements/username/username.compo
   declarations: [
     AdminComponent,
     AppComponent,
+    AppManageComponent,
     AppsComponent,
     AppsNewComponent,
     BugDetailsComponent,

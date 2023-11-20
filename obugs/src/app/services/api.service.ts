@@ -1,11 +1,11 @@
 import { Apollo } from 'apollo-angular';
 import { Injectable } from '@angular/core';
-import { MUTATION_BAN_USER, MutationResponseBanUser } from '../models/graphql/mutations/user';
+import { MUTATION_BAN_USER, MUTATION_USER_ROLE_CHANGE, MutationResponseBanUser, MutationResponseUserRoleChange } from '../models/graphql/mutations/user';
 import { MUTATION_COMMENT_ENTRY, MUTATION_DELETE_MESSAGE, MUTATION_PROCESS_PATCH, MUTATION_SUBMIT_PATCH, MutationResponseCommentEntry, MutationResponseDeleteMessage, MutationResponseProcessPatch, MutationResponseSubmitPatch } from '../models/graphql/mutations/entry_message';
 import { MUTATION_DELETE_SUGGESTION, MUTATION_SUGGEST_SOFTWARE, MUTATION_UPSERT_SOFTWARE, MutationResponseDeleteSuggestion, MutationResponseSuggestSoftware, MutationResponseUpsertSoftware } from '../models/graphql/mutations/software';
 import { MUTATION_UPSERT_TAG, MutationResponseUpsertTag } from '../models/graphql/mutations/tag';
 import { MUTATION_VOTE, MutationResponseVote } from '../models/graphql/mutations/vote';
-import { QUERY_CURRENT_USER, QUERY_USER_DETAILS, QueryResponseCurrentUser, QueryResponseUserDetails } from '../models/graphql/queries/user';
+import { QUERY_CURRENT_USER, QUERY_USERS, QUERY_USER_DETAILS, QueryResponseCurrentUser, QueryResponseUserDetails, QueryResponseUsers } from '../models/graphql/queries/user';
 import { QUERY_LIST_SOFTWARE, QUERY_LIST_SOFTWARE_SUGGESTIONS, QueryResponseListSoftware, QueryResponseListSoftwareSuggestions } from '../models/graphql/queries/software';
 import { QUERY_LIST_TAGS, QueryResponseListTags } from '../models/graphql/queries/tag';
 import { QUERY_MY_VOTE, QueryResponseMyVote } from '../models/graphql/queries/vote';
@@ -216,6 +216,27 @@ export class ApiService {
       query: QUERY_USER_DETAILS,
       variables: {
         userId: userId,
+      }
+    })
+  }
+
+  userRoleChange(userId: string, softwareId: string, role: number, setOn: boolean) {
+    return this.apollo.mutate<MutationResponseUserRoleChange>({
+      mutation: MUTATION_USER_ROLE_CHANGE,
+      variables: {
+        userId: userId,
+        softwareId: softwareId,
+        role: role,
+        setOn: setOn
+      }
+    })
+  }
+
+  users(search: string | null) {
+    return this.apollo.query<QueryResponseUsers>({
+      query: QUERY_USERS,
+      variables: {
+        search: search != '' ? search : null
       }
     })
   }

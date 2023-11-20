@@ -40,6 +40,19 @@
                 </div>
             </mat-list-item>
 
+            <mat-list-item
+                *ngIf="currentSoftwareId != null && currentUser != null && 
+                (auth.isAdmin() || auth.isRole(currentSoftwareId, 1) || auth.isRole(currentSoftwareId, 2) || auth.isRole(currentSoftwareId, 4))"
+                [activated]="currentUrl == '/s/' + currentSoftwareId + '/manage'"
+                routerLink="/s/{{currentSoftwareId}}/manage"
+                (mousedown)="handleMiddleMouseClick($event, '/s/' + currentSoftwareId + '/manage')"
+                class="sidebar-item">
+                <div class="sidebar-item-content">
+                    <div class="sidebar-item-icon"><mat-icon>folder_shared</mat-icon></div>
+                    <div class="sidebar-item-text">Manage</div>
+                </div>
+            </mat-list-item>
+
             <mat-list-item *ngIf="currentSoftwareId != null && currentUser != null"
                 [activated]="currentUrl == '/s/' + currentSoftwareId + '/new'" routerLink="/s/{{currentSoftwareId}}/new"
                 (mousedown)="handleMiddleMouseClick($event, '/s/' + currentSoftwareId + '/new')" class="sidebar-item">

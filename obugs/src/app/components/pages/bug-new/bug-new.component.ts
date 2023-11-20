@@ -44,7 +44,7 @@ export class BugNewComponent implements OnInit {
 
     this.softwareId = this.route.snapshot.paramMap.get("software");
     this.title.setTitle("oBugs - " + this.softwareId + " - New Entry")
-    if (this.softwareId == undefined) return
+    if (this.softwareId == null) return
     this.api.tagList(this.softwareId, '').subscribe((response) => {
       this.softwareTags = []
       for (var tag of response.data.tags) {

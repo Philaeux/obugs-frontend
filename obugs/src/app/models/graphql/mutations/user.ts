@@ -19,3 +19,22 @@ export const MUTATION_BAN_USER = gql`
 export interface MutationResponseBanUser {
     banUser: OBugsError | User
 }
+
+export const MUTATION_USER_ROLE_CHANGE = gql`
+    mutation ChangeRole($userId: UUID!, $softwareId: String!, $role: Int!, $setOn: Boolean!) {
+        changeRole(userId: $userId, softwareId: $softwareId, role: $role, setOn: $setOn) {
+            __typename
+            ... on OBugsError {
+                message
+            }
+            ... on User {
+                ...UserFragment
+            }
+        }
+    }
+    ${ObugsFragments.fragments.user}
+`
+
+export interface MutationResponseUserRoleChange {
+    changeRole: OBugsError | User
+}

@@ -38,7 +38,7 @@ export interface User {
 
 export interface UserSoftwareRole {
     __typename: 'UserSoftwareRole'
-    sofwareId: string;
+    softwareId: string;
     role: number;
 }
 

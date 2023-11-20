@@ -2,24 +2,24 @@
     <div class="message-header">
         <div class="message-header-section">
             <button
-                *ngIf="auth.current_user != null && (auth.isAdmin() || auth.isRole(softwareId, 'mod') || (auth.isRole(softwareId, 'curator') && message.type == 'patch'))"
+                *ngIf="auth.current_user != null && (auth.isAdmin() || auth.isRole(softwareId, 1) || (auth.isRole(softwareId, 2) && message.type == 'patch'))"
                 mat-icon-button [matMenuTriggerFor]="menu">
                 <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
                 <button
-                    *ngIf="message.type == 'patch' && !message.isClosed && (auth.isAdmin() || auth.isRole(softwareId, 'curator'))"
+                    *ngIf="message.type == 'patch' && !message.isClosed && (auth.isAdmin() || auth.isRole(softwareId, 2))"
                     mat-menu-item (click)="acceptPatch.emit(message)">
                     <mat-icon>done</mat-icon>
                     <span>Apply patch</span>
                 </button>
                 <button
-                    *ngIf="message.type == 'patch' && !message.isClosed && (auth.isAdmin() || auth.isRole(softwareId, 'curator'))"
+                    *ngIf="message.type == 'patch' && !message.isClosed && (auth.isAdmin() || auth.isRole(softwareId, 2))"
                     mat-menu-item (click)="declinePatch.emit(message)">
                     <mat-icon>close</mat-icon>
                     <span>Decline patch</span>
                 </button>
-                <button mat-menu-item *ngIf="auth.isAdmin() || auth.isRole(softwareId, 'mod')"
+                <button mat-menu-item *ngIf="auth.isAdmin() || auth.isRole(softwareId, 1)"
                     (click)="deleteMessage()">
                     <mat-icon>delete</mat-icon>
                     <span>Delete message</span>
