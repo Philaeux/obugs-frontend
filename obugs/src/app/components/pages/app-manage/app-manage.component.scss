@@ -6,7 +6,7 @@
 }
 
 .card-wide {
-    width: 75%;
+    width: 55%;
 }
 
 .card-mid {
@@ -21,9 +21,14 @@
 
 .card-content {
     display: flex;
+    flex-direction: column;
     gap: 8px;
 }
 
+.card-button {
+    margin-right: auto;
+    margin-left: auto;
+}
 
 .mat-mdc-row .mat-mdc-cell {
     border-bottom: 1px solid transparent;
