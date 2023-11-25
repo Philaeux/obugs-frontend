@@ -1,9 +1,9 @@
 <div class="container">
 
-    <mat-card>
+    <mat-card class="card-wide">
         <mat-card-header class="card-title">
             <mat-card-title>
-                Permission on {{softwareId}}
+                Your permission on {{softwareId}}
             </mat-card-title>
         </mat-card-header>
         <mat-card-content>
@@ -12,13 +12,13 @@
                     <li *ngIf="auth.isAdmin()">oBugs Admin: every rights on all softwares.</li>
                     <li *ngIf="auth.isRole(softwareId, 4)">{{softwareId}} Editor: manage user roles.</li>
                     <li *ngIf="auth.isRole(softwareId, 2)">{{softwareId}} Curator: accept/reject patches.</li>
-                    <li *ngIf="auth.isRole(softwareId, 1)">{{softwareId}} Mod: delete messages and mute users.</li>
+                    <li *ngIf="auth.isRole(softwareId, 1)">{{softwareId}} Mod: delete messages.</li>
                 </ul>
             </div>
         </mat-card-content>
     </mat-card>
 
-    <mat-card *ngIf="auth.isAdmin() || auth.isRole(softwareId, 2)">
+    <mat-card *ngIf="auth.isAdmin() || auth.isRole(softwareId, 2)" class="card-mid">
         <mat-card-header class="card-title">
             <mat-card-title>
                 Open Patches

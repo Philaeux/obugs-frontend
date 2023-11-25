@@ -2,7 +2,7 @@
     <div class="message-header">
         <div class="message-header-section">
             <button
-                *ngIf="auth.current_user != null && (auth.isAdmin() || auth.isRole(softwareId, 1) || (auth.isRole(softwareId, 2) && message.type == 'patch'))"
+                *ngIf="auth.current_user != null && (auth.isAdmin() || auth.isRole(softwareId, 1) || (auth.isRole(softwareId, 2) && message.type == 'patch' && !message.isClosed))"
                 mat-icon-button [matMenuTriggerFor]="menu">
                 <mat-icon>more_vert</mat-icon>
             </button>
