@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { EntryMessage, OBugsError, User } from 'src/app/models/models';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 
+@UntilDestroy()
 @Component({
   selector: 'app-app-manage',
   templateUrl: './app-manage.component.html',
@@ -16,8 +18,8 @@ export class AppManageComponent implements OnInit {
   softwareId: string | null = null;
   patches: EntryMessage[] = [];
   userNameFilter: string = "";
-  users: User[] = [];
 
+  users: User[] = [];
   selectedUser: User | null = null;
   selectedIsMod = false;
   selectedIsCurator = false;
@@ -33,7 +35,14 @@ export class AppManageComponent implements OnInit {
 
   ngOnInit(): void {
     this.softwareId = this.route.snapshot.paramMap.get("software");
-    if (this.softwareId == null) return
+    if (this.softwareId == null) this.router.navigate([`/apps`]);
+
+    this.auth.currentUser$.pipe(untilDestroyed(this)).subscribe((user) => {
+      if (user === undefined) return;
+      if (user === null) {
+        this.router.navigate(['/s/' + this.softwareId]);
+      }
+    })
 
     this.title.setTitle('oBugs ' + this.softwareId + ' - Manage')
   }
