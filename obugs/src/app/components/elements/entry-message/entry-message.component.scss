@@ -14,13 +14,16 @@
 .message-header {
     padding-bottom: 4px;
     padding-top: 4px;
-    padding-left: 12px;
-    padding-right: 12px;
-    height: 40px;
+    padding-left: 6px;
+    height: 26px;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+}
+
+.more-icon:hover {
+    cursor: pointer;
 }
 
 .vote-arrow:hover {

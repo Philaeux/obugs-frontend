@@ -1,11 +1,14 @@
 <div class="message">
     <div class="message-header">
         <div class="message-header-section">
-            <button
+            <!--button
                 *ngIf="auth.current_user != null && (auth.isAdmin() || auth.isRole(softwareId, 1) || (auth.isRole(softwareId, 2) && message.type == 'patch' && !message.isClosed))"
                 mat-icon-button [matMenuTriggerFor]="menu">
-                <mat-icon>more_vert</mat-icon>
-            </button>
+                
+            </button-->
+            <mat-icon
+                *ngIf="auth.current_user != null && (auth.isAdmin() || auth.isRole(softwareId, 1) || (auth.isRole(softwareId, 2) && message.type == 'patch' && !message.isClosed))"
+                mat-icon-button [matMenuTriggerFor]="menu" class="more-icon">more_horiz</mat-icon>
             <mat-menu #menu="matMenu">
                 <button
                     *ngIf="message.type == 'patch' && !message.isClosed && (auth.isAdmin() || auth.isRole(softwareId, 2))"
@@ -19,8 +22,7 @@
                     <mat-icon>close</mat-icon>
                     <span>Decline patch</span>
                 </button>
-                <button mat-menu-item *ngIf="auth.isAdmin() || auth.isRole(softwareId, 1)"
-                    (click)="deleteMessage()">
+                <button mat-menu-item *ngIf="auth.isAdmin() || auth.isRole(softwareId, 1)" (click)="deleteMessage()">
                     <mat-icon>delete</mat-icon>
                     <span>Delete message</span>
                 </button>
@@ -60,7 +62,8 @@
             <mat-icon *ngIf="message.isClosed && !message.accepted"
                 matTooltip="Rejected by {{closedByNickname}} {{this.message.closedAt | dateAgo}}."
                 class="red-icon">close</mat-icon>
-            <mat-icon *ngIf="!message.isClosed && !auth.current_user" matTooltip="Vote is open.">lock_open</mat-icon>
+            <mat-icon *ngIf="!message.isClosed && !auth.current_user"
+                matTooltip="Vote is open, login to vote.">lock_open</mat-icon>
 
             <button mat-button color="primary" (click)="showDetails = !showDetails" class="message-header-button">
                 <span *ngIf="showDetails">Hide</span>

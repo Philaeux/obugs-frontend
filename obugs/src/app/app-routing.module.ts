@@ -21,7 +21,7 @@ const routes: Routes = [
   { path: 's/:software/manage', component: AppManageComponent },
   { path: 's/:software/:entry', component: BugDetailsComponent },
   { path: 's/:software', component: DashboardComponent },
-  { path: '**', redirectTo: '', pathMatch: 'full' },
+  { path: '**', redirectTo: 'apps', pathMatch: 'full' },
 ];
 
 @NgModule({
