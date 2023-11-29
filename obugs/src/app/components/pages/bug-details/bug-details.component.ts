@@ -168,6 +168,12 @@ export class BugDetailsComponent implements OnInit {
     const imgurRegex = /^(https?:\/\/)?(www\.)?((i\.)?imgur\.com)\//;
     const redditRegex = /^(https?:\/\/)?(www\.)?((old\.)?reddit\.com|(preview\.)redd\.it)\//;
 
+    if (link.includes('.mp4')) {
+      return 'fa fa-film'
+    } else if (link.includes(".jpg") || link.includes(".jpeg") || link.includes(".gif") || link.includes(".png")) {
+      return 'fa fa-image'
+    }
+
     if (youtubeRegex.test(link)) {
       return 'fab fa-youtube';
     } else if (twitchRegex.test(link)) {
