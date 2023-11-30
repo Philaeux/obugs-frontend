@@ -1,24 +1,26 @@
 <div class="layout">
-    <div class="filters">
-        <mat-form-field class="app-filter-input">
-            <mat-label>Search</mat-label>
-            <input matInput placeholder="Search" [(ngModel)]="softwareFilter" (keyup.enter)="onEnterKey()"
-                matTooltip="Enter to search">
-        </mat-form-field>
-    </div>
-    <div class="filter-subtitle">Not finding a software? <a routerLink="/apps/new">Suggest it!</a></div>
-    <div class="software-cards">
-        <mat-card *ngFor="let software of softwares" class="software-card" (click)="selectSoftware(software.id)">
-            <mat-card-header class="software-header">
-                <mat-card-subtitle class="software-subtitle">
-                    <div>{{software.editor}}</div>
-                    <div>{{software.language}}</div>
-                </mat-card-subtitle>
-                <mat-card-title>{{software.fullName}}</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-                <p>{{software.description}}</p>
-            </mat-card-content>
-        </mat-card>
-    </div>
+  <div class="filters">
+    <mat-form-field class="app-filter-input">
+      <mat-label>Search</mat-label>
+      <input matInput placeholder="Search" [(ngModel)]="softwareFilter" (keyup.enter)="onEnterKey()"
+        matTooltip="Enter to search">
+    </mat-form-field>
+  </div>
+  <div class="filter-subtitle">Not finding a software? <a routerLink="/apps/new">Suggest it!</a></div>
+  <div class="software-cards">
+    @for (software of softwares; track software) {
+      <mat-card class="software-card" (click)="selectSoftware(software.id)">
+        <mat-card-header class="software-header">
+          <mat-card-subtitle class="software-subtitle">
+            <div>{{software.editor}}</div>
+            <div>{{software.language}}</div>
+          </mat-card-subtitle>
+          <mat-card-title>{{software.fullName}}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{software.description}}</p>
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
 </div>

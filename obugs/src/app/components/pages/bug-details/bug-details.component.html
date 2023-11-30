@@ -2,7 +2,6 @@
 <div class="entry-details">
     <div class="mat-headline-5 left-pad">{{entry.title}}</div>
     <mat-divider></mat-divider>
-
     <div class="entry-summary">
         <div class="column">
             <div class="mat-subtitle-2 italic">Created <span
@@ -17,10 +16,9 @@
         <div class="column-center">
             <app-status-chip [status]="entry.status"></app-status-chip>
         </div>
-
         <div class="entry-votes" matTooltip="Bug impact according to the community.">
             <div class="entry-impact">{{ratingTotal / ratingCount | number: '1.0-1'}}</div>
-            <div class="entry-vote-total">(
+            <div class="entry-vote-total">
                 @if(ratingCount>1) {
                 ({{ratingCount}} Votes)
                 } @else {
@@ -28,7 +26,6 @@
                 }
             </div>
         </div>
-
         @if (auth.current_user != null) {
         <div class="entry-my-vote" matTooltip="Rate how important this entry is.">
             <mat-button-toggle-group name="myVote" aria-label="My Vote" [(ngModel)]="myVote"
@@ -43,24 +40,24 @@
         </div>
         }
     </div>
-
     <div class="tag-list">
         @if (entry.tags.edges.length == 0) {
         <div>No Tag</div>
         } @else {
-        <app-tag-chip *ngFor="let tag of entry.tags.edges" [tag]="tag.node"></app-tag-chip>
+        @for (tag of entry.tags.edges; track tag) {
+        <app-tag-chip [tag]="tag.node"></app-tag-chip>
+        }
         }
     </div>
-
     <mat-divider></mat-divider>
-
     <div class="entry-description">
         <div class="link-list">
             @if (entry.illustration === "") {
             <div>No Link</div>
             } @else {
             <div class="link-list">
-                <div *ngFor="let link of entry.illustration.split('\n')" class="entry-illustration">
+                @for (link of entry.illustration.split('\n'); track link) {
+                <div class="entry-illustration">
                     <a [href]="link" target="_blank" matTooltip="{{link}}">
                         @if (linkIcon(link).endsWith('.png')) {
                         <img class="{{linkIcon(link)}}" src="/assets/icons/{{linkIcon(link)}}" alt="" class="link-icon">
@@ -69,23 +66,23 @@
                         }
                     </a>
                 </div>
+                }
             </div>
             }
         </div>
         <markdown katex mermaid [data]="entry.description"></markdown>
     </div>
 </div>
-
 <div class="entry-comments">
-    <app-entry-message *ngFor="let message of this.entryMessages" [softwareId]="softwareId" [message]="message"
-        (acceptPatch)="processPatch($event, true)" (declinePatch)="processPatch($event, false)"
-        (messageDeleted)="removeMessage($event)"></app-entry-message>
+    @for (message of this.entryMessages; track message) {
+    <app-entry-message [softwareId]="softwareId" [message]="message" (acceptPatch)="processPatch($event, true)"
+        (declinePatch)="processPatch($event, false)" (messageDeleted)="removeMessage($event)"></app-entry-message>
+    }
     <div style="text-align: center;">
         @if (messagesHasMore) {
         <button mat-raised-button color="primary" (click)="fetchMoreMessages()">Load more messages</button>
         }
     </div>
-
     <div class="comment-write">
         @if (auth.current_user != null) {
         <mat-tab-group animationDuration="0ms" [(selectedIndex)]="editPanelIndex">
@@ -95,14 +92,12 @@
                         <mat-label>Leave a comment.</mat-label>
                         <textarea matInput [(ngModel)]="editComment" rows="5"></textarea>
                     </mat-form-field>
-
                     @if (editComment != "") {
                     <div class="comment-preview-header">Comment Preview</div>
                     <div class="comment-preview">
                         <markdown katex mermaid data="{{editComment}}" ngPreserveWhiteSpaces></markdown>
                     </div>
                     }
-
                 </div>
             </mat-tab>
             <mat-tab label="Propose a patch">
@@ -123,7 +118,6 @@
                             <mat-button-toggle value="CLOSED">CLOSED</mat-button-toggle>
                         </mat-button-toggle-group>
                     </div>
-
                     <div class="comment-form">
                         <app-tag-input [selectedTags]="editTags" [softwareTags]="softwareTagsAsStrings"></app-tag-input>
                     </div>
@@ -141,13 +135,11 @@
                 </div>
             </mat-tab>
         </mat-tab-group>
-
         @if (errorMessage != "") {
         <div class="error">
             {{errorMessage}}
         </div>
         }
-
         <div class="comment-send">
             <button mat-raised-button color="primary" (click)="onSubmitButton()">Submit</button>
         </div>
