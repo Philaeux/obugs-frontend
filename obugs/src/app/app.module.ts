@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
-import { MarkdownModule } from 'ngx-markdown'
+import { MarkdownModule, MARKED_OPTIONS } from 'ngx-markdown'
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -64,7 +64,16 @@ import { UsernameComponent } from './components/elements/username/username.compo
     HttpClientModule,
     HttpClientXsrfModule,
     LayoutModule,
-    MarkdownModule.forRoot(),
+    MarkdownModule.forRoot({
+      markedOptions: {
+        provide: MARKED_OPTIONS,
+        useValue: {
+          gfm: true,
+          breaks: true,
+          pedantic: false
+        }
+      }
+    }),
     MaterialModule,
     ReactiveFormsModule,
     RecaptchaModule,

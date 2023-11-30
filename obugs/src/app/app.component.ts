@@ -54,8 +54,8 @@ export class AppComponent implements OnInit {
     })
   }
 
-  public resolved(captchaResponse: string): void {
-    this.captchav2Service.recaptchav2Resolved(captchaResponse);
+  public resolved(captchaResponse: string | null): void {
+    if (captchaResponse != null) this.captchav2Service.recaptchav2Resolved(captchaResponse);
   }
 
   toggleDarkMode() {
