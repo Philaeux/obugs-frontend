@@ -7,7 +7,9 @@
             <!-- Title -->
             <mat-form-field class="full-width">
                 <input matInput placeholder="Title" formControlName="title" required />
-                <mat-error *ngIf="form.get('title')?.hasError('required')">Title is required</mat-error>
+                @if (form.get('title')?.hasError('required')) {
+                <mat-error>Title is required</mat-error>
+                }
             </mat-form-field>
 
             <!-- Tags -->
@@ -23,14 +25,20 @@
             <mat-form-field class="full-width">
                 <textarea matInput placeholder="Description (Markdown with Katex and Mermaid)"
                     formControlName="description" required rows="10"></textarea>
-                <mat-error *ngIf="form.get('description')?.hasError('required')">Description is required</mat-error>
+                @if (form.get('description')?.hasError('required')) {
+                <mat-error>Description is required</mat-error>
+                }
             </mat-form-field>
 
-            <div *ngIf="form.value.description != ''" class="comment-preview">
+            @if (form.value.description != "") {
+            <div class="comment-preview">
                 <markdown katex mermaid [data]="form.value.description"></markdown>
             </div>
+            }
 
-            <div *ngIf="errorMessage != ''" class="error">{{errorMessage}}</div>
+            @if (errorMessage != "") {
+            <div class="error">{{errorMessage}}</div>
+            }
             <div class="button-container">
                 <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Create</button>
             </div>

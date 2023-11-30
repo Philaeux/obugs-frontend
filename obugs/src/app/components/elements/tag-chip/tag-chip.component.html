@@ -1,2 +1,7 @@
-<div *ngIf="tag" class="tag-chip" class="tag-chip" [ngStyle]="chipStyle()">{{tag.name}}</div>
-<div *ngIf="tagName" class="tag-chip" class="tag-chip" [ngStyle]="chipStyle()">{{tagName}}</div>
+@if (tag) {
+<div class="tag-chip" class="tag-chip" [ngStyle]="chipStyle()">{{tag.name}}</div>
+}
+
+@if (tagName) {
+<div class="tag-chip" class="tag-chip" [ngStyle]="chipStyle()">{{tagName}}</div>
+}

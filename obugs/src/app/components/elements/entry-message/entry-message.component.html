@@ -1,84 +1,118 @@
 <div class="message">
     <div class="message-header">
         <div class="message-header-section">
-            <!--button
-                *ngIf="auth.current_user != null && (auth.isAdmin() || auth.isRole(softwareId, 1) || (auth.isRole(softwareId, 2) && message.type == 'patch' && !message.isClosed))"
-                mat-icon-button [matMenuTriggerFor]="menu">
-                
-            </button-->
-            <mat-icon
-                *ngIf="auth.current_user != null && (auth.isAdmin() || auth.isRole(softwareId, 1) || (auth.isRole(softwareId, 2) && message.type == 'patch' && !message.isClosed))"
-                mat-icon-button [matMenuTriggerFor]="menu" class="more-icon">more_horiz</mat-icon>
+
+            @if (auth.current_user != null && (auth.isAdmin() || auth.isRole(softwareId, 1)
+            || (auth.isRole(softwareId, 2) && message.type == 'patch' && !message.isClosed))) {
+            <mat-icon mat-icon-button [matMenuTriggerFor]="menu" class="more-icon">more_horiz</mat-icon>
             <mat-menu #menu="matMenu">
-                <button
-                    *ngIf="message.type == 'patch' && !message.isClosed && (auth.isAdmin() || auth.isRole(softwareId, 2))"
-                    mat-menu-item (click)="acceptPatch.emit(message)">
+
+                @if (message.type == 'patch' && !message.isClosed && (auth.isAdmin() || auth.isRole(softwareId, 2))) {
+                <button mat-menu-item (click)="acceptPatch.emit(message)">
                     <mat-icon>done</mat-icon>
                     <span>Apply patch</span>
                 </button>
-                <button
-                    *ngIf="message.type == 'patch' && !message.isClosed && (auth.isAdmin() || auth.isRole(softwareId, 2))"
-                    mat-menu-item (click)="declinePatch.emit(message)">
+                <button mat-menu-item (click)="declinePatch.emit(message)">
                     <mat-icon>close</mat-icon>
                     <span>Decline patch</span>
                 </button>
-                <button mat-menu-item *ngIf="auth.isAdmin() || auth.isRole(softwareId, 1)" (click)="deleteMessage()">
+                }
+
+                @if (auth.isAdmin() || auth.isRole(softwareId, 1)) {
+                <button mat-menu-item (click)="deleteMessage()">
                     <mat-icon>delete</mat-icon>
                     <span>Delete message</span>
                 </button>
-                <button *ngIf="auth.isAdmin() && !messageUser?.isBanned" mat-menu-item (click)="banUser(true)">
-                    <mat-icon>person_off</mat-icon>
-                    <span>Ban user</span>
-                </button>
-                <button *ngIf="auth.isAdmin() && messageUser?.isBanned" mat-menu-item (click)="banUser(false)">
+                }
+
+                @if (auth.isAdmin()) {
+                @if (messageUser?.isBanned) {
+                <button mat-menu-item (click)="banUser(false)">
                     <mat-icon>person_check</mat-icon>
                     <span>Unban user</span>
                 </button>
+                } @else {
+                <button mat-menu-item (click)="banUser(true)">
+                    <mat-icon>person_off</mat-icon>
+                    <span>Ban user</span>
+                </button>
+                }
+                }
+
             </mat-menu>
+            }
+
             <app-username [user]="messageUser"></app-username>
-            <span *ngIf="message.type == 'creation'"> created this entry </span>
-            <span *ngIf="message.type == 'comment'"> commented </span>
-            <span *ngIf="message.type == 'patch'"> suggested a patch </span>
+            @switch (message.type) {
+            @case ("creation") {
+            created this entry
+            }
+            @case ("comment") {
+            commented
+            }
+            @case ("patch") {
+            suggested a patch
+            }
+            }
+
             <span matTooltip="{{(message.createdAt+'+00:00') | date: 'MMMM d, y, H:mm:ss'}}">
                 {{message.createdAt | dateAgo }}.
             </span>
         </div>
 
-        <div *ngIf="message.type == 'patch'" class="message-header-section">
+        @if (message.type == "patch") {
+        <div class="message-header-section">
 
-            <mat-icon *ngIf="auth.current_user != null && !message.isClosed" class="vote-arrow" (click)="vote(1)"
-                matTooltip="Approve this patch."
+            @if (auth.current_user != null && !message.isClosed){
+            <mat-icon class="vote-arrow" (click)="vote(1)" matTooltip="Approve this patch."
                 [ngClass]="{'green-icon': petitionVote === 1, 'transparent-icon': petitionVote === -1 }">arrow_upward</mat-icon>
-            <mat-icon *ngIf="auth.current_user != null && !message.isClosed" class="vote-arrow" (click)="vote(-1)"
-                matTooltip="Disapprove this patch."
+            <mat-icon class="vote-arrow" (click)="vote(-1)" matTooltip="Disapprove this patch."
                 [ngClass]="{'red-icon': petitionVote === -1, 'transparent-icon': petitionVote === 1 }">arrow_downward</mat-icon>
-            <div class="vote-percent" *ngIf="ratingTotal != null && ratingCount != null"
-                matTooltip="Approbation with {{ratingCount}} votes.">
+            }
+            @if (ratingTotal != null && ratingCount != null) {
+            <div class="vote-percent" matTooltip="Approbation with {{ratingCount}} votes.">
                 {{(ratingCount+ratingTotal)*50.0/ratingCount | number: '1.0-1'}}&nbsp;%
             </div>
-            <mat-icon *ngIf="message.isClosed && message.accepted"
-                matTooltip="Accepted by {{closedByNickname}} {{this.message.closedAt | dateAgo}}."
+            }
+            @if (message.isClosed) {
+            @if (message.accepted) {
+            <mat-icon matTooltip="Accepted by {{closedByNickname}} {{this.message.closedAt | dateAgo}}."
                 class="green-icon">done</mat-icon>
-            <mat-icon *ngIf="message.isClosed && !message.accepted"
-                matTooltip="Rejected by {{closedByNickname}} {{this.message.closedAt | dateAgo}}."
+            } @else {
+            <mat-icon matTooltip="Rejected by {{closedByNickname}} {{this.message.closedAt | dateAgo}}."
                 class="red-icon">close</mat-icon>
-            <mat-icon *ngIf="!message.isClosed && !auth.current_user"
-                matTooltip="Vote is open, login to vote.">lock_open</mat-icon>
+            }
+            } @else {
+            @if (auth.current_user == null) {
+            <mat-icon matTooltip="Vote is open, login to vote.">lock_open</mat-icon>
+            }
+            }
 
             <button mat-button color="primary" (click)="showDetails = !showDetails" class="message-header-button">
-                <span *ngIf="showDetails">Hide</span>
-                <span *ngIf="!showDetails">Show</span>
+                @if (showDetails){
+                Hide
+                } @else {
+                Show
+                }
             </button>
         </div>
+        }
 
-        <button *ngIf="message.type == 'creation'" mat-button color="primary" (click)="showDetails = !showDetails"
-            class="message-header-button">
-            <span *ngIf="showDetails">Hide</span>
-            <span *ngIf="!showDetails">Show</span>
+        @if (message.type == "creation") {
+        <button mat-button color="primary" (click)="showDetails = !showDetails" class="message-header-button">
+            @if (showDetails) {
+            Hide
+            } @else {
+            Show
+            }
         </button>
+        }
     </div>
 
-    <div *ngIf="message.type == 'creation' && showDetails" class="message-content patch">
+    @switch (message.type) {
+    @case ("creation") {
+    @if (showDetails) {
+    <div class="message-content patch">
         <div class="change-item">
             <div class="change-title">Title</div>
             <div>{{stateAfter.title}}</div>
@@ -87,15 +121,23 @@
             <div class="change-title">Status</div>
             <app-status-chip [status]="stateAfter.status"></app-status-chip>
         </div>
-        <div *ngIf="stateAfter.tags" class="change-item">
+        @if (stateAfter.tags) {
+        <div class="change-item">
             <div class="change-title">Tags</div>
-            <div *ngIf="stateAfter.tags.length == 0">- EMPTY -</div>
+            @if(stateAfter.tags.length == 0) {
+            <div>- EMPTY -</div>
+            } @else {
             <app-tag-chip *ngFor="let tag of stateAfter.tags" [tagName]="tag"></app-tag-chip>
+            }
         </div>
+        }
         <div>
             <div class="change-title">Links</div>
-            <div *ngIf="!stateAfter.illustration">- EMPTY -</div>
+            @if (stateAfter.illustration) {
             <div [innerHTML]="newLineConvert(stateAfter.illustration)"></div>
+            } @else {
+            <div>- EMPTY -</div>
+            }
         </div>
 
         <mat-divider></mat-divider>
@@ -104,44 +146,71 @@
             <markdown katex mermaid>{{stateAfter.description}}</markdown>
         </div>
     </div>
-
-    <div *ngIf="message.type == 'comment'" class="message-content">
+    }
+    }
+    @case ("comment") {
+    <div class="message-content">
         <markdown katex mermaid>{{message.comment}}</markdown>
     </div>
-
-    <div *ngIf="message.type == 'patch' && showDetails" class="message-content patch">
-        <div *ngIf="stateAfter.title" class="change-item">
+    }
+    @case ("patch") {
+    @if (showDetails) {
+    <div class="message-content patch">
+        @if (stateAfter.title) {
+        <div class="change-item">
             <div class="change-title">Title</div>
             <div [innerHTML]="generateUnifiedText(stateBefore.title, stateAfter.title)"></div>
         </div>
-        <div *ngIf="stateAfter.status" class="change-item">
+        }
+        @if (stateAfter.status) {
+        <div class="change-item">
             <div class="change-title">Status</div>
             <app-status-chip [status]="stateBefore.status"></app-status-chip>
             <mat-icon class="patch-change-icon">double_arrow</mat-icon>
             <app-status-chip [status]="stateAfter.status"></app-status-chip>
         </div>
-        <div *ngIf="stateAfter.tags" class="change-item">
+        }
+        @if (stateAfter.tags) {
+        <div class="change-item">
             <div class="change-title">Tags</div>
-            <div *ngIf="stateBefore.tags.length == 0">- EMPTY -</div>
+            @if (stateBefore.tags.length == 0) {
+            <div>- EMPTY -</div>
+            } @else {
             <app-tag-chip *ngFor="let tag of stateBefore.tags" [tagName]="tag"></app-tag-chip>
+            }
             <mat-icon class="patch-change-icon">double_arrow</mat-icon>
-            <div *ngIf="stateAfter.tags.length == 0">- EMPTY -</div>
+            @if (stateAfter.tags.length == 0) {
+            <div>- EMPTY -</div>
+            } @else {
             <app-tag-chip *ngFor="let tag of stateAfter.tags" [tagName]="tag"></app-tag-chip>
+            }
         </div>
-        <div *ngIf="stateAfter.illustration">
+        }
+        @if (stateAfter.illustration) {
+        <div>
             <div class="change-title">Links</div>
             <div [innerHTML]="generateUnifiedText(stateBefore.illustration, stateAfter.illustration)"></div>
         </div>
-        <mat-divider *ngIf="stateAfter.description"></mat-divider>
-        <div *ngIf="stateAfter.description">
+        }
+        @if (stateAfter.description) {
+        <mat-divider></mat-divider>
+        <div>
             <div class="change-title">Description</div>
             <div [innerHTML]="generateUnifiedText(stateBefore.description, stateAfter.description)"></div>
         </div>
-        <mat-divider *ngIf="stateAfter.description"></mat-divider>
-        <div *ngIf="stateAfter.description">
+        <mat-divider></mat-divider>
+        <div>
             <div class="change-title">Preview</div>
             <markdown katex mermaid>{{stateAfter.description}}</markdown>
         </div>
-        <div *ngIf="!stateAfter.description" class="no-preview-pad"></div>
+        } @else {
+        <div class="no-preview-pad"></div>
+        }
     </div>
+    }
+    }
+    }
+
+
+
 </div>

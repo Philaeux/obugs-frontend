@@ -1,7 +1,14 @@
 <div class="username" matTooltip="{{getUserProvider(user)}} user">
-    <i *ngIf="user != null && getUserProvider(user) == 'Github'" class="fab fa-github"></i>
-    <i *ngIf="user != null && getUserProvider(user) == 'Reddit'" class="fab fa-reddit"></i>
-    <div *ngIf="user != null">
-        {{getUserName(user)}}
-    </div>
+    @if (user != null) {
+    @switch (getUserProvider(user)) {
+    @case ("Github") {
+    <i class="fab fa-github"></i>
+    }
+    @case ("Reddit") {
+    <i class="fab fa-reddit"></i>
+    }
+    }
+
+    <div>{{getUserName(user)}}</div>
+    }
 </div>

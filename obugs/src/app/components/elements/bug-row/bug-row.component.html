@@ -19,9 +19,13 @@
             </div>
         </div>
     </div>
-    <div *ngIf="entry.openPatchesCount != 0" class="bug-open-patches" matTooltip="Number of open patches">
+
+    @if (entry.openPatchesCount != 0) {
+    <div class="bug-open-patches" matTooltip="Number of open patches">
         <div class="bug-open-patches-txt">
             {{entry.openPatchesCount}}
         </div>
     </div>
+    }
+
 </div>

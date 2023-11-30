@@ -17,19 +17,20 @@
                 </div>
             </mat-list-item>
 
-            <mat-list-item *ngIf="currentUser != null && currentUser.isAdmin" routerLink="/admin"
-                [activated]="currentUrl == '/admin'" (mousedown)="handleMiddleMouseClick($event, '/admin')"
-                class="sidebar-item">
+            @if (currentUser != null && currentUser.isAdmin) {
+            <mat-list-item routerLink="/admin" [activated]="currentUrl == '/admin'"
+                (mousedown)="handleMiddleMouseClick($event, '/admin')" class="sidebar-item">
                 <div class="sidebar-item-content">
                     <div class="sidebar-item-icon"><mat-icon>admin_panel_settings</mat-icon></div>
                     <div class="sidebar-item-text">Admin</div>
                 </div>
             </mat-list-item>
+            }
 
             <mat-divider></mat-divider>
 
-            <mat-list-item *ngIf="currentSoftwareId != null" routerLink="/s/{{currentSoftwareId}}"
-                [activated]="currentUrl == '/s/' + currentSoftwareId"
+            @if (currentSoftwareId != null) {
+            <mat-list-item routerLink="/s/{{currentSoftwareId}}" [activated]="currentUrl == '/s/' + currentSoftwareId"
                 (mousedown)="handleMiddleMouseClick($event, '/s/' + currentSoftwareId)" class="sidebar-item">
                 <div class="sidebar-item-content">
                     <div class="sidebar-item-icon">
@@ -39,11 +40,12 @@
                     <div class="sidebar-item-text">{{currentSoftwareId}}</div>
                 </div>
             </mat-list-item>
+            }
 
-            <mat-list-item
-                *ngIf="currentSoftwareId != null && currentUser != null && 
-                (auth.isAdmin() || auth.isRole(currentSoftwareId, 1) || auth.isRole(currentSoftwareId, 2) || auth.isRole(currentSoftwareId, 4))"
-                [activated]="currentUrl == '/s/' + currentSoftwareId + '/manage'"
+            @if (currentSoftwareId != null && currentUser != null &&
+            (auth.isAdmin() || auth.isRole(currentSoftwareId, 1) || auth.isRole(currentSoftwareId, 2) ||
+            auth.isRole(currentSoftwareId, 4))) {
+            <mat-list-item [activated]="currentUrl == '/s/' + currentSoftwareId + '/manage'"
                 routerLink="/s/{{currentSoftwareId}}/manage"
                 (mousedown)="handleMiddleMouseClick($event, '/s/' + currentSoftwareId + '/manage')"
                 class="sidebar-item">
@@ -52,38 +54,44 @@
                     <div class="sidebar-item-text">Manage</div>
                 </div>
             </mat-list-item>
+            }
 
-            <mat-list-item *ngIf="currentSoftwareId != null && currentUser != null"
-                [activated]="currentUrl == '/s/' + currentSoftwareId + '/new'" routerLink="/s/{{currentSoftwareId}}/new"
+            @if (currentSoftwareId != null && currentUser != null){
+            <mat-list-item [activated]="currentUrl == '/s/' + currentSoftwareId + '/new'"
+                routerLink="/s/{{currentSoftwareId}}/new"
                 (mousedown)="handleMiddleMouseClick($event, '/s/' + currentSoftwareId + '/new')" class="sidebar-item">
                 <div class="sidebar-item-content">
                     <div class="sidebar-item-icon"><mat-icon>add</mat-icon></div>
                     <div class="sidebar-item-text">New</div>
                 </div>
             </mat-list-item>
+            }
 
         </mat-nav-list>
 
         <button class="dark-light-switch" (click)="toggleDarkMode()">
             <div class="switch-icon">
-                <mat-icon *ngIf="darkMode">wb_sunny</mat-icon>
-                <mat-icon *ngIf="!darkMode">nights_stay</mat-icon>
+                @if (darkMode) {
+                <mat-icon>wb_sunny</mat-icon>
+                } @else {
+                <mat-icon>nights_stay</mat-icon>
+                }
             </div>
         </button>
     </div>
 
     <div class="right-panel">
         <div class="top-bar">
-            <button *ngIf="!auth.current_user" routerLink="/login" mat-mini-fab aria-label="login" color="primary"
-                matTooltip="Login">
-                <mat-icon>login</mat-icon>
-            </button>
-
+            @if (auth.current_user) {
             <app-username [user]="currentUser"></app-username>
-            <button *ngIf="auth.current_user" (click)="auth.logout()" mat-mini-fab aria-label="Logout" color="primary"
-                matTooltip="Logout">
+            <button (click)="auth.logout()" mat-mini-fab aria-label="Logout" color="primary" matTooltip="Logout">
                 <mat-icon>logout</mat-icon>
             </button>
+            } @else {
+            <button routerLink="/login" mat-mini-fab aria-label="login" color="primary" matTooltip="Login">
+                <mat-icon>login</mat-icon>
+            </button>
+            }
         </div>
 
         <div class="content">

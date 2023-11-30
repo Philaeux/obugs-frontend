@@ -9,16 +9,25 @@
         <mat-card-content>
             <div class="card-content">
                 <ul>
-                    <li *ngIf="auth.isAdmin()">oBugs Admin: every rights on all softwares.</li>
-                    <li *ngIf="auth.isRole(softwareId, 4)">{{softwareId}} Editor: manage user roles.</li>
-                    <li *ngIf="auth.isRole(softwareId, 2)">{{softwareId}} Curator: accept/reject patches.</li>
-                    <li *ngIf="auth.isRole(softwareId, 1)">{{softwareId}} Mod: delete messages.</li>
+                    @if (auth.isAdmin()) {
+                    <li>oBugs Admin: every rights on all softwares.</li>
+                    }
+                    @if (auth.isRole(softwareId, 4)) {
+                    <li>{{softwareId}} Editor: manage user roles.</li>
+                    }
+                    @if (auth.isRole(softwareId, 2)) {
+                    <li>{{softwareId}} Curator: accept/reject patches.</li>
+                    }
+                    @if (auth.isRole(softwareId, 1)) {
+                    <li>{{softwareId}} Mod: delete messages.</li>
+                    }
                 </ul>
             </div>
         </mat-card-content>
     </mat-card>
 
-    <mat-card *ngIf="auth.isAdmin() || auth.isRole(softwareId, 2)" class="card-mid">
+    @if (auth.isAdmin() || auth.isRole(softwareId, 2)){
+    <mat-card class="card-mid">
         <mat-card-header class="card-title">
             <mat-card-title>
                 Patches
@@ -66,8 +75,10 @@
             </div>
         </mat-card-content>
     </mat-card>
+    }
 
-    <mat-card *ngIf="auth.isAdmin() || auth.isRole(softwareId, 4)" class="card-mid">
+    @if (auth.isAdmin() || auth.isRole(softwareId, 4)) {
+    <mat-card class="card-mid">
         <mat-card-header class="card-title">
             <mat-card-title>
                 Users
@@ -82,12 +93,16 @@
                             <input matInput placeholder="User ID" [(ngModel)]="userNameFilter"
                                 (keyup.enter)="refreshUserList()">
                         </mat-form-field>
-                        <div *ngIf="selectedUser != null" class="mat-headline-5">Selected User</div>
-                        <div *ngIf="selectedUser != null">
-                            <div *ngIf="selectedUser.redditName != null">Reddit Name:
-                                {{selectedUser.redditName}}</div>
-                            <div *ngIf="selectedUser.githubName != null">GitHub Name:
-                                {{selectedUser.githubName}}</div>
+                        @if (selectedUser) {
+                        <div class="mat-headline-5">Selected User</div>
+                        <div>
+                            @if (selectedUser.redditName != null) {
+                            <div>Reddit Name: {{selectedUser.redditName}}</div>
+                            }
+                            @if (selectedUser.githubName != null) {
+                            <div>GitHub Name: {{selectedUser.githubName}}</div>
+                            }
+
                             <div>
                                 <mat-checkbox [(ngModel)]="selectedIsEditor" (change)="onRoleChange(4, $event)">
                                     Editor</mat-checkbox>
@@ -101,6 +116,7 @@
                                     Moderator</mat-checkbox>
                             </div>
                         </div>
+                        }
                     </div>
                 </div>
                 <div class="card-subcontent">
@@ -122,5 +138,6 @@
             </div>
         </mat-card-content>
     </mat-card>
+    }
 
 </div>

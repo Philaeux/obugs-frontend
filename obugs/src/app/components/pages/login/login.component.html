@@ -1,8 +1,12 @@
 <div class="container">
     <div class="form-column">
         <h1>Select a login provider</h1>
-        <div *ngIf="errorLogin != ''" class="login-error">{{errorLogin}}</div>
-        <div *ngIf="messageLogin != ''" class="login-message">{{messageLogin}}</div>
+        @if (errorLogin != "") {
+        <div class="login-error">{{errorLogin}}</div>
+        }
+        @if (messageLogin != "") {
+        <div class="login-message">{{messageLogin}}</div>
+        }
         <button class="login-with-github" mat-raised-button (click)="onLoginWithGithub()"><i class="fab fa-github"></i>
             Login with Github</button>
         <button class="login-with-reddit" mat-raised-button (click)="onLoginWithReddit()"><i class="fab fa-reddit"></i>

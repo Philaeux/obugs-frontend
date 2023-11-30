@@ -195,10 +195,11 @@
                     <div class="mat-headline-5">Filter</div>
                     <button mat-raised-button color="primary" (click)="refreshSuggestionList()">Refresh</button>
                     <div class="mat-headline-5">Details</div>
-                    <div *ngIf="selectedSuggestion != null">Name: {{selectedSuggestion.name}}</div>
-                    <div *ngIf="selectedSuggestion != null">Description: {{selectedSuggestion.description}}</div>
-                    <button *ngIf="selectedSuggestion != null" mat-raised-button color="primary"
-                        (click)="deleteSuggestion()">Delete</button>
+                    @if (selectedSuggestion != null) {
+                    <div>Name: {{selectedSuggestion.name}}</div>
+                    <div>Description: {{selectedSuggestion.description}}</div>
+                    <button mat-raised-button color="primary" (click)="deleteSuggestion()">Delete</button>
+                    }
 
                 </div>
                 <div class="card-subcontent">
