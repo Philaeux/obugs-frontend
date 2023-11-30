@@ -79,7 +79,7 @@
                     </mat-form-field>
                     <div *ngIf="editComment != ''" class="comment-preview-header">Comment Preview</div>
                     <div *ngIf="editComment != ''" class="comment-preview">
-                        <markdown katex mermaid data="{{editComment}}"></markdown>
+                        <markdown katex mermaid data="{{editComment}}" ngPreserveWhiteSpaces></markdown>
                     </div>
 
                 </div>

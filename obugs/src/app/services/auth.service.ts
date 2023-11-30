@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { User, OBugsError } from '../models/models';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Apollo } from 'apollo-angular';
-import jwt_decode, { JwtPayload } from 'jwt-decode';
+import { JwtPayload, jwtDecode } from 'jwt-decode';
 import { ApiService } from './api.service';
 
 @Injectable({
@@ -72,7 +72,7 @@ export class AuthService {
 
   isExpired(token: string) {
     try {
-      const decoded = jwt_decode(token) as JwtPayload
+      const decoded = jwtDecode(token) as JwtPayload
       if (decoded.exp == null) return true;
       if (Date.now() >= decoded.exp * 1000) return true;
     } catch (err) {
