@@ -50,6 +50,7 @@ export const ObugsFragments = {
                 ratingTotal
                 ratingCount
                 openPatchesCount
+                commentCount
             }
         `,
         entryMessageCreation: gql`

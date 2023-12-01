@@ -18,41 +18,41 @@
       <mat-button-toggle-group name="status" aria-label="Status" multiple [(ngModel)]="statusFilter"
         (change)="onFiltersChange()">
         <mat-button-toggle value="NEW" matTooltip="Every new entry on the website.">
-        New</mat-button-toggle>
+          New</mat-button-toggle>
         <mat-button-toggle value="CONFIRMED" checked
-        matTooltip="The Bug has been confirmed by the community.">Confirmed</mat-button-toggle>
+          matTooltip="The Bug has been confirmed by the community.">Confirmed</mat-button-toggle>
         <mat-button-toggle value="WIP" checked
-        matTooltip="Developers have informed that they are working on a fix for this bug.">WIP</mat-button-toggle>
+          matTooltip="Developers have informed that they are working on a fix for this bug.">WIP</mat-button-toggle>
         <mat-button-toggle value="CHECK" checked
-        matTooltip="A fix has been deployed, or the bug is very old. A bug check is necessary.">Check</mat-button-toggle>
+          matTooltip="A fix has been deployed, or the bug is very old. A bug check is necessary.">Check</mat-button-toggle>
         <mat-button-toggle value="FIXED"
-        matTooltip="Bug has been dealt with and is not present anymore.">Fixed</mat-button-toggle>
+          matTooltip="Bug has been dealt with and is not present anymore.">Fixed</mat-button-toggle>
         <mat-button-toggle value="EXPECTED"
-        matTooltip="The described entry is the intended behavior from the software. No Action required">Expected</mat-button-toggle>
+          matTooltip="The described entry is the intended behavior. No Action required.">Expected</mat-button-toggle>
         <mat-button-toggle value="DUPLICATE"
-        matTooltip="This entry is a duplicate of another already open bug. Use the main one instead.">Duplicate</mat-button-toggle>
+          matTooltip="This entry is a duplicate of another already open bug.">Duplicate</mat-button-toggle>
         <mat-button-toggle value="CLOSED"
-        matTooltip="This entry is out of scope (customer support), won't be fiexed, or non-sensical.">Closed</mat-button-toggle>
+          matTooltip="This entry is out of scope (ex: customer support, non-sensical).">Closed</mat-button-toggle>
       </mat-button-toggle-group>
     </div>
     <div class="bug-list">
       @for (entry of filteredEntries; track entry) {
-        <app-bug-row (click)="openBugDetails(entry, false)"
-        (mousedown)="handleMiddleMouseClick($event, entry)" [entry]="entry"></app-bug-row>
+      <app-bug-row (click)="openBugDetails(entry, false)" (mousedown)="handleMiddleMouseClick($event, entry)"
+        [entry]="entry"></app-bug-row>
       }
     </div>
     @if (filterHasMore) {
-      <div class="more-button">
-        <button mat-raised-button (click)="getMoreFiltered()" color="primary">Get More</button>
-      </div>
+    <div class="more-button">
+      <button mat-raised-button (click)="getMoreFiltered()" color="primary">Get More</button>
+    </div>
     }
   </div>
   <mat-divider [vertical]="true"></mat-divider>
   <div class="panel">
     <div class="bug-list">
       @for (entry of newEntries; track entry) {
-        <app-bug-row (click)="openBugDetails(entry, false)"
-        (mousedown)="handleMiddleMouseClick($event, entry)" [entry]="entry"></app-bug-row>
+      <app-bug-row (click)="openBugDetails(entry, false)" (mousedown)="handleMiddleMouseClick($event, entry)"
+        [entry]="entry"></app-bug-row>
       }
     </div>
   </div>

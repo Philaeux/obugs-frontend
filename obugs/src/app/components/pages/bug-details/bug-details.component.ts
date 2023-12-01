@@ -160,13 +160,15 @@ export class BugDetailsComponent implements OnInit {
     })
   }
 
-  linkIcon(link: string): string {
+  linkIcon(raw_link: string): string {
     // Regular expression to match YouTube URLs
     const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//;
     const twitchRegex = /^(https?:\/\/)?(www\.)?((clips\.)?twitch\.tv)\//;
     const githubRegex = /^(https?:\/\/)?(www\.)?(github\.com|user-images\.githubusercontent\.com)\//;
     const imgurRegex = /^(https?:\/\/)?(www\.)?((i\.)?imgur\.com)\//;
     const redditRegex = /^(https?:\/\/)?(www\.)?((old\.)?reddit\.com|(preview\.)redd\.it)\//;
+
+    var link = raw_link.toLowerCase()
 
     if (link.includes('.mp4')) {
       return 'fa fa-film'

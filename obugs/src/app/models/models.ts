@@ -70,6 +70,7 @@ export interface Entry {
         }[]
     }
     openPatchesCount: number;
+    commentCount: number;
 }
 
 export interface Vote {

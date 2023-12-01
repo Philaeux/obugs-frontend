@@ -14,17 +14,21 @@
         <div class="bug-updated-at" matTooltip="Last update">
           {{entry.updatedAt | dateAgo}}
         </div>
+        @if (entry.commentCount != 0) {
+        <div matTooltip="Comments">
+          <mat-icon class="comment-icon" fontSet="material-symbols-outlined">comment</mat-icon> {{entry.commentCount}}
+        </div>
+        }
+        @if (entry.openPatchesCount != 0) {
+        <div matTooltip="Open patches">
+          <mat-icon class="patch-icon" fontSet="material-symbols-outlined">deployed_code_history</mat-icon>
+          {{entry.openPatchesCount}}
+        </div>
+        }
         @for (tag of entry.tags.edges; track tag) {
-          <app-tag-chip [tag]="tag.node"></app-tag-chip>
+        <app-tag-chip [tag]="tag.node"></app-tag-chip>
         }
       </div>
     </div>
   </div>
-  @if (entry.openPatchesCount != 0) {
-    <div class="bug-open-patches" matTooltip="Number of open patches">
-      <div class="bug-open-patches-txt">
-        {{entry.openPatchesCount}}
-      </div>
-    </div>
-  }
 </div>
