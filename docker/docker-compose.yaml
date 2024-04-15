@@ -1,8 +1,14 @@
 version: '3'
 services:
   angular:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: obugs-frontend
+
+    container_name: obugs-frontend
     restart: always
-    build: .
+
     ports:
       - "19997:80"
     environment:

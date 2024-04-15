@@ -1,0 +1,10 @@
+.git
+.idea
+.dockerignore
+.gitignore
+LICENSE
+README.md
+obugs/.angular
+obugs/dist
+obugs/node_modules
+obugs/README.md
