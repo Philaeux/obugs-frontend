@@ -2,7 +2,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { diff_match_patch as DiffMatchPatch } from 'diff-match-patch';
-import { EntryMessage, OBugsError, VoteUpdate, User, OperationDone } from 'src/app/models/models';
+import { EntryMessage, ApiError, OutputVote, User, ApiSuccess } from 'src/app/models/models';
 
 @Component({
   selector: 'app-entry-message',
@@ -54,8 +54,8 @@ export class EntryMessageComponent implements OnInit {
 
     if (this.auth.current_user != null && this.message.type == 'patch') {
       this.api.voteGet(this.message.id).subscribe((response) => {
-        if (response.data.myVote) {
-          this.petitionVote = response.data.myVote.rating;
+        if (response.data.voteMy) {
+          this.petitionVote = response.data.voteMy.rating;
         }
       })
     }
@@ -111,11 +111,11 @@ export class EntryMessageComponent implements OnInit {
       this.api.voteSet(this.message.id, this.petitionVote).subscribe((response) => {
         if (response.data && response.data.vote) {
           const result = response.data.vote
-          if (result.__typename === 'OBugsError') {
-            const error = result as OBugsError
+          if (result.__typename === 'ApiError') {
+            const error = result as ApiError
             console.log(error)
           } else {
-            const vote = result as VoteUpdate
+            const vote = result as OutputVote
             this.ratingTotal = vote.ratingTotal
             this.ratingCount = vote.ratingCount
           }
@@ -129,8 +129,8 @@ export class EntryMessageComponent implements OnInit {
       this.api.userBan(this.messageUser.id, ban).subscribe((response) => {
         if (response.data && response.data.banUser) {
           const result = response.data.banUser
-          if (result.__typename === 'OBugsError') {
-            const error = result as OBugsError;
+          if (result.__typename === 'ApiError') {
+            const error = result as ApiError;
             console.log(error)
           } else {
             const user = result as User;
@@ -144,11 +144,11 @@ export class EntryMessageComponent implements OnInit {
     this.api.messageDelete(this.message.id).subscribe((response) => {
       if (response.data && response.data.deleteMessage) {
         const result = response.data.deleteMessage
-        if (result.__typename === 'OBugsError') {
-          const error = result as OBugsError;
+        if (result.__typename === 'ApiError') {
+          const error = result as ApiError;
           console.log(error)
         } else {
-          const user = result as OperationDone;
+          const user = result as ApiSuccess;
           this.messageDeleted.emit(this.message)
         }
       }

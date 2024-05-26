@@ -4,13 +4,13 @@ import { ObugsFragments } from "../fragments";
 
 
 export const QUERY_MY_VOTE = gql`
-    query MyVote($subjectId: UUID!) {
-        myVote(subjectId: $subjectId) {
+    query VoteMy($subjectId: UUID!) {
+        voteMy(subjectId: $subjectId) {
             ...VoteFragment
         }
     }
     ${ObugsFragments.fragments.vote}
 `;
 export interface QueryResponseMyVote {
-    myVote: Vote;
+    voteMy: Vote;
 }

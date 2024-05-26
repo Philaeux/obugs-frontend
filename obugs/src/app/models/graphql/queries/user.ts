@@ -1,13 +1,13 @@
 import { gql } from "apollo-angular";
-import { OBugsError, User } from "../../models";
+import { ApiError, User } from "../../models";
 import { ObugsFragments } from "../fragments";
 
 
 export const QUERY_CURRENT_USER = gql`
     {
-        currentUser {
+        userCurrent {
             __typename
-            ... on OBugsError {
+            ... on ApiError {
                 message
             }
             ... on User {
@@ -18,7 +18,7 @@ export const QUERY_CURRENT_USER = gql`
     ${ObugsFragments.fragments.user}
 `;
 export interface QueryResponseCurrentUser {
-    currentUser: OBugsError | User;
+    userCurrent: ApiError | User;
 }
 
 export const QUERY_USER_DETAILS = gql`

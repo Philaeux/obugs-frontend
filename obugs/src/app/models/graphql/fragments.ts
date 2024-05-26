@@ -125,8 +125,8 @@ export const ObugsFragments = {
                 rating
             }
         `,
-        voteUpdate: gql`
-            fragment VoteUpdateFragment on VoteUpdate {
+        outputVote: gql`
+            fragment OutputVoteFragment on OutputVote {
                 ratingTotal
                 ratingCount
             }

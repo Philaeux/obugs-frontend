@@ -3,7 +3,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { EntryMessage, OBugsError, User } from 'src/app/models/models';
+import { EntryMessage, ApiError, User } from 'src/app/models/models';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -86,8 +86,8 @@ export class AppManageComponent implements OnInit {
 
     this.api.userRoleChange(this.selectedUser.id, this.softwareId, role, e.checked).subscribe((response) => {
       const result = response.data!.changeRole
-      if (result.__typename === 'OBugsError') {
-        const error = result as OBugsError
+      if (result.__typename === 'ApiError') {
+        const error = result as ApiError
         console.log(error.message)
       }
     })

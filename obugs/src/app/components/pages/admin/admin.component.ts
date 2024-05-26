@@ -3,7 +3,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Software, OBugsError, Tag, EntryMessage, SoftwareSuggestion, OperationDone } from 'src/app/models/models';
+import { Software, ApiError, Tag, EntryMessage, SoftwareSuggestion, ApiSuccess } from 'src/app/models/models';
 import { timer } from 'rxjs'
 import { Title } from '@angular/platform-browser';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -120,8 +120,8 @@ export class AdminComponent implements OnInit {
       ).subscribe((response) => {
         if (response.data != null && response.data.upsertSoftware != null) {
           const data = response.data?.upsertSoftware
-          if (data.__typename === 'OBugsError') {
-            const error = data as OBugsError;
+          if (data.__typename === 'ApiError') {
+            const error = data as ApiError;
             console.log(error.message);
           } else {
             const software = data as Software;
@@ -151,8 +151,8 @@ export class AdminComponent implements OnInit {
       ).subscribe((response) => {
         if (response.data != null && response.data.upsertTag != null) {
           const data = response.data?.upsertTag
-          if (data.__typename === 'OBugsError') {
-            const error = data as OBugsError;
+          if (data.__typename === 'ApiError') {
+            const error = data as ApiError;
             console.log(error.message);
           } else {
             const tag = data as Tag;
@@ -198,11 +198,11 @@ export class AdminComponent implements OnInit {
     if (this.selectedSuggestion != null) {
       this.api.softwareSuggestionDelete(this.selectedSuggestion.id).subscribe((response) => {
         const result = response.data!.deleteSuggestion
-        if (result.__typename === 'OBugsError') {
-          const error = result as OBugsError;
+        if (result.__typename === 'ApiError') {
+          const error = result as ApiError;
           console.log(error)
         } else {
-          const user = result as OperationDone;
+          const user = result as ApiSuccess;
           this.suggestions = this.suggestions.filter((suggestion) => suggestion.id != this.selectedSuggestion?.id)
           this.selectedSuggestion = null;
         }

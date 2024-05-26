@@ -1,12 +1,12 @@
 import { gql } from "apollo-angular";
-import { EntryMessage, OBugsError, OperationDone, ProcessPatchSuccess } from "../../models";
+import { EntryMessage, ApiError, ApiSuccess, ProcessPatchSuccess } from "../../models";
 import { ObugsFragments } from "../fragments";
 
 export const MUTATION_COMMENT_ENTRY = gql`
     mutation CommentEntry($recaptcha: String!, $entryId: UUID!, $comment: String!) {
         commentEntry(recaptcha: $recaptcha, entryId: $entryId, comment: $comment) {
             __typename
-            ... on OBugsError {
+            ... on ApiError {
                 message
             }
             ... on EntryMessageComment {
@@ -17,31 +17,31 @@ export const MUTATION_COMMENT_ENTRY = gql`
     ${ObugsFragments.fragments.entryMessageComment}
 `
 export interface MutationResponseCommentEntry {
-    commentEntry: OBugsError | EntryMessage;
+    commentEntry: ApiError | EntryMessage;
 }
 
 export const MUTATION_DELETE_MESSAGE = gql`
     mutation DeleteMessage($messageId: UUID!) {
         deleteMessage(messageId: $messageId){
             __typename
-            ... on OBugsError {
+            ... on ApiError {
                 message
             }
-            ... on OperationDone {
-                success
+            ... on ApiSuccess {
+                message
             }
         }
     }
 `
 export interface MutationResponseDeleteMessage {
-    deleteMessage: OBugsError | OperationDone
+    deleteMessage: ApiError | ApiSuccess
 }
 
 export const MUTATION_SUBMIT_PATCH = gql`
     mutation SubmitPatch($recaptcha: String!, $entryId: UUID!, $title: String!, $status: String!, $tags: [String!]!, $description: String!, $illustration: String!) {
         submitPatch(recaptcha: $recaptcha, entryId: $entryId, title: $title, status: $status, tags: $tags, description: $description, illustration: $illustration) {
             __typename
-            ... on OBugsError {
+            ... on ApiError {
                 message
             }
             ... on EntryMessagePatch {
@@ -52,14 +52,14 @@ export const MUTATION_SUBMIT_PATCH = gql`
     ${ObugsFragments.fragments.entryMessagePatch}
 `
 export interface MutationResponseSubmitPatch {
-    submitPatch: OBugsError | EntryMessage
+    submitPatch: ApiError | EntryMessage
 }
 
 export const MUTATION_PROCESS_PATCH = gql`
     mutation ProcessPatch($messageId: UUID!, $accept: Boolean!) {
         processPatch(messageId: $messageId, accept: $accept){
             __typename
-            ... on OBugsError {
+            ... on ApiError {
                 message
             }
             ... on ProcessPatchSuccess {
@@ -76,5 +76,5 @@ export const MUTATION_PROCESS_PATCH = gql`
     ${ObugsFragments.fragments.entryMessagePatch}
 `
 export interface MutationResponseProcessPatch {
-    processPatch: OBugsError | ProcessPatchSuccess
+    processPatch: ApiError | ProcessPatchSuccess
 }

@@ -2,7 +2,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Component, OnInit } from '@angular/core';
-import { Entry, EntryMessage, OBugsError, ProcessPatchSuccess, Tag, VoteUpdate } from 'src/app/models/models';
+import { Entry, EntryMessage, ApiError, ProcessPatchSuccess, Tag, OutputVote } from 'src/app/models/models';
 import { Recaptchav2Service } from 'src/app/services/recaptchav2.service';
 import { Title } from '@angular/platform-browser';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -71,8 +71,8 @@ export class BugDetailsComponent implements OnInit {
       if (user === undefined || user === null) return;
       if (this.entryId != undefined) {
         this.api.voteGet(this.entryId).subscribe((response) => {
-          if (response.data && response.data.myVote) {
-            this.myVote = response.data.myVote.rating.toString();
+          if (response.data && response.data.voteMy) {
+            this.myVote = response.data.voteMy.rating.toString();
           }
         })
       }
@@ -148,11 +148,11 @@ export class BugDetailsComponent implements OnInit {
     this.api.voteSet(this.entryId, parseInt(this.myVote)).subscribe((response) => {
       if (response.data && response.data.vote) {
         const result = response.data.vote
-        if (result.__typename === 'OBugsError') {
-          const error = result as OBugsError;
+        if (result.__typename === 'ApiError') {
+          const error = result as ApiError;
           console.log(error)
         } else {
-          const vote = result as VoteUpdate
+          const vote = result as OutputVote
           this.ratingCount = vote.ratingCount
           this.ratingTotal = vote.ratingTotal
         }
@@ -204,8 +204,8 @@ export class BugDetailsComponent implements OnInit {
         grecaptcha.reset()
         if (response.data && response.data.commentEntry) {
           const result = response.data.commentEntry
-          if (result.__typename === 'OBugsError') {
-            const error = result as OBugsError;
+          if (result.__typename === 'ApiError') {
+            const error = result as ApiError;
             this.errorMessage = error.message;
           } else {
             const message = result as EntryMessage
@@ -229,8 +229,8 @@ export class BugDetailsComponent implements OnInit {
         grecaptcha.reset()
         if (response.data && response.data.submitPatch) {
           const result = response.data.submitPatch
-          if (result.__typename === 'OBugsError') {
-            const error = result as OBugsError;
+          if (result.__typename === 'ApiError') {
+            const error = result as ApiError;
             this.errorMessage = error.message;
           } else {
             const message = result as EntryMessage
@@ -264,8 +264,8 @@ export class BugDetailsComponent implements OnInit {
     this.api.patchProcess(message.id, accept).subscribe((response) => {
       if (response.data && response.data.processPatch) {
         const result = response.data.processPatch
-        if (result.__typename === 'OBugsError') {
-          const error = result as OBugsError;
+        if (result.__typename === 'ApiError') {
+          const error = result as ApiError;
           console.log(error.message);
         } else {
           const pps = result as ProcessPatchSuccess

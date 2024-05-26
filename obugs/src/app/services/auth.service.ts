@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User, OBugsError } from '../models/models';
+import { User, ApiError } from '../models/models';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Apollo } from 'apollo-angular';
 import { JwtPayload, jwtDecode } from 'jwt-decode';
@@ -32,9 +32,9 @@ export class AuthService {
       this.logout()
     } else {
       this.api.userCurrent().subscribe((response) => {
-        const data = response.data.currentUser
-        if (data.__typename === 'OBugsError') {
-          const error = data as OBugsError
+        const data = response.data.userCurrent
+        if (data.__typename === 'ApiError') {
+          const error = data as ApiError
           console.log(error.message)
           this.logout()
         } else {
@@ -50,9 +50,9 @@ export class AuthService {
     localStorage.setItem('access_token', token)
 
     return this.api.userCurrent().pipe(tap((response) => {
-      const data = response.data.currentUser
-      if (data.__typename === 'OBugsError') {
-        const error = data as OBugsError
+      const data = response.data.userCurrent
+      if (data.__typename === 'ApiError') {
+        const error = data as ApiError
         console.log(error.message)
         this.logout()
       } else {

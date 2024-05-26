@@ -1,12 +1,12 @@
 import { gql } from "apollo-angular";
-import { OBugsError, OperationDone, Software, SoftwareSuggestion } from "../../models";
+import { ApiError, ApiSuccess, Software, SoftwareSuggestion } from "../../models";
 import { ObugsFragments } from "../fragments";
 
 export const MUTATION_UPSERT_SOFTWARE = gql`
     mutation UpsertSoftware($id: String!, $fullName: String!, $editor: String!, $description: String!, $language: String!) {
         upsertSoftware(id: $id, fullName: $fullName, editor: $editor, description: $description, language: $language){
             __typename
-            ... on OBugsError {
+            ... on ApiError {
                 message
             }
             ... on Software {
@@ -17,14 +17,14 @@ export const MUTATION_UPSERT_SOFTWARE = gql`
     ${ObugsFragments.fragments.software}
 `
 export interface MutationResponseUpsertSoftware {
-    upsertSoftware: OBugsError | Software
+    upsertSoftware: ApiError | Software
 }
 
 export const MUTATION_SUGGEST_SOFTWARE = gql`
     mutation SuggestSoftware($recaptcha: String!, $name: String!, $description: String!) {
         suggestSoftware(recaptcha: $recaptcha, name: $name, description: $description) {
             __typename
-            ... on OBugsError {
+            ... on ApiError {
                 message
             }
             ... on SoftwareSuggestion {
@@ -35,22 +35,22 @@ export const MUTATION_SUGGEST_SOFTWARE = gql`
     ${ObugsFragments.fragments.softwareSuggestion}
 `
 export interface MutationResponseSuggestSoftware {
-    suggestSoftware: OBugsError | SoftwareSuggestion
+    suggestSoftware: ApiError | SoftwareSuggestion
 }
 
 export const MUTATION_DELETE_SUGGESTION = gql`
     mutation DeleteSuggestion($suggestionId: UUID!) {
         deleteSuggestion(suggestionId: $suggestionId){
             __typename
-            ... on OBugsError {
+            ... on ApiError {
                 message
             }
-            ... on OperationDone {
-                success
+            ... on ApiSuccess {
+                message
             }
         }
     }
 `
 export interface MutationResponseDeleteSuggestion {
-    deleteSuggestion: OBugsError | OperationDone
+    deleteSuggestion: ApiError | ApiSuccess
 }

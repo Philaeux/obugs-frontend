@@ -81,8 +81,8 @@ export interface Vote {
     rating: number;
 }
 
-export interface VoteUpdate {
-    __typename: 'VoteUpdate'
+export interface OutputVote {
+    __typename: 'OutputVote'
     ratingCount: number;
     ratingTotal: number;
 }
@@ -106,14 +106,14 @@ export interface EntryMessage {
     entry: Entry
 }
 
-export interface OBugsError {
-    __typename: 'OBugsError';
+export interface ApiError {
+    __typename: 'ApiError';
     message: string;
 }
 
-export interface OperationDone {
-    __typename: 'OperationDone';
-    success: boolean;
+export interface ApiSuccess {
+    __typename: 'ApiSuccess';
+    message: boolean;
 }
 
 export interface ProcessPatchSuccess {

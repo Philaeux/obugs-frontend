@@ -1,7 +1,7 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { Component, OnInit } from '@angular/core';
-import { OBugsError, Entry } from 'src/app/models/models';
+import { ApiError, Entry } from 'src/app/models/models';
 import { Recaptchav2Service } from 'src/app/services/recaptchav2.service';
 import { Title } from '@angular/platform-browser';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
@@ -71,8 +71,8 @@ export class BugNewComponent implements OnInit {
         grecaptcha.reset()
         if (response.data && response.data.createEntry) {
           const result = response.data.createEntry
-          if (result.__typename === 'OBugsError') {
-            const error = result as OBugsError
+          if (result.__typename === 'ApiError') {
+            const error = result as ApiError
             this.errorMessage = error.message
           } else {
             const entry = result as Entry

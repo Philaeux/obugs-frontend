@@ -1,7 +1,7 @@
 import { ApiService } from 'src/app/services/api.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { OBugsError, SoftwareSuggestion, User } from 'src/app/models/models';
+import { ApiError, SoftwareSuggestion, User } from 'src/app/models/models';
 import { Recaptchav2Service } from 'src/app/services/recaptchav2.service';
 import { Subscription } from 'rxjs';
 import { Title } from '@angular/platform-browser';
@@ -60,8 +60,8 @@ export class AppsNewComponent implements OnInit {
       grecaptcha.reset()
       if (response.data && response.data.suggestSoftware) {
         const result = response.data.suggestSoftware
-        if (result.__typename === 'OBugsError') {
-          const error = result as OBugsError;
+        if (result.__typename === 'ApiError') {
+          const error = result as ApiError;
           this.error = error.message;
         } else {
           const suggestion = result as SoftwareSuggestion;
