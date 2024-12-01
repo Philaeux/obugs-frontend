@@ -6,9 +6,10 @@ import { Title } from '@angular/platform-browser';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
-  selector: 'app-apps',
-  templateUrl: './apps.component.html',
-  styleUrls: ['./apps.component.scss']
+    selector: 'app-apps',
+    templateUrl: './apps.component.html',
+    styleUrls: ['./apps.component.scss'],
+    standalone: false
 })
 export class AppsComponent {
   softwares: Software[] = [];

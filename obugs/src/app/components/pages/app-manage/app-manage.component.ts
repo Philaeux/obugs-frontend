@@ -9,9 +9,10 @@ import { AuthService } from 'src/app/services/auth.service';
 
 @UntilDestroy()
 @Component({
-  selector: 'app-app-manage',
-  templateUrl: './app-manage.component.html',
-  styleUrls: ['./app-manage.component.scss']
+    selector: 'app-app-manage',
+    templateUrl: './app-manage.component.html',
+    styleUrls: ['./app-manage.component.scss'],
+    standalone: false
 })
 export class AppManageComponent implements OnInit {
 

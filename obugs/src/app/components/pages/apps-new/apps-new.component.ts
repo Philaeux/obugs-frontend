@@ -8,9 +8,10 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 @UntilDestroy()
 @Component({
-  selector: 'app-apps-new',
-  templateUrl: './apps-new.component.html',
-  styleUrls: ['./apps-new.component.scss']
+    selector: 'app-apps-new',
+    templateUrl: './apps-new.component.html',
+    styleUrls: ['./apps-new.component.scss'],
+    standalone: false
 })
 export class AppsNewComponent implements OnInit {
 

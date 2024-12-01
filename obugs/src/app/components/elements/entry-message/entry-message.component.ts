@@ -5,10 +5,11 @@ import { diff_match_patch as DiffMatchPatch } from 'diff-match-patch';
 import { EntryMessage, ApiError, OutputVote, User, ApiSuccess } from 'src/app/models/models';
 
 @Component({
-  selector: 'app-entry-message',
-  templateUrl: './entry-message.component.html',
-  styleUrls: ['./entry-message.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+    selector: 'app-entry-message',
+    templateUrl: './entry-message.component.html',
+    styleUrls: ['./entry-message.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class EntryMessageComponent implements OnInit {
   @Input({ required: true }) message!: EntryMessage;

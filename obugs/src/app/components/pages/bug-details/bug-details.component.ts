@@ -9,9 +9,10 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 @UntilDestroy()
 @Component({
-  selector: 'app-bug-details',
-  templateUrl: './bug-details.component.html',
-  styleUrls: ['./bug-details.component.scss']
+    selector: 'app-bug-details',
+    templateUrl: './bug-details.component.html',
+    styleUrls: ['./bug-details.component.scss'],
+    standalone: false
 })
 export class BugDetailsComponent implements OnInit {
 

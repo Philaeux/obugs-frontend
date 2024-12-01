@@ -2,9 +2,10 @@ import { Component, Input } from '@angular/core';
 import { User } from 'src/app/models/models';
 
 @Component({
-  selector: 'app-username',
-  templateUrl: './username.component.html',
-  styleUrls: ['./username.component.scss']
+    selector: 'app-username',
+    templateUrl: './username.component.html',
+    styleUrls: ['./username.component.scss'],
+    standalone: false
 })
 export class UsernameComponent {
 
