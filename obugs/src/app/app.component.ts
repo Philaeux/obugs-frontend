@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { Recaptchav2Service } from './services/recaptchav2.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, map } from 'rxjs';
 import { AuthService } from './services/auth.service';
@@ -13,7 +12,6 @@ import { User } from './models/models';
 })
 export class AppComponent implements OnInit {
 
-  siteKey: string = environment.recaptchaSiteKey;
   darkMode = false;
 
   currentUrl: string = "";
@@ -21,7 +19,6 @@ export class AppComponent implements OnInit {
   currentSoftwareId: string | null = null;
 
   constructor(
-    private captchav2Service: Recaptchav2Service,
     public auth: AuthService,
     private router: Router,
     private route: ActivatedRoute
@@ -52,10 +49,6 @@ export class AppComponent implements OnInit {
       if (user === undefined) return;
       this.currentUser = user;
     })
-  }
-
-  public resolved(captchaResponse: string | null): void {
-    if (captchaResponse != null) this.captchav2Service.recaptchav2Resolved(captchaResponse);
   }
 
   toggleDarkMode() {

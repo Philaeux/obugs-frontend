@@ -39,10 +39,6 @@ $primary-palette: map.get($color-config, 'primary');
 $accent-palette: map.get($color-config, 'accent');
 $warn-palette: map.get($color-config, 'warn');
 
-.grecaptcha-badge {
-      visibility: hidden;
-}
-
 a {
       color: cornflowerblue;
 }

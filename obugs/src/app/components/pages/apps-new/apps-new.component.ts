@@ -2,8 +2,6 @@ import { ApiService } from 'src/app/services/api.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiError, SoftwareSuggestion, User } from 'src/app/models/models';
-import { Recaptchav2Service } from 'src/app/services/recaptchav2.service';
-import { Subscription } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { AuthService } from 'src/app/services/auth.service';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -25,7 +23,6 @@ export class AppsNewComponent implements OnInit {
   constructor(
     private api: ApiService,
     private auth: AuthService,
-    private recaptchav2Service: Recaptchav2Service,
     private title: Title,
     public fb: FormBuilder,
   ) {
@@ -37,9 +34,6 @@ export class AppsNewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.recaptchav2Service.recaptchav2$.pipe(untilDestroyed(this)).subscribe((token) => {
-      this.submitSoftware(token);
-    });
 
     this.auth.currentUser$.pipe(untilDestroyed(this)).subscribe((user) => {
       if (user === undefined) return;
@@ -50,14 +44,11 @@ export class AppsNewComponent implements OnInit {
   onCreateButton() {
     this.error = ""
     this.message = ""
-    if (this.form.valid) {
-      grecaptcha.execute();
-    }
+    this.submitSoftware()
   }
 
-  submitSoftware(token: string) {
+  submitSoftware() {
     this.api.softwareSuggestionAdd(token, this.form.value.name, this.form.value.description).subscribe((response) => {
-      grecaptcha.reset()
       if (response.data && response.data.suggestSoftware) {
         const result = response.data.suggestSoftware
         if (result.__typename === 'ApiError') {
@@ -69,6 +60,5 @@ export class AppsNewComponent implements OnInit {
         }
       }
     })
-    grecaptcha.reset()
   }
 }

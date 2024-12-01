@@ -30,7 +30,6 @@
     "katex": "^0.16.9",
     "marked": "^12.0.0",
     "mermaid": "^10.6.1",
-    "ng-recaptcha": "^13.2.1",
     "ngx-markdown": "^18.1.0",
     "normalize.css": "^8.0.1",
     "rxjs": "~7.8.1",

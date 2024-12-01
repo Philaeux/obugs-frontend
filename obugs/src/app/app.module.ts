@@ -11,7 +11,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { GraphQLModule } from './graphql.module';
 import { MaterialModule } from './material.module';
-import { RecaptchaModule } from 'ng-recaptcha';
 
 import { AdminComponent } from './components/pages/admin/admin.component';
 import { ApiService } from './services/api.service';
@@ -28,7 +27,6 @@ import { DateAgoPipe } from './pipes/date-ago.pipe';
 import { EntryMessageComponent } from './components/elements/entry-message/entry-message.component';
 import { IndexComponent } from './components/pages/index/index.component';
 import { LoginComponent } from './components/pages/login/login.component';
-import { Recaptchav2Service } from './services/recaptchav2.service';
 import { StatusChipComponent } from './components/elements/status-chip/status-chip.component';
 import { TagChipComponent } from './components/elements/tag-chip/tag-chip.component';
 import { TagInputComponent } from './components/elements/tag-input/tag-input.component';
@@ -71,11 +69,9 @@ import { UsernameComponent } from './components/elements/username/username.compo
             }
         }),
         MaterialModule,
-        ReactiveFormsModule,
-        RecaptchaModule], providers: [
+        ReactiveFormsModule], providers: [
         ApiService,
         AuthService,
-        Recaptchav2Service,
         Title,
         provideHttpClient(withInterceptorsFromDi(), withXsrfConfiguration()),
     ] })
