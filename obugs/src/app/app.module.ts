@@ -3,7 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXsrfConfiguration } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MarkdownModule, MARKED_OPTIONS } from 'ngx-markdown'
 import { NgModule } from '@angular/core';
@@ -34,57 +34,50 @@ import { TagChipComponent } from './components/elements/tag-chip/tag-chip.compon
 import { TagInputComponent } from './components/elements/tag-input/tag-input.component';
 import { UsernameComponent } from './components/elements/username/username.component';
 
-@NgModule({
-  declarations: [
-    AdminComponent,
-    AppComponent,
-    AppManageComponent,
-    AppsComponent,
-    AppsNewComponent,
-    BugDetailsComponent,
-    BugNewComponent,
-    BugRowComponent,
-    DashboardComponent,
-    DateAgoPipe,
-    EntryMessageComponent,
-    IndexComponent,
-    LoginComponent,
-    StatusChipComponent,
-    TagChipComponent,
-    TagInputComponent,
-    UsernameComponent,
-  ],
-  imports: [
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    BrowserModule,
-    CommonModule,
-    FormsModule,
-    GraphQLModule,
-    HttpClientModule,
-    HttpClientXsrfModule,
-    LayoutModule,
-    MarkdownModule.forRoot({
-      markedOptions: {
-        provide: MARKED_OPTIONS,
-        useValue: {
-          gfm: true,
-          breaks: true,
-          pedantic: false
-        }
-      }
-    }),
-    MaterialModule,
-    ReactiveFormsModule,
-    RecaptchaModule,
-  ],
-  providers: [
-    ApiService,
-    AuthService,
-    Recaptchav2Service,
-    Title,
-  ],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AdminComponent,
+        AppComponent,
+        AppManageComponent,
+        AppsComponent,
+        AppsNewComponent,
+        BugDetailsComponent,
+        BugNewComponent,
+        BugRowComponent,
+        DashboardComponent,
+        DateAgoPipe,
+        EntryMessageComponent,
+        IndexComponent,
+        LoginComponent,
+        StatusChipComponent,
+        TagChipComponent,
+        TagInputComponent,
+        UsernameComponent,
+    ],
+    bootstrap: [AppComponent], imports: [AppRoutingModule,
+        BrowserAnimationsModule,
+        BrowserModule,
+        CommonModule,
+        FormsModule,
+        GraphQLModule,
+        LayoutModule,
+        MarkdownModule.forRoot({
+            markedOptions: {
+                provide: MARKED_OPTIONS,
+                useValue: {
+                    gfm: true,
+                    breaks: true,
+                    pedantic: false
+                }
+            }
+        }),
+        MaterialModule,
+        ReactiveFormsModule,
+        RecaptchaModule], providers: [
+        ApiService,
+        AuthService,
+        Recaptchav2Service,
+        Title,
+        provideHttpClient(withInterceptorsFromDi(), withXsrfConfiguration()),
+    ] })
 export class AppModule {
 }
